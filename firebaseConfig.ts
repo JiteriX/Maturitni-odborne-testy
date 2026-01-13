@@ -5,7 +5,7 @@ import { getFirestore } from "firebase/firestore";
 
 // Údaje opsané z tvého obrázku:
 const firebaseConfig = {
-  apiKey: "AIzaSyC9vto5dYtih7Pfly514ksV76IQQuSiTd8",
+  apiKey: "AIzaSyC9vto5dYtih7Pfly514ksV76I0QuSiTd8",
   authDomain: "maturita-app.firebaseapp.com",
   projectId: "maturita-app",
   storageBucket: "maturita-app.firebasestorage.app",
