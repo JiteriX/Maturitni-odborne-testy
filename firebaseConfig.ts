@@ -1,9 +1,8 @@
-
-import { initializeApp } from "firebase/app";
+import * as firebaseApp from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-// Údaje opsané z tvého obrázku:
+// Konfigurace pro projekt "Maturita app"
 const firebaseConfig = {
   apiKey: "AIzaSyC9vto5dYtih7Pfly514ksV76I0QuSiTd8",
   authDomain: "maturita-app.firebaseapp.com",
@@ -14,17 +13,10 @@ const firebaseConfig = {
   measurementId: "G-4CT3YBS8FQ"
 };
 
-// Inicializace Firebase
-let app;
-let auth;
-let db;
+// Inicializace aplikace
+// Použití type casting (as any) pro obejití chyby, kdy TypeScript vidí v8 definice (namespace), ale runtime je v9 (modul).
+const app = (firebaseApp as any).initializeApp(firebaseConfig);
 
-try {
-    app = initializeApp(firebaseConfig);
-    auth = getAuth(app);
-    db = getFirestore(app);
-} catch (e) {
-    console.warn("Chyba při inicializaci Firebase:", e);
-}
-
-export { auth, db };
+// Export služeb pro zbytek aplikace
+export const auth = getAuth(app);
+export const db = getFirestore(app);
