@@ -50,10 +50,31 @@ const App: React.FC = () => {
       return () => unsubscribe();
   }, []);
 
-  // 2. NAČTENÍ DAT Z DATABÁZE (Firestore)
+  const handleLogout = () => {
+      // Vymažeme i lokální session ID
+      localStorage.removeItem('app_session_id');
+      
+      if(auth) signOut(auth);
+      setSubject(null);
+      setMode(AppMode.MENU);
+      setLastResult(null);
+  };
+
+  // 2. NAČTENÍ DAT Z DATABÁZE (Firestore) A KONTROLA SINGLE SESSION
   useEffect(() => {
     if (currentUser && db) {
         const userDocRef = doc(db, "users", currentUser.uid);
+
+        // --- SINGLE SESSION LOGIKA ---
+        // Při načtení (přihlášení na tomto zařízení) zkontrolujeme, zda máme v localStorage ID relace.
+        // Pokud ne, vygenerujeme nové a zapíšeme ho do DB. Tím "převezmeme" sezení.
+        let localSessionId = localStorage.getItem('app_session_id');
+        if (!localSessionId) {
+             localSessionId = Date.now().toString() + "-" + Math.random().toString(36).substr(2, 9);
+             localStorage.setItem('app_session_id', localSessionId);
+             // Zapíšeme do DB, že toto je aktuální platná relace
+             setDoc(userDocRef, { sessionId: localSessionId }, { merge: true });
+        }
         
         // Posloucháme změny v reálném čase (kdyby se přihlásil na mobilu i PC)
         const unsubDoc = onSnapshot(userDocRef, (docSnap) => {
@@ -61,13 +82,22 @@ const App: React.FC = () => {
                 const data = docSnap.data();
                 setMistakesSPS(data.mistakesSPS || []);
                 setMistakesSTT(data.mistakesSTT || []);
+                
+                // KONTROLA: Pokud v DB existuje sessionId a liší se od našeho lokálního,
+                // znamená to, že se někdo přihlásil jinde a přepsal ho.
+                if (data.sessionId && data.sessionId !== localSessionId) {
+                    alert("Byli jste odhlášeni, protože se k tomuto účtu přihlásil někdo jiný na jiném zařízení.");
+                    handleLogout();
+                }
+
             } else {
-                // Nový uživatel v DB - vytvoříme prázdný záznam
+                // Nový uživatel v DB - vytvoříme prázdný záznam i s aktuálním session ID
                 setDoc(userDocRef, {
                     mistakesSPS: [],
                     mistakesSTT: [],
                     lastLogin: new Date().toISOString(),
-                    displayName: currentUser.displayName
+                    displayName: currentUser.displayName,
+                    sessionId: localSessionId
                 }, { merge: true });
             }
         }, (error) => {
@@ -132,13 +162,6 @@ const App: React.FC = () => {
       setMode(AppMode.MENU);
       setBrowserSearch("");
       setExpandedQuestionId(null);
-  };
-
-  const handleLogout = () => {
-      if(auth) signOut(auth);
-      setSubject(null);
-      setMode(AppMode.MENU);
-      setLastResult(null);
   };
 
   const getMenuButtonClass = (color: string) => 
@@ -319,16 +342,18 @@ const App: React.FC = () => {
       {subject && mode === AppMode.MENU && (
         <div className="max-w-md mx-auto min-h-screen flex flex-col justify-center p-6">
             <div className="text-center mb-8">
+                {/* VYLEPŠENÉ TLAČÍTKO PRO ZMĚNU PŘEDMĚTU */}
                 <div 
                     onClick={() => {
                         setSubject(null);
                         setBrowserSearch("");
                     }}
-                    className="cursor-pointer inline-flex items-center gap-2 text-sm font-medium text-gray-400 hover:text-gray-600 mb-4 transition-colors"
+                    className="group cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-gray-200 text-gray-600 font-medium text-sm shadow-sm hover:shadow-md hover:border-blue-300 hover:text-blue-600 transition-all duration-300 mb-6"
                 >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                    <svg className="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                     Změnit předmět
                 </div>
+
                 <h1 className={`text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r mb-2 ${subject === 'SPS' ? 'from-blue-700 to-indigo-600' : 'from-orange-600 to-red-600'}`}>
                     Maturitní test {subject}
                 </h1>
