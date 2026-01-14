@@ -14,10 +14,19 @@ export const LoginScreen: React.FC<Props> = ({ onLogin }) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // Funkce pro vytvoření emailu z uživatelského jména
   const createFakeEmail = (username: string) => {
-      // Vytvoří fiktivní email: Matyas -> matyas@maturita.app
-      // Odstraní diakritiku a mezery
-      const cleanName = username.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '').toLowerCase();
+      // 1. Převedeme na malá písmena a odstraníme mezery na začátku/konci
+      let cleanName = username.trim().toLowerCase();
+      
+      // 2. Pokud uživatel omylem zadal celý email (např. pepa@maturita.app),
+      // odstraníme tu koncovku, abychom ji tam nepřidali dvakrát.
+      cleanName = cleanName.replace('@maturita.app', '');
+
+      // 3. Odstraníme diakritiku a mezery uvnitř jména (pro jistotu)
+      cleanName = cleanName.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '');
+      
+      // 4. Vrátíme formát pro Firebase
       return `${cleanName}@maturita.app`;
   };
 
@@ -33,10 +42,13 @@ export const LoginScreen: React.FC<Props> = ({ onLogin }) => {
     }
 
     try {
+        // Automatické doplnění domény
         const fakeEmail = createFakeEmail(name);
+        console.log("Pokus o přihlášení jako:", fakeEmail);
 
-        // Logika přihlášení
+        // PŘIHLÁŠENÍ
         const userCredential = await signInWithEmailAndPassword(auth, fakeEmail, password);
+        
         onLogin({
             uid: userCredential.user.uid,
             email: fakeEmail,
@@ -51,17 +63,18 @@ export const LoginScreen: React.FC<Props> = ({ onLogin }) => {
         const message = err.message || "";
 
         if (code === 'auth/invalid-credential' || code === 'auth/wrong-password') {
-            msg = "Špatné heslo.";
+            msg = "Nesprávné jméno nebo heslo.";
         } else if (code === 'auth/user-not-found' || code === 'auth/invalid-email') {
             msg = "Tento uživatel neexistuje. Požádejte učitele o vytvoření účtu.";
+        } else if (code === 'auth/too-many-requests') {
+            msg = "Příliš mnoho nezdařených pokusů. Zkuste to prosím později.";
         } else if (code === 'auth/network-request-failed') {
-            msg = "Chyba připojení k internetu. Jste online?";
+            msg = "Chyba připojení k internetu.";
         } else if (
             code === 'auth/api-key-not-valid' || 
-            code === 'auth/invalid-api-key' || 
-            message.includes('api-key-not-valid')
+            code === 'auth/invalid-api-key'
         ) {
-            msg = "CHYBA KONFIGURACE: Špatný API klíč ve firebaseConfig.ts.";
+            msg = "CHYBA KONFIGURACE: Špatný API klíč.";
         } else {
             msg = "Chyba: " + message;
         }
@@ -98,6 +111,7 @@ export const LoginScreen: React.FC<Props> = ({ onLogin }) => {
               onChange={(e) => setName(e.target.value)}
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
               placeholder="např. Novak"
+              autoFocus
             />
           </div>
           
@@ -128,11 +142,6 @@ export const LoginScreen: React.FC<Props> = ({ onLogin }) => {
             {loading ? "Ověřuji..." : "Přihlásit se"}
           </button>
         </form>
-          
-        <div className="text-center mt-6 text-xs text-gray-400">
-              Přístup pouze pro registrované studenty.
-        </div>
-
       </div>
     </div>
   );
