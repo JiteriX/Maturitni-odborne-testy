@@ -1,7 +1,9 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Question, AppMode, TestResult } from '../types';
 import { QuestionCard } from './QuestionCard';
+import { db, auth } from '../firebaseConfig';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 interface Props {
   mode: AppMode;
@@ -15,9 +17,10 @@ interface Props {
   // New props for Review Mode
   initialQuestions?: Question[];
   initialAnswers?: Record<number, number>;
+  subject?: 'SPS' | 'STT'; // Potřebujeme vědět předmět pro ukládání statistik
 }
 
-export const TestRunner: React.FC<Props> = ({ mode, mistakeIds, onComplete, onExit, initialQuestionsForMode, initialQuestions, initialAnswers }) => {
+export const TestRunner: React.FC<Props> = ({ mode, mistakeIds, onComplete, onExit, initialQuestionsForMode, initialQuestions, initialAnswers, subject }) => {
   const [currentQuestions, setCurrentQuestions] = useState<Question[]>([]);
   const [answers, setAnswers] = useState<Record<number, number>>({}); // qId -> selectedIndex
   const [timeLeft, setTimeLeft] = useState(30 * 60); // 30 mins in seconds
@@ -68,7 +71,43 @@ export const TestRunner: React.FC<Props> = ({ mode, mistakeIds, onComplete, onEx
     setAnswers(prev => ({ ...prev, [qId]: idx }));
   };
 
-  const finishTest = () => {
+  const saveStats = async (score: number, total: number) => {
+      // Statistiky ukládáme pouze pro kompletní testy (MOCK_TEST) nebo trénink,
+      // ale pro žebříček je nejspravedlivější počítat hlavně MOCK_TEST nebo větší sady.
+      // Pro jednoduchost budeme zatím počítat MOCK_TEST, kde je skóre relevantní.
+      if (mode !== AppMode.MOCK_TEST || !subject || !auth.currentUser) return;
+
+      try {
+          const userRef = doc(db, "users", auth.currentUser.uid);
+          const userSnap = await getDoc(userRef);
+          
+          if (userSnap.exists()) {
+              const data = userSnap.data();
+              const fieldName = subject === 'SPS' ? 'statsSPS' : 'statsSTT';
+              const currentStats = data[fieldName] || {
+                  testsTaken: 0,
+                  totalPoints: 0,
+                  totalMaxPoints: 0,
+                  bestScorePercent: 0
+              };
+
+              const currentPercent = (score / total) * 100;
+
+              const newStats = {
+                  testsTaken: currentStats.testsTaken + 1,
+                  totalPoints: currentStats.totalPoints + score,
+                  totalMaxPoints: currentStats.totalMaxPoints + total,
+                  bestScorePercent: Math.max(currentStats.bestScorePercent, currentPercent)
+              };
+
+              await setDoc(userRef, { [fieldName]: newStats }, { merge: true });
+          }
+      } catch (e) {
+          console.error("Chyba při ukládání statistik:", e instanceof Error ? e.message : e);
+      }
+  };
+
+  const finishTest = async () => {
     let score = 0;
     const mistakes: number[] = [];
     
@@ -84,6 +123,9 @@ export const TestRunner: React.FC<Props> = ({ mode, mistakeIds, onComplete, onEx
     const total = currentQuestions.length;
     const percentage = total === 0 ? 0 : (score / total) * 100;
     const passed = percentage >= 44;
+
+    // Uložit statistiky do DB (nečekáme na dokončení)
+    saveStats(score, total);
 
     onComplete({
       score,

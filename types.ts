@@ -16,6 +16,7 @@ export enum AppMode {
   BROWSER = 'BROWSER',         // 3. Prohlížení (Search)
   MISTAKES = 'MISTAKES',       // 4. Oprava chyb
   REVIEW = 'REVIEW',           // 5. Prohlédnutí výsledků testu
+  LEADERBOARD = 'LEADERBOARD', // 6. Žebříček (Novinka)
 }
 
 export interface TestResult {
@@ -26,4 +27,19 @@ export interface TestResult {
   timeElapsed: number;
   userAnswers: Record<number, number>; // Map of QuestionID -> SelectedIndex
   questionsUsed: Question[]; // The specific list of questions used in that test run
+}
+
+// Statistiky pro jeden předmět
+export interface SubjectStats {
+  testsTaken: number;      // Počet dokončených testů
+  totalPoints: number;     // Celkový počet získaných bodů ze všech testů
+  totalMaxPoints: number;  // Celkový počet možných bodů
+  bestScorePercent: number; // Nejlepší výsledek v procentech (0-100)
+}
+
+// Rozšířený uživatel o statistiky (pro načítání žebříčku)
+export interface LeaderboardUser {
+  displayName: string;
+  statsSPS?: SubjectStats;
+  statsSTT?: SubjectStats;
 }

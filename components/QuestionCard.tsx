@@ -19,10 +19,13 @@ export const QuestionCard: React.FC<Props> = ({
 }) => {
   const [selected, setSelected] = useState<number | null>(userAnswer ?? null);
   const [imgError, setImgError] = useState(false);
+  const [currentImgSrc, setCurrentImgSrc] = useState<string | undefined>(question.imageUrl);
 
   useEffect(() => {
     setSelected(userAnswer ?? null);
     setImgError(false);
+    // Resetujeme zdroj obrázku na výchozí hodnotu (což je obvykle .png z constants.ts)
+    setCurrentImgSrc(question.imageUrl);
   }, [question, userAnswer]);
 
   const handleSelect = (index: number) => {
@@ -32,6 +35,16 @@ export const QuestionCard: React.FC<Props> = ({
     setSelected(index);
     const isCorrect = index === question.correctAnswerIndex;
     onAnswer(question.id, index, isCorrect);
+  };
+
+  const handleImageError = () => {
+      // Pokud se nepodařilo načíst obrázek a končí na .png, zkusíme .jpg
+      if (currentImgSrc && currentImgSrc.endsWith('.png')) {
+          setCurrentImgSrc(currentImgSrc.replace('.png', '.jpg'));
+      } else {
+          // Pokud už to není .png (nebo už jsme zkusili .jpg), tak je to finální chyba
+          setImgError(true);
+      }
   };
 
   const getOptionClass = (index: number) => {
@@ -67,13 +80,13 @@ export const QuestionCard: React.FC<Props> = ({
         </h3>
       </div>
 
-      {question.imageUrl && !imgError && (
+      {question.imageUrl && !imgError && currentImgSrc && (
         <div className="mb-6 rounded-lg overflow-hidden border border-gray-200 bg-gray-50 min-h-[200px] flex items-center justify-center relative">
           <img 
-            src={question.imageUrl} 
+            src={currentImgSrc} 
             alt="Ilustrace k otázce" 
             className="w-full h-auto max-h-80 object-contain mx-auto"
-            onError={() => setImgError(true)}
+            onError={handleImageError}
             loading="lazy"
           />
         </div>
@@ -81,7 +94,7 @@ export const QuestionCard: React.FC<Props> = ({
       
       {question.imageUrl && imgError && (
           <div className="mb-6 p-4 text-center text-sm text-red-400 italic bg-red-50 rounded-lg border border-red-100">
-             Obrázek se nepodařilo načíst: {question.imageUrl}
+             Obrázek se nepodařilo načíst: {question.imageUrl} (ani .jpg varianta)
           </div>
       )}
 

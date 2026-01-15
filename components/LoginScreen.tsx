@@ -9,24 +9,27 @@ interface Props {
 }
 
 export const LoginScreen: React.FC<Props> = ({ onLogin }) => {
-  const [name, setName] = useState(''); 
+  const [input, setInput] = useState(''); 
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Funkce pro vytvoření emailu z uživatelského jména
-  const createFakeEmail = (username: string) => {
-      // 1. Převedeme na malá písmena a odstraníme mezery na začátku/konci
-      let cleanName = username.trim().toLowerCase();
-      
-      // 2. Pokud uživatel omylem zadal celý email (např. pepa@maturita.app),
-      // odstraníme tu koncovku, abychom ji tam nepřidali dvakrát.
-      cleanName = cleanName.replace('@maturita.app', '');
+  // Funkce pro zpracování vstupu (buď celé jméno nebo generování domény)
+  const processEmail = (userInput: string) => {
+      const trimmedInput = userInput.trim();
 
-      // 3. Odstraníme diakritiku a mezery uvnitř jména (pro jistotu)
+      // 1. Pokud uživatel zadal celý email (obsahuje @), použijeme ho tak, jak je.
+      // To umožní přihlášení přes gmail.com nebo jiné domény pro adminy/učitele.
+      if (trimmedInput.includes('@')) {
+          return trimmedInput;
+      }
+
+      // 2. Pokud uživatel zadal jen jméno (pro studenty), vygenerujeme @maturita.app
+      let cleanName = trimmedInput.toLowerCase();
+      
+      // Odstraníme diakritiku a mezery
       cleanName = cleanName.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '');
       
-      // 4. Vrátíme formát pro Firebase
       return `${cleanName}@maturita.app`;
   };
 
@@ -42,17 +45,17 @@ export const LoginScreen: React.FC<Props> = ({ onLogin }) => {
     }
 
     try {
-        // Automatické doplnění domény
-        const fakeEmail = createFakeEmail(name);
-        console.log("Pokus o přihlášení jako:", fakeEmail);
+        // Zpracování emailu
+        const emailToUse = processEmail(input);
+        console.log("Pokus o přihlášení jako:", emailToUse);
 
         // PŘIHLÁŠENÍ
-        const userCredential = await signInWithEmailAndPassword(auth, fakeEmail, password);
+        const userCredential = await signInWithEmailAndPassword(auth, emailToUse, password);
         
         onLogin({
             uid: userCredential.user.uid,
-            email: fakeEmail,
-            displayName: userCredential.user.displayName || name
+            email: emailToUse,
+            displayName: userCredential.user.displayName || input
         });
 
     } catch (err: any) {
@@ -65,7 +68,7 @@ export const LoginScreen: React.FC<Props> = ({ onLogin }) => {
         if (code === 'auth/invalid-credential' || code === 'auth/wrong-password') {
             msg = "Nesprávné jméno nebo heslo.";
         } else if (code === 'auth/user-not-found' || code === 'auth/invalid-email') {
-            msg = "Tento uživatel neexistuje. Požádejte učitele o vytvoření účtu.";
+            msg = "Tento uživatel neexistuje.";
         } else if (code === 'auth/too-many-requests') {
             msg = "Příliš mnoho nezdařených pokusů. Zkuste to prosím později.";
         } else if (code === 'auth/network-request-failed') {
@@ -103,14 +106,14 @@ export const LoginScreen: React.FC<Props> = ({ onLogin }) => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-                Uživatelské jméno
+                Uživatelské jméno nebo Email
             </label>
             <input
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-              placeholder="např. Novak"
+              placeholder="Jméno nebo email"
               autoFocus
             />
           </div>

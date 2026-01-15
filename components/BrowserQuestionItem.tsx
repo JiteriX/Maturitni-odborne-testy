@@ -10,12 +10,22 @@ interface Props {
 
 export const BrowserQuestionItem: React.FC<Props> = ({ question, isExpanded, onToggle }) => {
   const [imgError, setImgError] = useState(false);
+  const [currentImgSrc, setCurrentImgSrc] = useState<string | undefined>(question.imageUrl);
 
   useEffect(() => {
       if (isExpanded) {
           setImgError(false);
+          setCurrentImgSrc(question.imageUrl);
       }
-  }, [isExpanded]);
+  }, [isExpanded, question.imageUrl]);
+
+  const handleImageError = () => {
+    if (currentImgSrc && currentImgSrc.endsWith('.png')) {
+        setCurrentImgSrc(currentImgSrc.replace('.png', '.jpg'));
+    } else {
+        setImgError(true);
+    }
+  };
 
   return (
     <div 
@@ -39,13 +49,13 @@ export const BrowserQuestionItem: React.FC<Props> = ({ question, isExpanded, onT
 
         {isExpanded && (
             <div className="mt-6 pt-6 border-t border-gray-100 animate-in fade-in slide-in-from-top-2 duration-200">
-                {question.imageUrl && !imgError && (
+                {question.imageUrl && !imgError && currentImgSrc && (
                     <div className="mb-6 bg-gray-50 rounded-lg p-2 border border-gray-200 min-h-[200px] flex items-center justify-center">
                         <img 
-                            src={question.imageUrl} 
+                            src={currentImgSrc} 
                             alt="Obrázek k otázce" 
                             className="max-h-80 w-full object-contain mx-auto"
-                            onError={() => setImgError(true)}
+                            onError={handleImageError}
                             loading="lazy"
                         />
                     </div>
@@ -53,7 +63,7 @@ export const BrowserQuestionItem: React.FC<Props> = ({ question, isExpanded, onT
                 
                 {question.imageUrl && imgError && (
                     <div className="mb-6 p-4 text-center text-sm text-gray-400 italic bg-gray-50 rounded-lg border border-gray-100">
-                        Obrázek se nepodařilo načíst
+                        Obrázek se nepodařilo načíst (ani .jpg varianta)
                     </div>
                 )}
 

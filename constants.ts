@@ -12,15 +12,20 @@ const parseQuestions = (raw: any[], subject: 'SPS' | 'STT'): Question[] => {
   return raw.map(item => {
     const [id, text, options, correct] = item;
     
-    // Zjistíme, zda text obsahuje klíčové slovo pro obrázek
+    // 1. Základní kontrola klíčových slov
     let hasImage = IMAGE_KEYWORDS.some(k => text.toLowerCase().includes(k));
 
-    // Výjimka pro konkrétní otázky v SPS (např. 211 obsahuje slovo "schématech", ale nemá obrázek)
+    // 2. Vynucení obrázků pro STT v rozsahu 91-174
+    // Tyto otázky často neobsahují slovo "obrázek", ale ptají se "O jakou technologii se jedná?" a vyžadují obrázek.
+    if (subject === 'STT' && id >= 91 && id <= 174) {
+        hasImage = true;
+    }
+
+    // 3. Výjimky pro SPS (otázky, které obrázek mít nemají)
     if (subject === 'SPS' && SPS_EXCLUDED_IMAGES.includes(id)) {
         hasImage = false;
     }
     
-    // ZDE JE KLÍČOVÁ ZMĚNA:
     // Vše převádíme na malá písmena.
     // Očekáváme strukturu: /images/sps/q1.png
     const imagePath = hasImage 
