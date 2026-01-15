@@ -18,7 +18,7 @@ const App: React.FC = () => {
   const [subject, setSubject] = useState<Subject | null>(null);
   const [mode, setMode] = useState<AppMode>(AppMode.MENU);
   
-  // Nový stav pro určení, zda se má tlačítko "Zpět" v žebříčku vrátit do hlavního menu (výběr předmětů)
+  // Stav pro určení, zda se má tlačítko "Zpět" v žebříčku vrátit do hlavního menu
   const [returnToMainMenu, setReturnToMainMenu] = useState(false);
   
   const [mistakesSPS, setMistakesSPS] = useState<number[]>([]);
@@ -80,9 +80,8 @@ const App: React.FC = () => {
                 setMistakesSPS(data.mistakesSPS || []);
                 setMistakesSTT(data.mistakesSTT || []);
                 
-                // FIX: Automatická aktualizace jména v DB, pokud chybí nebo je jiné než v Auth
+                // Automatická aktualizace jména v DB
                 if (currentUser.displayName && data.displayName !== currentUser.displayName) {
-                    console.log("Aktualizuji jméno v databázi na:", currentUser.displayName);
                     setDoc(userDocRef, { displayName: currentUser.displayName }, { merge: true });
                 }
                 
@@ -330,9 +329,9 @@ const App: React.FC = () => {
               </button>
           </div>
 
-          {/* Sekce Síň slávy na hlavní stránce */}
+          {/* Sekce Statistiky na hlavní stránce */}
           <div className="w-full max-w-5xl mx-auto">
-              <h3 className="text-xl font-bold text-gray-400 uppercase tracking-widest text-center mb-6">Síň slávy</h3>
+              <h3 className="text-xl font-bold text-gray-400 uppercase tracking-widest text-center mb-6">Statistiky</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Pro zobrazení celého žebříčku při kliku na "Zobrazit více" v kompaktu, použijeme setSubject a setMode.
                       Zároveň nastavíme příznak returnToMainMenu na true. */}
