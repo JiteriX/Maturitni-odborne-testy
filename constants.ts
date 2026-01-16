@@ -3,31 +3,43 @@ import { Question } from './types';
 import { RAW_SPS } from './questionsSPS';
 import { RAW_STT } from './questionsSTT';
 
-const IMAGE_KEYWORDS = ["obrázku", "náčrtu", "vidíš", "schéma", "diagram", "pozice", "kóta"];
+// Definice rozsahů a konkrétních ID pro SPS
+const SPS_IMAGE_IDS: (number | [number, number])[] = [
+  [16, 20], [36, 40], [56, 60], [76, 80], [96, 100],
+  [116, 120], [136, 140], [156, 160], [176, 180],
+  [216, 220], [236, 240], [256, 260], [276, 280], [296, 300],
+  [316, 320], [336, 340], [356, 360], [376, 380], [396, 400],
+  [416, 420], [436, 440], [456, 460], [476, 480], [496, 500]
+];
 
-// Seznam ID otázek pro SPS, které NEMAJÍ mít obrázek, i když obsahují klíčové slovo
-const SPS_EXCLUDED_IMAGES = [211];
+// Definice rozsahů a konkrétních ID pro STT
+const STT_IMAGE_IDS: (number | [number, number])[] = [
+  [91, 174], 186, 235, [243, 263], [265, 273], [283, 289], 
+  293, [295, 298], [302, 303], [305, 308], [375, 377], [380, 381], 
+  384, 390, 393, 396, 401, [404, 406], [410, 413], [420, 425], 
+  [427, 429], [432, 433], [438, 450], [452, 453], [456, 460], 
+  [462, 463], 472, [474, 479], 483, 485, [490, 492], [496, 497], 
+  [499, 500], 505, 511, 513, [516, 522], [524, 529], [676, 677], 
+  [679, 681], [685, 686], 688
+];
+
+const checkHasImage = (id: number, config: (number | [number, number])[]): boolean => {
+  return config.some(item => {
+    if (Array.isArray(item)) {
+      return id >= item[0] && id <= item[1];
+    }
+    return id === item;
+  });
+};
 
 const parseQuestions = (raw: any[], subject: 'SPS' | 'STT'): Question[] => {
+  const imageConfig = subject === 'SPS' ? SPS_IMAGE_IDS : STT_IMAGE_IDS;
+  
   return raw.map(item => {
     const [id, text, options, correct] = item;
     
-    // 1. Základní kontrola klíčových slov
-    let hasImage = IMAGE_KEYWORDS.some(k => text.toLowerCase().includes(k));
-
-    // 2. Vynucení obrázků pro STT v rozsahu 91-174
-    // Tyto otázky často neobsahují slovo "obrázek", ale ptají se "O jakou technologii se jedná?" a vyžadují obrázek.
-    if (subject === 'STT' && id >= 91 && id <= 174) {
-        hasImage = true;
-    }
-
-    // 3. Výjimky pro SPS (otázky, které obrázek mít nemají)
-    if (subject === 'SPS' && SPS_EXCLUDED_IMAGES.includes(id)) {
-        hasImage = false;
-    }
+    const hasImage = checkHasImage(id, imageConfig);
     
-    // Vše převádíme na malá písmena.
-    // Očekáváme strukturu: /images/sps/q1.png
     const imagePath = hasImage 
         ? `/images/${subject.toLowerCase()}/q${id}.png` 
         : undefined;
