@@ -94,10 +94,11 @@ export const QuestionCard: React.FC<Props> = ({
     }
 
     // --- FALLBACK (Starý parser pro jednoduché věci nebo pokud KaTeX chybí) ---
+    // Zde přidána podpora pro HTML tagy (např. <span style="...">)
     let html = text;
     
-    // Jednoduché formátování pro texty bez odmocnin
-    if (text.includes('_') || text.includes('^')) {
+    // Jednoduché formátování pro texty bez odmocnin nebo s HTML značkami
+    if (text.includes('_') || text.includes('^') || text.includes('<')) {
          html = html.replace(/(\d)x([A-Z])/g, '$1&times;$2');
          html = html.replace(/(\d)x(\d)/g, '$1&times;$2');
          html = html.replace(/ x /g, ' &times; ');

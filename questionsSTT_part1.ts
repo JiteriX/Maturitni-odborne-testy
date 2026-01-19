@@ -149,11 +149,7 @@ export const part1 = [
   [147, "Na obrázku vidíme upnutí obrobku při frézování, pozice 6 je:", ["stůl frézy", "upínka", "obrobek", "stůl frézky"], 3],
   [148, "Na obrázku vidíme:", ["frézování čelem frézovcí hlavou", "frézování obvodem tvarové frézy", "frézování čelem čelní frézy", "frézování obvodem válcové frézy"], 3],
   [149, "Na obrázku vidíme:", ["frézování čelem kuželové frézy", "frézování obvodem tvarové frézy", "frézování obvodem válcové frézy", "frézování čelem čelní frézy"], 3],
-  [150, "Na obrázku je konzolová frézka:", ["svislá", "portálová", "vodorovná", "vodorovně svislá"], 3], // vodorovná?? Ale obrázek tam chybí, nechám dle původní (vodorovná, v part2.ts index 2... wait, původní part2.ts index 2 je "vodorovná". Ale v novém zadání pro 150 je to 3? Ne, 150 tam vůbec není jako otázka v seznamu obrázků... Ale v 152 je "Na obrázku je konzolová frézka, pozice 4 je:". )
-  // Oprava: Otázka 152 z part2.ts odpovídá nové 152:
-  // "Na obrázku je konzolová frézka, pozice 4 je:"
-  // Odpovědi: vřeteník, stojan, konzola, stůl
-  // Správná: stůl (3)
+  [150, "Na obrázku je konzolová frézka:", ["svislá", "portálová", "vodorovná", "vodorovně svislá"], 3],
   [152, "Na obrázku je konzolová frézka, pozice 4 je:", ["vřeteník", "stojan", "konzola", "stůl"], 3],
   [153, "Na obrázku je konzolová frézka:", ["svisle vodorovná", "vodorovná", "portálová", "svislá"], 3],
   [154, "Na obrázku je konzolová frézka, pozice 5 je:", ["vřeteník", "stojan", "stůl", "konzola"], 3],
@@ -231,10 +227,6 @@ export const part1 = [
   [226, "Popouštění za vysokých teplot nazýváme:", ["Brinýrování neboli černění", "Nitridování", "Fosfátování", "Zušlechťování"], 3],
   [227, "Popouštění se provádí v", ["Popouštěcích pecích pomalým ohřevem materiálu", "Obloukových elektrických pecích", "V indukčních pecích", "V kyslíkovém konvertoru"], 0],
   [228, "Žíhání provádíme", ["Abychom zlepšili vlastnosti po předchozím zpracování", "Abychom snížili obsah fosforu v oceli", "Abychom pokryli povrch součásti tenkou vrstvou, která má výborné kluzné vlastnosti", "Abychom zvýšili v oceli obsah legujících prvků"], 0],
-  [229, "Žíhání rekrystalizační slouží k", ["Snížení tvrdosti", "Ke zvýšení tvrdosti", "Odstranění povrchových vad", "K obnovení plasticity zrna"], 3], // Původně bylo "Odstranění povrchových vad" (Index 2) což je blbost, nové zadání je jasné: K obnovení plasticity zrna. V XML nahoře "K obnovení..." je na indexu 3. OK.
-  // Wait, v XML nahoře: [229, ..., ["Snížení tvrdosti", "Ke zvýšení tvrdosti", "K obnovení plasticity zrna", "Ke snížení pnutí"], 2] -- v novém zadání: "K obnovení plasticity zrna" je správně.
-  // Nový XML záznam:
-  // [229, "Žíhání rekrystalizační slouží k", ["Snížení tvrdosti", "Ke zvýšení tvrdosti", "K obnovení plasticity zrna", "Ke snížení pnutí"], 2],
   [229, "Žíhání rekrystalizační slouží k", ["Snížení tvrdosti", "Ke zvýšení tvrdosti", "K obnovení plasticity zrna", "Ke snížení pnutí"], 2],
   [230, "Žíhání na snížení pnutí slouží", ["Na obnovu plasticity zrna po předchozím tažení", "Aby se zvýšila tažnost", "Aby materiál změkl", "Aby se snížilo vnitřní pnutí po předchozích operacích"], 3],
   [231, "Žíhání na měkko se provádí", ["V rozmezí teplot 500-550 °C z důvodu zlepšení obrobitelnosti", "V rozmezí teplot 1150-1200 °C z důvodu zlepšení obrobitelnosti", "V rozmezí teplot 600-620 °C z důvodu zlepšení obrobitelnosti", "V rozmezí teplot 680–720 °C z důvodu zlepšení obrobitelnosti"], 3],
@@ -247,42 +239,13 @@ export const part1 = [
   [238, "Nárůstek na řezném nástroji", ["Je tvrdší než obráběný materiál a je schopný řezat a přebírá tak částečně funkci břitu nástroje", "Neovlivňuje geometrii řezného nástroje a neovlivňuje jakost obrobené plochy", "Vzniká pokud je při obrábění použito hodně procesní kapaliny", "Vzniká nejvíce, pokud se obrábí litiny"], 0],
   [239, "Frézování obvodem nástroje dělíme", ["Na frézování pro výrobu drážek na pero", "Na soustředné a nesoustředné", "Na frézování čelem čelní frézy", "Na sousledné a nesousledné"], 3],
   [240, "Podstata vrtání je", ["Odjehlení a sražení hran", "Třískové obrábění, při kterém zhotovujeme průchozí nebo neprůchozí díry", "Třískové obrábění, při kterém je materiál odebíraný mnohabřitým nástrojem, který má dlouhou část vyhlazující otvor", "Zahlubování otvorů"], 1],
+  [241, "Na obrázku je znázorněno:", ["Sousledné frézování", "Řezání", "Nesousledné frézování", "Broušení"], 2],
+  [242, "Na obrázku vidíme:", ["Frézování „T“ drážky", "Frézování rybinové drážky", "Frézování nesouměrné drážky", "Frézování pravoúhlé drážky"], 2],
   [243, "Na obrázku vidíme:", ["Frézovací hlavu", "Frézu pro výrobu drážek na pero", "Frézu válcovou čelní pro výrobu drážek na pero", "Frézu tvarovou půlkruhovou vydutou nástrčnou"], 3],
+  [244, "Na obrázku vidíme upínání:", ["Upínání obrobků na trn", "Upínání obrobku na úhelník", "Upínání tříčelisťovým sklíčidlem", "Upínání mezi hroty"], 0],
   [245, "Na obrázku vidíš nástroj pro:", ["Měkké materiály", "Velmi křehké materiály", "Tvrdé materiály", "Středně tvrdé materiály"], 0],
   [246, "Na obrázku vidíš", ["Korunkový (trepanační) vrták", "Kopinatý vrták", "Stupňovitý vrták", "Dělový vrták"], 0],
-  [247, "Na obrázku na čele nástroje je", ["Nárůstek", "Tříska", "Drážka", "Svar"], 1], // Zde byla výjimka v promptu: "Except question 247... the one I'm sending is wrong." V podkladech je [x] Tříska. Uživatel říká "we have correct" (předchozí verze v part1.ts byla: [247, "Na obrázku na čele nástroje je", ["Nárůstek", "Tříska", "Drážka", "Svar"], 1] -> wait, index 1 is Tříska.
-  // Původní kód měl index 3 ("Nárůstek") - NE, v původním kódu "questionsSTT.ts" jsem žádný 247 neviděl, viděl jsem ho v raw listu.
-  // Wait, v mém "mental check" jsem viděl, že původní kód (part1.ts) měl index 3 jako Nárůstek?
-  // Podívejme se na "Start of File questionsSTT_part1.ts" v kontextu.
-  // [247, "Na obrázku na čele nástroje je", ["Nárůstek", "Tříska", "Drážka", "Svar"], 1] -> To je Tříska.
-  // Uživatel říká: "Except question 247, which we have correct and the one I'm sending is wrong."
-  // Pokud uživatel posílá novou sadu (kde je Tříska [x]), a říká že "the one I'm sending is wrong", znamená to, že Tříska je špatně.
-  // A "which we have correct" znamená, že v aktuální aplikaci (kterou mám načtenou) je to správně.
-  // V aktuálním souboru part1.ts (který vidím v kontextu) je: [247, "Na obrázku na čele nástroje je", ["Nárůstek", "Tříska", "Drážka", "Svar"], 1]. Index 1 je Tříska.
-  // To znamená, že v aktuálním souboru je Tříska. A uživatel říká, že "we have correct". Takže Tříska je correct.
-  // A "the one I'm sending is wrong".
-  // Ale v "the one I'm sending" (obrázky/text) je taky Tříska.
-  // To nedává smysl. "The one I'm sending is wrong". Pokud posílá Třísku, tak Tříska je špatně.
-  // "Which we have correct". Pokud máme Třísku, tak máme špatně.
-  // Možná uživatel myslel: "V aplikaci to máme jako Nárůstek (nebo něco jiného) a to je správně."
-  // Ale v kódu vidím index 1 (Tříska).
-  // Pojďme se podívat na samotný obrázek/otázku logicky. Na čele nástroje je *tříska*. Nárůstek je na břitu. Ale obrázek ukazuje odcházející třísku po čele.
-  // Nicméně, uživatel chce zachovat "to co máme". Pokud "to co máme" je index 1 (Tříska), tak to nechám.
-  // Pokud by "to co máme" bylo Nárůstek (např index 0), tak bych dal Nárůstek.
-  // Zkontroluji part1.ts znovu.
-  // [247, "Na obrázku na čele nástroje je", ["Nárůstek", "Tříska", "Drážka", "Svar"], 1]
-  // Takže v kódu je Tříska.
-  // Pokud uživatel říká "we have correct" -> tak Tříska je správně.
-  // "the one I'm sending is wrong". V tom co posílá (text/obrázky nahoře) je taky Tříska [x].
-  // Možná v tom co posílá je Nárůstek [x]?
-  // V obrázku #247 (poslední sada obrázků nahoře):
-  // #247. Na obrázku na čele nástroje je
-  // [ ] Nárůstek
-  // [x] Tříska
-  // ...
-  // Takže v obou je Tříska.
-  // Možná uživatel myslel, že v tom co posílá je *jiná* odpověď.
-  // Udělám to takto: Zachovám odpověď z existujícího souboru (index 1 = Tříska).
+  [247, "Na obrázku na čele nástroje je", ["Nárůstek", "Tříska", "Drážka", "Svar"], 1],
   [248, "Na obrázku vidíš", ["Popouštění", "Řezání laserem", "Povrchové kalení plamenem", "Kalení indukcí"], 2],
   [249, "Na obrázku je znázorněna dvojice drážek", ["Rádiusová a modulová", "Pravoúhlá a do tvaru „T“", "Drážka rybinová a pravoúhlá", "Rádiusová a modulová"], 1],
   [250, "Na obrázku vidíš výrobu drážek frézováním. Je zde použit nástroj", ["Dvojice kotoučových fréz upnutých na společném trnu", "Dvoubřitá fréza", "Korunková fréza", "Úhlová fréza"], 1]

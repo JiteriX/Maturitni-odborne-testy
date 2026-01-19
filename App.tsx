@@ -360,7 +360,7 @@ const App: React.FC = () => {
           </div>
 
           <div className="mt-auto pt-16 text-center text-xs text-gray-400">
-             © 2026 Matyáš Korec | Verze 2.2.0
+             © 2026 Matyáš Korec | Verze 2.2.1
           </div>
       </div>
       )}
@@ -446,7 +446,7 @@ const App: React.FC = () => {
                         </div>
                         <div>
                             <div className="font-bold text-lg">Prohlížet otázky</div>
-                            <div className="text-sm text-gray-500 font-normal">Databáze otázek</div>
+                            <div className="text-sm text-gray-500 font-normal">Databáze {currentQuestions.length} otázek</div>
                         </div>
                     </button>
                     
