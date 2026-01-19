@@ -1,4 +1,5 @@
-import * as firebaseApp from "firebase/app";
+
+import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
@@ -14,8 +15,8 @@ const firebaseConfig = {
 };
 
 // Inicializace aplikace
-// Použití type casting (as any) pro obejití chyby, kdy TypeScript vidí v8 definice (namespace), ale runtime je v9 (modul).
-const app = (firebaseApp as any).initializeApp(firebaseConfig);
+// Standardní modular inicializace (bez přetypování as any)
+const app = initializeApp(firebaseConfig);
 
 // Export služeb pro zbytek aplikace
 export const auth = getAuth(app);
