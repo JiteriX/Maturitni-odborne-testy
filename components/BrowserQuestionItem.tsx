@@ -27,6 +27,48 @@ export const BrowserQuestionItem: React.FC<Props> = ({ question, isExpanded, onT
     }
   };
 
+  // Stejná logika pro renderování textu jako v QuestionCard
+  const renderText = (text: string) => {
+    if (!text) return text;
+
+    // 1. HTML (např. červený text)
+    if (text.includes('<') && text.includes('>')) {
+        return <span dangerouslySetInnerHTML={{ __html: text }} />;
+    }
+    
+    // 2. KaTeX / Matematika
+    const useKatex = text.includes('sqrt') || (text.includes('_') && text.includes('^'));
+    if (useKatex && window.katex) {
+        try {
+            let latex = text;
+            latex = latex.replace(/sqrt\((.+?)\)/g, '\\sqrt{$1}');
+            latex = latex.replace(/(\d|[a-zA-Z])x([a-zA-Z]|\d)/g, '$1 \\cdot $2');
+            latex = latex.replace(/_([a-zA-Z0-9]+)/g, '_{$1}');
+            
+            const html = window.katex.renderToString(latex, {
+                throwOnError: false,
+                displayMode: false
+            });
+            return <span dangerouslySetInnerHTML={{ __html: html }} />;
+        } catch (e) {
+            console.error("KaTeX error:", e);
+        }
+    }
+
+    // 3. Fallback formátování
+    let html = text;
+    if (text.includes('_') || text.includes('^')) {
+         html = html.replace(/(\d)x([A-Z])/g, '$1&times;$2');
+         html = html.replace(/(\d)x(\d)/g, '$1&times;$2');
+         html = html.replace(/ x /g, ' &times; ');
+         html = html.replace(/([a-zA-Z0-9])_([a-zA-Z0-9]+)/g, '$1<sub>$2</sub>');
+         html = html.replace(/\^([0-9]+)/g, '<sup>$1</sup>');
+         return <span dangerouslySetInnerHTML={{ __html: html }} />;
+    }
+
+    return text;
+  };
+
   return (
     <div 
         className={`bg-white p-5 rounded-xl shadow-sm border transition-all ${isExpanded ? 'border-blue-400 ring-2 ring-blue-100' : 'border-gray-100 hover:border-blue-200 hover:shadow-md'}`}
@@ -35,7 +77,7 @@ export const BrowserQuestionItem: React.FC<Props> = ({ question, isExpanded, onT
             <div className="flex justify-between items-start gap-4">
                 <div className="flex-1">
                     <span className="font-bold text-blue-600 text-sm block mb-1">Otázka #{question.id}</span>
-                    <p className="text-gray-800 font-medium text-lg leading-snug">{question.text}</p>
+                    <p className="text-gray-800 font-medium text-lg leading-snug">{renderText(question.text)}</p>
                 </div>
                 <div className="text-gray-400 mt-1">
                     {isExpanded ? (
@@ -84,7 +126,7 @@ export const BrowserQuestionItem: React.FC<Props> = ({ question, isExpanded, onT
                                 }`}>
                                     {isCorrect && <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
                                 </div>
-                                <span>{opt}</span>
+                                <span className="flex-1">{renderText(opt)}</span>
                             </div>
                         )
                     })}

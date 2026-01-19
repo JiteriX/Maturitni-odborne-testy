@@ -54,51 +54,40 @@ export const QuestionCard: React.FC<Props> = ({
   // --- VYLEPŠENÝ PARSER MATEMATICKÝCH VZORCŮ S KATEX ---
   const renderMathText = (text: string) => {
     if (!text) return text;
+
+    // 1. PRIORITA: HTML (např. pro červený text v STT otázce 273)
+    // Pokud text obsahuje HTML tagy (< a >), vykreslíme ho přímo jako HTML.
+    // Tím zajistíme, že se <span class="..."> nevykreslí jako text.
+    if (text.includes('<') && text.includes('>')) {
+        return <span dangerouslySetInnerHTML={{ __html: text }} />;
+    }
     
-    // Použijeme KaTeX pouze pokud text obsahuje odmocninu 'sqrt' (pro otázku 75 SPS)
-    // nebo složitější indexy, které vyžadují profesionální sazbu.
+    // 2. PRIORITA: KaTeX (Matematika)
+    // Použijeme KaTeX pouze pokud text obsahuje odmocninu 'sqrt' nebo složitější indexy
     const useKatex = text.includes('sqrt') || (text.includes('_') && text.includes('^'));
 
     if (useKatex && window.katex) {
         try {
             // Převod našeho zjednodušeného zápisu do LaTeX syntaxe
             let latex = text;
-
-            // 1. Odmocnina: sqrt(...) -> \sqrt{...}
-            // Nahradíme sqrt(...) za \sqrt{...}
-            // Pozor: toto je jednoduchý regex, pro složitější vnoření by byl potřeba parser, 
-            // ale pro naše otázky to stačí.
             latex = latex.replace(/sqrt\((.+?)\)/g, '\\sqrt{$1}');
-
-            // 2. Násobení: 3xM -> 3 \cdot M nebo 3 \times M
-            // Nahradíme 'x' za \cdot, pokud je mezi znaky
             latex = latex.replace(/(\d|[a-zA-Z])x([a-zA-Z]|\d)/g, '$1 \\cdot $2');
-            
-            // 3. Indexy: M_RED -> M_{RED} (složené závorky jsou v LaTeXu nutné pro více znaků)
-            // Najdeme podtržítko následované alfanumerickými znaky a obalíme je {}
             latex = latex.replace(/_([a-zA-Z0-9]+)/g, '_{$1}');
-
-            // 4. Pokud je tam 'M_RED =', chceme to hezky zarovnat, v LaTeXu je to standard.
             
-            // Vykreslení pomocí KaTeX do HTML stringu
             const html = window.katex.renderToString(latex, {
                 throwOnError: false,
-                displayMode: false // Inline mód
+                displayMode: false
             });
 
             return <span dangerouslySetInnerHTML={{ __html: html }} />;
         } catch (e) {
             console.error("KaTeX error:", e);
-            // Fallback na starý render, pokud KaTeX selže
         }
     }
 
-    // --- FALLBACK (Starý parser pro jednoduché věci nebo pokud KaTeX chybí) ---
-    // Zde přidána podpora pro HTML tagy (např. <span style="...">)
+    // 3. FALLBACK: Jednoduché náhrady
     let html = text;
-    
-    // Jednoduché formátování pro texty bez odmocnin nebo s HTML značkami
-    if (text.includes('_') || text.includes('^') || text.includes('<')) {
+    if (text.includes('_') || text.includes('^')) {
          html = html.replace(/(\d)x([A-Z])/g, '$1&times;$2');
          html = html.replace(/(\d)x(\d)/g, '$1&times;$2');
          html = html.replace(/ x /g, ' &times; ');
