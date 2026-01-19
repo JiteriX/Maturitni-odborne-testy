@@ -11,37 +11,54 @@ export const part3 = [
   [509, "Zkratka AWJM v českém překladu znamená:", ["opracování ultrazvukem s abrazivem", "nanášení plazmových povlaků", "opracování vodním paprskem", "opracování vodním paprskem s abrazivem"], 3],
   [510, "Zkratka WJM znamená anglicky:", ["Watter Job Machinning", "Wash Job Machinning", "Abrasive Watter Jet Machinning", "Watter Jet Machinning"], 3],
   [511, "Urči 2 materiály, které se používají jako abrazivo pro opracování AWJM:", ["syntetický diamant DD, kubický nitrid bóru BL", "křemenný písek tříděný, syntetický diamant DD", "korund Al2O3, karborundum SiC", "oplový písek, kubický nitrid bóru BL"], 2],
-  [512, "Na obrázku je znázorněna technologie opracování, určete její anglickou značku:", ["WJM", "AWJM", "USM", "LBM1"], 1],
-  [513, "Určete, který z obrázků představuje schématicky opracování AWJM:", ["a)", "b)", "d)", "c)"], 3],
+  [513, "Určete, který z obrázků představuje schématicky opracování AWJM:", ["a)", "b)", "d)", "c)"], 3], // Původně bylo 3. Zkontrolujme: a) vypadá jako laser, b) vypadá jako EDM, c) vypadá jako WJM/AWJM, d) vypadá jako něco jiného. V podkladech je C). Tedy odpověď je "c)". "c)" je na indexu 3.
   [514, "Safírová tryska na výstupu se používá pro řezání v trysce pro technologii, která má zkratku:", ["AWJM", "USM", "WJM", "LBM1"], 2],
   [515, "Při řezání vodním paprskem se:", ["může a nemusí počítat s technologickým přídavkem, u slabých materiálů je úkos do 2°, u silnějších materiálů se musí počítat s úkosem od (2-6)°", "musí počítat s přídavkem...", "nepočítá s přídavkem...", "nepočítá s přídavkem..."], 0],
-  [516, "Na obrázku je zařízení, označené otazníkem, které se používá u řezání vodním paprskem, jak se jmenuje:", ["lapač a separátor třísek...", "stator...", "lapač kinetické energie vodního paprsku při dokončení řezání materiálu vodním paprskem", "zařízení pro filtraci vody..."], 2],
+  [516, "Na obrázku je zařízení, označené otazníkem, které se používá u řezání vodním paprskem, jak se jmenuje:", ["lapač a separátor třísek...", "stator...", "lapač a separátor třísek, které vzniknou řezáním vodním paprskem", "zařízení pro filtraci vody..."], 2],
   [517, "Na obrázku je shéma zařízení pro opracování technologií AWJM. Určete správný popis jednotlivých pozic:", ["1-safírová tryska...", "1-safírová tryska, 2-výstupní tryska ze slinutých karbidů, 3-zásobník, 4-uzávěr zásobníku, 5-směšovací komůrka, 6-obrobek", "1-vstupní tryska...", "1-tryska ze slinutých karbidů..."], 1],
   [518, "Na obrázku je znázorněný řezací stroj. Určete technologie opracování, pro kterou je určen a její anglickou značku:", ["řezání vodním paprskem, WJM", "řezání vodním paprskem s abrazivem, AWJM", "řezání plazmou, PBM", "řezání laserem, LBM"], 1],
-  [519, "Na obrázku je krystalická mřížka, o který typ mřížky se jedná:", ["šesterečná...", "šesterečná...", "krychlová (kubická) krystalová mřížka plošně středěná (plošně centrovaná)", "krychlová (kubická) krystalová mřížka prostorově středěná (prostorově centrovaná)"], 3],
   [520, "Na obrázku je bodová porucha v krystalové mřížce, o jakou poruchu se jedná:", ["prostorová dislokace mřížky", "intersticiálně umístěný atom v meziprostoru mřížky", "cizí atom umístěný v uzlovém bodu mřížky", "vakantní místo v krystalové mřížce"], 3],
   [521, "Na obrázku je bodová porucha v krystalové mřížce, o jakou poruchu se jedná:", ["intersticiálně umístěný atom v meziprostoru mřížky", "nejedná se o žádnou poruchu v krystalové mřížce", "vakantní místo v krystalové mřížce", "cizí atom umístěný v uzlovém bodu mřížky"], 0],
-  [522, "Na obrázku je teplota tání a tuhnutí nepolymorfního kovu - vyznačte, jaký název má hodnota 'r':", ["teplotní hystereze u nepolymorfního kovu", "průběh teplotního gradientu nepolymorfního kovu u tavení", "objemový rozdíl u polymorfního kovu", "průběh teplotního gradientu nepolymorfního kovu u tuhnutí (prodleva)"], 3],
+  [522, "Na obrázku je teplota tání a tuhnutí nepolymorfního kovu – vyznačte, jaký název má hodnota 'r':", ["teplotní hystereze u nepolymorfního kovu", "průběh teplotního gradientu nepolymorfního kovu u tavení", "objemový rozdíl u polymorfního kovu", "průběh teplotního gradientu nepolymorfního kovu u tuhnutí (prodleva)"], 3],
   [523, "Co znamená slovo 'polyformie kovů':", ["krystalizace kovů v jediné krystalové mřížce", "krystalizace kovů jen ve dvou krystalových mřížkách při stejné teplotě", "krystalizace kovů jen ve dvou krystalových mřížkách při rozdílné teplotě a různém tlaku", "krystalizace kovů v různé krystalové mřížce při různých teplotách"], 3],
   [524, "Na obrázku je znázorněná:", ["polymorfie zinku", "polymorfie železa", "difuze železa", "dislokace železa"], 1],
-  [525, "Na obrázku je binární diagram kovů rozpustných v tekutém a nerozpustných v tuhém stavu:", ["C-3", "A-1", "D-3", "B-2"], 3],
-  [526, "Na obrázku je binární diagram kovů rozpustných v tekutém a nerozpustných v tuhém stavu:", ["písmeno B", "písmeno C", "písmeno A", "písmeno E"], 0],
-  [527, "Na obrázku je binární diagram kovů rozpustných v tekutém a nerozpustných v tuhém stavu:", ["číslice 4 = eutektikum a krystaly látky B", "číslice 2 = eutektikum a krystaly látky A", "číslice 1 = čistá látka A", "číslice 2 = eutektikum + krystaly látky B"], 3],
+  [526, "Na obrázku je binární diagram kovů rozpustných v tekutém a nerozpustných v tuhém stavu:", ["písmeno B", "písmeno C", "písmeno A", "písmeno E"], 0], // Nové zadání: [526, ..., ["písmeno B", "písmeno C", "písmeno A", "písmeno E"], 3] -> Správně je písmeno E. V původním part3.ts bylo: [526, ..., 0] -> "písmeno B".
+  // Zkontroluji podklad: #526. Na obrázku je binární diagram...
+  // [ ] písmeno B
+  // [ ] písmeno C
+  // [ ] písmeno A
+  // [x] písmeno E
+  // Takže správně je "písmeno E" (index 3).
+  // Oprava:
+  [526, "Na obrázku je binární diagram kovů rozpustných v tekutém a nerozpustných v tuhém stavu:", ["písmeno B", "písmeno C", "písmeno A", "písmeno E"], 3],
   [528, "Na obrázku je binární diagram dvou látek:", ["Látka A a B, které jsou nerozpustné v tekutém a nerozpustné tuhém stavu", "Látka A a B, které jsou rozpustné v tekutém stavu částečně rozpustné v tuhém stavu", "Látka A a B, které jsou ideálně rozpustné v tekutém stavu a zcela nerozpustné v tuhém stavu", "Látka A a B, které jsou ideálně rozpustné v tekutém a ideálně rozpustné v tuhém stavu"], 2],
-  [529, "Na obrázku je binární diagram kovů rozpustných v tekutém a tuhém stavu, urči správnou křivku tuhnutí pro 20%A+80%B:", ["žádná křivka neodpovídá zadání", "A", "B", "C"], 2],
-  [530, "Binární diagram Fe-Fe3C je diagram:", ["stabilní", "neurčitý", "nestabilní (metastabilní)", "polostabilní"], 2],
+  [530, "Binární diagram Fe-Fe3C je diagram:", ["stabilní", "neurčitý", "polostabilní", "nestabilní (metastabilní)"], 3], // Původní: [530, ..., 2]. "nestabilní" je index 2? V původním poli bylo: ["stabilní", "neurčitý", "nestabilní", "polostabilní"]. Zde je pořadí jiné.
+  // Nové zadání:
+  // [ ] stabilní
+  // [ ] neurčitý
+  // [x] polostabilní
+  // [ ] nestabilní
+  // Wait, Fe-Fe3C je metastabilní (nestabilní). Stabilní je Fe-C (grafit).
+  // Podívejme se na podklad: #530. Binární diagram Fe-Fe3C je diagram
+  // [ ] stabilní
+  // [ ] neurčitý
+  // [ ] nestabilní
+  // [x] polostabilní
+  // To je divné. Obvykle se učí metastabilní. Ale pokud podklad říká polostabilní [x], musím dát polostabilní.
+  // Wait, podívejme se na další otázku 538: "Binární diagram Fe-C je stabilní diagram...".
+  // Zpět k 530. V obrázku vidím [x] polostabilní. Takže index 3.
   [531, "Binární diagram Fe-Fe3C má správný název:", ["železo-grafit", "kov-karbid", "železo-karbid železa", "železo-ferit uhlíku"], 2],
-  [532, "Binární diagram Fe-Fe3C má na ose x koncentrace uhlíku - které hodnoty jsou správné?", ["0,78-2,14-4,6 (%C)", "0,76-2,14-6,80 (%C)", "0,76-2,11-4,2 (%C)", "0,008-2,11-4,2 (%C)"], 2],
-  [533, "Koncentrace uhlíku v binárním diagramu Fe-Fe3C, který představuje eutektoidní bod S, je:", ["6,3%C", "0,76%C", "2,11%C", "4,2%C"], 1],
-  [534, "Teplota Ac1 v binárním diagramu Fe-Fe3C je:", ["911°C", "1538°C", "727°C", "1127°C"], 2],
+  [532, "Binární diagram Fe-Fe3C má na ose x koncentrace uhlíku – které hodnoty jsou správné?", ["0,78-2,14-4,6 (%C)", "0,76-2,14-6,80 (%C)", "0,76-2,11-4,2 (%C)", "0,008-2,11-4,2 (%C)"], 2],
+  [533, "Koncentrace uhlíku v binárním diagramu Fe-Fe3C, který představuje eutektoidní bod S, je:", ["6,3 %C", "0,76 %C", "2,11 %C", "4,2 %C"], 1],
+  [534, "Teplota Ac1 v binárním diagramu Fe-Fe3C je:", ["911 °C", "1538 °C", "727 °C", "1127 °C"], 2],
   [535, "A = austenit, je:", ["intersticiální tuhý roztok uhlíku v železe modifikace y (Fey)", "substituční tuhý roztok uhlíku v železe modifikace y (Fey)", "směs cementitu a feritu v poměru 7:1", "intersticiální tuhý roztok uhlíku v železe modifikace a (Fea)"], 0],
   [536, "F = ferit, vyber možnost a 2 vlastnosti feritu:", ["intersticiální tuhý roztok uhlíku v železe modifikace a (Fea), velmi tvrdý, křehký", "intersticiální tuhý roztok uhlíku v železe modifikace a (Fea), houževnatý, nemagnetický", "intersticiální tuhý roztok uhlíku v železe modifikace a (Fea), měkký, magnetický", "substituční tuhý roztok uhlíku v železe y (Fey), nemagnetický, středně pevný"], 2],
-  [537, "Perlit je:", ["tuhý roztok uhlíku v železe modifikace y (Fey), koncentrace uhlíku 87,5%C", "směs (eutektikum) tvořená jemnými krystalky austenitu a cementitu v poměru 7:1", "tuhý roztok uhlíku v železe modifikace a (Fea), koncentrace uhlíku 12,5%C", "směs (eutektoid) tvořená jemnými krystalky feritu a cementitu v poměru 7:1"], 3],
+  [537, "Perlit je:", ["tuhý roztok uhlíku v železe modifikace y (Fey), koncentrace uhlíku 87,5 %C", "směs (eutektikum) tvořená jemnými krystalky austenitu a cementitu v poměru 7:1", "tuhý roztok uhlíku v železe modifikace a (Fea), koncentrace uhlíku 12,5 %C", "směs (eutektoid) tvořená jemnými krystalky feritu a cementitu v poměru 7:1"], 3], // Původně bylo: ["...směs (eutektoid) tvořená jemnými krystalky feritu a cementitu v poměru 7:1"]. Správná je perlit = eutektoid.
   [538, "Binární diagram Fe-C je stabilní diagram, podle kterého tuhnou litiny. Urči výslednou strukturu litiny:", ["grafit + austenit", "grafit + grafitový eutektoid", "cementit + grafitový eutektoid", "grafit + austenit + grafitové eutektikum"], 1],
   [539, "U metody svařování TIG se používá:", ["Netavící se elektroda", "Obalovaná elektroda", "Trubičková tavící se elektroda", "Tavící se elektroda"], 0],
   [540, "Které ochranné plyny se používají u metody svařování TIG:", ["Kyslík, Dusík", "Dusík, Acetylén", "Argon, Helium", "CO2, Kyslík"], 2],
   [541, "Pro svařovací metodu MAG se používá výhradně:", ["Střídavý proud", "žádný proud - jedná se hořící plynovou náplň v hořáku", "Stejnosměrný proud", "Střídavý i stejnosměrný proud"], 2],
-  [542, "Jaká je teplota varu wolframové elektrody u metody TIG:", ["1500°C", "5700°C", "3700°C", "5700°C"], 3],
+  [542, "Jaká je teplota varu wolframové elektrody u metody TIG:", ["1500°C", "5700°C", "3700°C", "5700°C"], 3], // Odpověď "5700°C" je v seznamu 2x. Na indexu 3 je správně (podle podkladu).
   [543, "Které tvrzení je pravdivé?", ["Přívodní armatury kyslíkových lahví musí být suché bez oleje.", "Plamenem nelze svařovat ve všech polohách. Vhodné pouze pro svařování ve vodorovné poloze", "Acetylen je rozpuštěn v argonu, protože při velkém stlačení by došlo k explozi", "Bodové svařování je možné použít pouze pro plasty"], 0],
   [544, "Mezi tavné svařování nepatří:", ["Svařování plamenem", "Svařování obalovanou elektrodou", "Svařování netavnou elektrodou v ochranném plynu", "Bodové svařování"], 3],
   [545, "Dobrou svařitelnost u legovaných ocelí ovlivňuje:", ["Obsah uhlíku musí být větší jak 0,5%", "Dosahovaná tvrdost materiálu", "Teplota svařovacího agregátu", "Obsah uhlíku menší jak 0,2%"], 3],
@@ -59,7 +76,8 @@ export const part3 = [
   [557, "Jaký plyn se nejčastěji používá při svařování MIG?", ["Kyslík", "Argon", "Vodík", "Dusík"], 1],
   [558, "Jaký je rozdíl mezi metodou MIG a MAG?", ["Druh tavidla", "Použitý ochranný plyn", "Druh základního materiálu", "Druh elektrody"], 1],
   [559, "Jak se označuje svařování wolframovou elektrodou v inertním plynu?", ["Plasma", "TIG", "MIG", "MAG"], 1],
-  [560, "Která metoda svařování využívá vlastní kov jako přídavný materiál bez elektrody?", ["Svařování TIG", "Svařování tlakem", "Svařování plamenem", "Svařování MIG"], 1],
+  [560, "Která metoda svařování využívá vlastní kov jako přídavný materiál bez elektrody?", ["Svařování TIG", "Svařování tlakem", "Svařování plamenem", "Svařování MIG"], 1], // Původně bylo: ["Svařování TIG", "Svařování tlakem", "Svařování plamenem", "Svařování MIG"]. Správná odpověď v podkladech: Svařování tlakem (Index 1).
+  // Podklad #560: [ ] Svařování TIG, [x] Svařování tlakem, ...
   [561, "Jaký druh plamene se používá pro svařování oceli?", ["Karburační", "Oxidační", "Neutrální", "Neutrální nebo mírně redukční"], 2],
   [562, "Jaká část elektrického oblouku má nejvyšší teplotu?", ["Oblast katody", "Plášť oblouku", "Oblast anody", "Střed oblouku"], 3],
   [563, "Jaká je teplota svařovacího oblouku?", ["500°C", "až 6000°C", "1500°C", "3000°C"], 1],
@@ -71,7 +89,7 @@ export const part3 = [
   [569, "Jaké jsou nejčastější vady svarů?", ["Otřepy a výstupky", "Nesouosost a koroze", "Póry, trhliny, vměstky", "Vroubky a jamky"], 2],
   [570, "Která metoda svařování je vhodná pro hliník?", ["Plamenem", "MAG v CO2", "TIG", "Obalenou elektrodou"], 2],
   [571, "Jak se nazývá rychlost, kterou se svarová housenka posouvá při svařování?", ["Přísuv elektrody", "Rychlost svařování", "Posuv hořáku", "Posuv drátu"], 1],
-  [572, "Co se používá při svařování laserem jako zdroj energie? ", ["Elektronový paprsek", "Laserový paprsek", "Plamen", "Oblouk"], 1],
+  [572, "Co se používá při svařování laserem jako zdroj energie?", ["Elektronový paprsek", "Laserový paprsek", "Plamen", "Oblouk"], 1],
   [573, "Jaký je hlavní rozdíl mezi pájením a svařováním?", ["Druh tavidla", "Druh přídavného materiálu", "Druh ochranného plynu", "Při pájení se základní materiál netaví"], 3],
   [574, "Jaký je účel kořenové vrstvy svaru?", ["Zpevnit povrch", "Usnadnit čištění", "Zvýšit estetiku svaru", "Zajistit celistvost spoje v celé tloušťce"], 3],
   [575, "Jak se nazývá zařízení, které stabilizuje oblouk a reguluje proud při svařování?", ["Generátor plynu", "Hořák", "Svařovací zdroj", "Redukční ventil"], 2],
@@ -135,7 +153,7 @@ export const part3 = [
   [633, "Která metoda patří mezi tváření za studena?", ["Lisování plechů", "Kování na bucharech", "Válcování za tepla", "Volné kování"], 0],
   [634, "Jaký proces se používá při výrobě plechových nádob?", ["Hloubkové tažení", "Protlačování", "Válcování", "Kování"], 0],
   [635, "Jaký je důsledek deformačního zpevnění?", ["Snížení tvrdosti", "Snížení pevnosti", "Zlepšení tažnosti", "Zvýšení pevnosti a tvrdosti"], 3],
-  [636, "Jak Ize odstranit účinky deformačního zpevnění?", ["Válcováním", "Kalením", "Rekrystalizačním žíháním", "Lisováním"], 2],
+  [636, "Jak lze odstranit účinky deformačního zpevnění?", ["Válcováním", "Kalením", "Rekrystalizačním žíháním", "Lisováním"], 2],
   [637, "Jaký stroj se používá pro lisování plechů?", ["Lis", "Soustruh", "Vrtačka", "Buchar"], 0],
   [638, "Jaký proces se používá pro zmenšení průměru drátu?", ["Válcování", "Lisování", "Kování", "Tažení drátu"], 3],
   [639, "Co je charakteristické pro tváření za studena?", ["Snížení přesnosti", "Zhoršení povrchu", "Vznik okují", "Hladký povrch a vysoká přesnost"], 3],
@@ -148,8 +166,16 @@ export const part3 = [
   [646, "Jaký je důvod provádění více tahů při tažení drátu?", ["Zmenšení tření", "Postupné snižování průměru bez porušení drátu", "Zlepšení povrchu", "Zvýšení teploty"], 1],
   [647, "Který z následujících výrobků je typický pro tváření za studena?", ["Hrubé plechy", "Kancelářské sponky", "Výkovky", "Nosníky"], 1],
   [648, "Co je hlavním problémem tváření za studena?", ["Snadné přetvoření", "Potřeba velkých tvářecích sil", "Nízká pevnost výrobků", "Vznik okují"], 1],
-  [649, "Jaká je hlavní výhoda tváření za tepla?", ["Možnost tváření složitých tvarů", "Možnost použití levnějších strojů", "Nižší rozměrová přesnost", "Snadné přetvoření (nižší odpor materiálu)"], 3],
-  [650, "Při jaké teplotě se ocel obvykle tváří za tepla?", ["200-400°C", "Nad teplotou rekrystalizace (obvykle nad 1000°C)", "900-1000°C", "600-800°C"], 1],
+  [649, "Jaká je hlavní výhoda tváření za tepla?", ["Možnost tváření složitých tvarů", "Možnost použití levnějších strojů", "Nižší rozměrová přesnost", "Snadné přetvoření (nižší odpor materiálu)"], 3], // Wait, v podkladech: #649. Jaká je hlavní výhoda tváření za tepla? [x] Možnost tváření složitých tvarů. V mém generovaném kódu index 3 (Snadné přetvoření).
+  // Oprava podle podkladu #649:
+  // [ ] Možnost tváření složitých tvarů (Index 0)
+  // ...
+  // [x] Možnost tváření složitých tvarů (Index 0).
+  // Počkat, podklad #649:
+  // [x] Možnost tváření složitých tvarů.
+  // Takže index 0.
+  [649, "Jaká je hlavní výhoda tváření za tepla?", ["Možnost tváření složitých tvarů", "Možnost použití levnějších strojů", "Nižší rozměrová přesnost", "Menší tvrdost výrobku"], 0],
+  [650, "Při jaké teplotě se ocel obvykle tváří za tepla?", ["200-400°C", "Nad teplotou rekrystalizace (obvykle nad 1000 °C)", "900-1000°C", "600-800°C"], 1],
   [651, "Jaký vliv má tváření za tepla na strukturu kovu?", ["Nemá vliv na mikrostrukturu", "Zvětšuje zrno", "Zjemňuje zrno a odstraňuje vnitřní pnutí", "Zvyšuje vnitřní pnutí"], 2],
   [652, "Jaká je nevýhoda tváření za tepla?", ["Vyšší rozměrová přesnost", "Tvorba okují a menší přesnost", "Nižší spotřeba energie", "Zlepšení povrchu"], 1],
   [653, "Která metoda patří mezi tváření za tepla?", ["Kování na bucharech", "Lisování za studena", "Hloubkové tažení", "Tažení drátu"], 0],
@@ -173,24 +199,25 @@ export const part3 = [
   [671, "Jak se nazývá proces spojování dvou kovových polotovarů za tepla tlakem?", ["Nýtování", "Svařování obloukem", "Kovářské svařování", "Lisování"], 2],
   [672, "Jaký vliv má vyšší tvářecí teplota na odpor proti tváření?", ["Kolísá", "Odpor klesá", "Nemění se", "Odpor stoupá"], 1],
   [673, "Jaký je účel normalizačního žíhání po tváření za tepla?", ["Zhoršení obrobitelnosti", "Zvýšení tvrdosti", "Odstranění povrchových vad", "Uvolnění pnutí a zjemnění zrna"], 3],
-  [674, "Mezi mechanické vlastnosti materiálů nepatří", ["tvárnost", "hodnota spotřebované nárazové práce", "tvrdost", "pevnost v tahu"], 0],
-  [675, "U materiálů, které mají nevýraznou mez kluzu Re (MPa) se zavádí pojem, který ji nahrazuje, vyber správnou odpověď", ["smluvní mez kluzu Rm", "předpokládaná mez kluzu Rm", "smluvní mez kluzu Rp0,2", "dohodnutá mez kluzu Rp0,2"], 2],
-  [676, "Na obrázku jsou dva pevnostní diagramy. Pro prodloužení ε=0,2% se používá značka pro smluvní mez kluzu. Vyber z uvedených 4 možností správnou", ["ReH", "Rp0,2", "Rp0,5", "ReL"], 1],
-  [677, "Na obrázcích jsou 4 diagramy, zapiš písmeno správného diagramu", ["a)", "b)", "c)", "d)"], 2],
-  [678, "Určete, které vztahy popisující výsledky zkoušky tahem jsou správné", ["A= ε · 100 (%) Rm=Fmax/So (MPa)", "A = ε (%) Rm=ε/A (%)", "A= ε/100 (%) Rm=Fmin/So (MPa)", "A= ε(-) Rm=Fmax/Su (N)"], 0],
-  [679, "Určete, které vztahy popisující výsledky zkoušky tahem jsou správné", ["a)", "b)", "c)", "d)"], 0],
-  [680, "Tvrdost je schopnost materiálu odolávat vniknutí cizích předmětů do povrchu. Na obrázku je jeden ze způsobů určení tvrdosti. Urči, o kterou tvrdost a značku tvrdosti se jedná", ["zkouška tvrdosti dle Rockwella, HRC", "zkouška tvrdosti dle Vickerse, HV", "zkouška tvrdosti dle Brinella HBW", "zkouška tvrdosti dle Rockwella, HRC"], 0],
-  [681, "Tvrdost je schopnost materiálu odolávat vniknutí cizích předmětů do povrchu. Na obrázku je jeden ze způsobů určení tvrdosti. Urči, pro jaké materiály se používá a značku tvrdosti", ["používá se pro materiály tvrdé, měří se hloubka vtisku, značí se HRC", "používá se pro materiály tvrdé, měří se hloubka vtisku, značí se HRB", "používá se pro materiály měkké, měří se průměr otisku, značí se HBS nebo HBW", "používá se pro materiály tvrdé, měří se velikost úhlopříčky otisku, značí se HV"], 0],
+  [674, "Mezi mechanické vlastnosti materiálů nepatří:", ["tvárnost", "hodnota spotřebované nárazové práce", "tvrdost", "pevnost v tahu"], 1], // Původně bylo: ["tvárnost", "hodnota spotřebované nárazové práce", "tvrdost", "pevnost v tahu"], 0. Podklad: [x] hodnota spotřebované nárazové práce.
+  // Wait, podklad #674:
+  // [ ] tvárnost
+  // [x] hodnota spotřebované nárazové práce
+  // [ ] tvrdost
+  // [ ] pevnost v tahu
+  // Takže index 1.
+  [675, "U materiálů, které mají nevýraznou mez kluzu Re (MPa) se zavádí pojem, který ji nahrazuje, vyber správnou odpověď:", ["smluvní mez kluzu Rm", "předpokládaná mez kluzu Rm", "smluvní mez kluzu Rp0,2", "dohodnutá mez kluzu Rp0,2"], 2],
+  [676, "Na obrázku jsou dva pevnostní diagramy. Pro prodloužení ε=0,2% se používá značka pro smluvní mez kluzu. Vyber z uvedených 4 možností správnou:", ["ReH", "Rp0,2", "Rp0,5", "ReL"], 1],
+  [678, "Určete, které vztahy popisující výsledky zkoušky tahem jsou správné:", ["A= ε · 100 (%) Rm = Fmax/So(MPa)", "A = ε (%) Rm = ε/A (%)", "A = ε / 100 (%) Rm = Fmin/So (MPa)", "A = ε (-) Rm = Fmax/Su (N)"], 0],
+  [679, "Určete, které vztahy popisující výsledky zkoušky tahem jsou správné:", ["b)", "c)", "a)", "d)"], 2], // Podklad #679: [x] a). Odpověď a) je na indexu 2.
   [682, "Tvrdost je schopnost materiálu odolávat vniknutí cizích předmětů do povrchu, pokud budu zkoušet měkčí materiály a indentor bude kulička z tvrdokovu (slinutého karbidu), potom název tvrdosti bude mít značku:", ["HBW", "HBS", "HV", "HRA"], 0],
-  [683, "Zkouška tvrdosti odrazem je často používaná jako tvz. provozní zkouška. Urči název metody určení tvrdosti a značku tvrdosti", ["určení tvrdosti dle Lagrange, HL", "určení tvrdosti dle Rockwella, HRC", "určení tvrdosti dle Leeba, HL", "určení tvrdosti dle Brinella, HBS"], 2],
-  [684, "Při zkoušce rázem v ohybu jsou rozměry zkušebního tělíska s vrubem \"U\"", ["průřez 10 mm x 10 mm, délka 200mm, vrub U uprostřed obou protilehlých delších stran, šířka vrubu 8mm", "průřez 20 mm x 20 mm, délka 55 mm, U-vrub v 1/3 délky delší strany zkušebního tělíska šířka vrubu 2 mm", "průřez 10 mm x 10 mm délka 55 mm, V-vrub s úhlem 450, vrub uprostřed delší strany", "průřez 10 mm x 10 mm, délka 55 mm, U-vrub uprostřed delší strany, šířka vrubu 2 mm"], 3],
-  [685, "Na obrázku je technologická zkouška, urči její správný název", ["zkouška drátů střídavým ohybem", "zkouška plechů hloubením dle Eirichsena", "zkouška kujnosti", "zkouška plechů a pásů střídavým ohybem"], 0],
-  [686, "Na obrázku je technologická zkouška, urči její správný název", ["zkouška hloubením dle Erichsena", "zkouška pěchováním", "zkouška hloubením dle Brinella", "zkouška kujnosti za tepla"], 0],
-  [687, "Etalonový materiál pro zkoušku obrobitelnosti má ČSN a EN značku :", ["dle ČSN EN :X30 Cr13, dle ČSN: 117023", "dle ČSN EN: E295, dle ČSN: 11500", "dle ČSN EN :C45, dle ČSN:12050", "dle ČSN EN: 17MnCr5, dle ČSN: 114220"], 2],
-  [688, "Na obrázku je technologická zkouška: urči správnou odpověď", ["ERICHSENOVA zkouška obrobitelnosti", "JOMINIHO zkouška kalitelnosti", "JOMINIHO zkouška obrobitelnosti", "ERICHSENOVA zkouška kalitelnost"], 1],
-  [689, "Na obrázku je NDT zkouška: urči správnou odpověď", ["UT: zkouška ultrazvukem", "MT: zkouška magnetická", "PT: zkouška penetrační", "RT: zkouška prozařováním"], 0],
-  [690, "Zkouška PT penetrační zkouška, urči správnou odpověď", ["penetrační kapalina = identifikační kapalina má barvu červenou nebo fialovou, detekční kapalina po uschnutí má barvu bílou", "penetrační kapalina = identifikační kapalina má barvu bílou, detekční kapalina po uschnutí má červenou nebo fialovou barvu", "používá se pouze detekční kapalina, která má bílou barvu", "používá se identifikační kapalina s fluorescenčním efektem..."], 0],
-  [691, "Zkouška MT = magnetická zkouška se používá pro:", ["nemagnetické materiály", "magnetické materiály, zejména oceli", "všechny kovy", "všechny materiály"], 1],
-  [692, "RT zkouška princip zkoušky vada vytvořená dutinou - urči správnou odpověď", ["zkoušená součást pohlcuje RTG či jiné měkké záření které jí prochází, a tím dojde v místě vady = dutiny k silnějšímu ozáření fotografického filmu a vada se projeví tmavší než materiál", "zkoušená součást násobí RTG či jiné záření...", "zkoušená součást pohlcuje RTG... a vada se projeví světlejší než materiál", "zkoušená součást pohlcuje RTG..."], 0],
-  [693, "Která metoda NDT je nejvhodnější pro detekci povrchových trhlin v nemagnetických materiálech?", ["magnetická metoda (MT)", "penetrační metoda PT", "vizuální zkouška VT", "zkouška ultrazvukem UT"], 1]
+  [683, "Zkouška tvrdosti odrazem je často používaná jako tvz. provozní zkouška. Urči název metody určení tvrdosti a značku tvrdosti:", ["určení tvrdosti dle Lagrange, HL", "určení tvrdosti dle Rockwella, HRC", "určení tvrdosti dle Leeba, HL", "určení tvrdosti dle Brinella, HBS"], 2],
+  [684, "Při zkoušce rázem v ohybu jsou rozměry zkušebního tělíska s vrubem \"U\":", ["průřez 10 mm × 10 mm, délka 200mm, vrub U uprostřed obou protilehlých delších stran, šířka vrubu 8mm", "průřez 20 mm × 20 mm, délka 55 mm, U-vrub v 1/3 délky delší strany zkušebního tělíska šířka vrubu 2 mm", "průřez 10 mm × 10 mm délka 55 mm, V-vrub s úhlem 45o , vrub uprostřed delší strany", "průřez 10 mm × 10 mm, délka 55 mm, Uvrub uprostřed delší strany, šířka vrubu 2 mm"], 3],
+  [685, "Na obrázku je technologická zkouška, urči její správný název:", ["zkouška drátů střídavým ohybem", "zkouška plechů hloubením dle Eirichsena", "zkouška kujnosti", "zkouška plechů a pásů střídavým ohybem"], 3], // Podklad #685: [x] zkouška plechů a pásů střídavým ohybem. Index 3.
+  [686, "Na obrázku je technologická zkouška, urči její správný název:", ["zkouška hloubením dle Erichsena", "zkouška pěchováním", "zkouška hloubením dle Brinella", "zkouška kujnosti za tepla"], 0],
+  [688, "Na obrázku je technologická zkouška: urči správnou odpověď:", ["ERICHSENOVA zkouška obrobitelnosti", "JOMINIHO zkouška kalitelnosti", "JOMINIHO zkouška obrobitelnosti", "ERICHSENOVA zkouška kalitelnost"], 1],
+  [690, "Zkouška PT=penetrační zkouška, urči správnou odpověď:", ["penetrační kapalina – identifikační kapalina má barvu červenou nebo fialovou, detekční kapalina po uschnutí má barvu bílou", "penetrační kapalina – identifikační kapalina má barvu bílou, detekční kapalina po uschnutí má červenou nebo fialovou barvu", "používá se pouze detekční kapalina, která má bílou barvu", "používá identifikační se kapalina s fluorescenčním efektem, součást musí být zmagmetovaná , detekce se provádí pod UV(ultrafialovou) lampou"], 0],
+  [691, "Zkouška MT = magnatická zkouška se používá pro:", ["nemagnetické materiály", "magnetické materiály, zejména oceli", "všechny kovy", "všechny materiály"], 1],
+  [692, "RT zkouška princip zkoušky vada vytvořená dutinou - urči správnou odpověď:", ["zkoušená součást pohlcuje RTG či jiné měkké záření které jí prochází , a tím dojde v místě vady = dutiny k silnějšímu ozáření fotografického filmu a vada se projeví tmavší než materiál", "zkoušená součást násobí RTG či jiné záření které jí prochází , a tím dojde v místě vady = dutiny ke slabšímu ozáření fotografického filmu a vada se projeví světlejším odstínem než materiál", "zkoušená součást pohlcuje RTG či jiné záření které jí prochází, a tím dojde v místě vady = dutiny k slabšímu ozáření fotografického filmu a vada se projevísvětlejší než materiál", "zkoušená součást pohlcuje RTG či jiné(tvrdé) záření které jí prochází , a tím dojde v místě vady = dutiny k silnějšímu ozáření fotografického filmu a vada se projeví tmavší než materiál"], 2], // Podklad #692: [x] zkoušená součást pohlcuje RTG... a vada se projeví světlejší než materiál. Index 2.
+  [693, "Která metoda NDT je nejvhodnější pro detekci povrchových trhlin v nemagnetických materiálech?", ["magnetická metoda (MT)", "penetrační metoda PT", "světlejší než materiál", "zkouška ultrazvukem UT"], 1]
 ];
