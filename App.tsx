@@ -26,7 +26,9 @@ const App: React.FC = () => {
 
   const [lastResult, setLastResult] = useState<TestResult | null>(null);
   const [browserSearch, setBrowserSearch] = useState("");
-  const [expandedQuestionId, setExpandedQuestionId] = useState<number | null>(null);
+  
+  // ZMĚNA: Místo jednoho ID (expandedQuestionId) používáme Set pro více otevřených otázek
+  const [expandedIds, setExpandedIds] = useState<Set<number>>(new Set());
   
   const [lastTestQuestions, setLastTestQuestions] = useState<Question[]>([]);
   const [lastUserAnswers, setLastUserAnswers] = useState<Record<number, number>>({});
@@ -60,6 +62,7 @@ const App: React.FC = () => {
       setSubject(null);
       setMode(AppMode.MENU);
       setLastResult(null);
+      setExpandedIds(new Set()); // Vyčistit otevřené otázky
   };
 
   // 2. NAČTENÍ DAT Z DATABÁZE (Firestore) A KONTROLA SINGLE SESSION
@@ -156,7 +159,17 @@ const App: React.FC = () => {
   const closeBrowser = () => {
       setMode(AppMode.MENU);
       setBrowserSearch("");
-      setExpandedQuestionId(null);
+      setExpandedIds(new Set()); // Vyčistit otevřené otázky při odchodu
+  };
+
+  const toggleQuestion = (id: number) => {
+      const newSet = new Set(expandedIds);
+      if (newSet.has(id)) {
+          newSet.delete(id);
+      } else {
+          newSet.add(id);
+      }
+      setExpandedIds(newSet);
   };
 
   const getMenuButtonClass = (color: string) => 
@@ -168,21 +181,64 @@ const App: React.FC = () => {
           q.id.toString().includes(browserSearch)
       );
 
+      // Zjistíme, jestli jsou všechny aktuálně zobrazené otázky otevřené
+      const areAllExpanded = filtered.length > 0 && filtered.every(q => expandedIds.has(q.id));
+
+      const handleToggleAll = () => {
+          if (areAllExpanded) {
+              // Pokud jsou všechny otevřené -> zavřít vše (vyprázdnit set)
+              setExpandedIds(new Set());
+          } else {
+              // Jinak otevřít všechny vyfiltrované
+              const newSet = new Set(expandedIds);
+              filtered.forEach(q => newSet.add(q.id));
+              setExpandedIds(newSet);
+          }
+      };
+
       return (
           <div className="max-w-4xl mx-auto w-full p-4">
-               <div className="bg-white sticky top-0 z-10 shadow-sm border-b border-gray-200 px-6 py-4 mb-6 flex justify-between items-center rounded-b-xl gap-4">
-                  <button onClick={closeBrowser} className="text-gray-500 hover:text-gray-900 transition-colors">
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
-                  </button>
-                  <div className="flex-1 relative">
-                      <input 
-                          type="text" 
-                          value={browserSearch}
-                          onChange={(e) => setBrowserSearch(e.target.value)}
-                          placeholder="Hledat otázku (text nebo číslo)..."
-                          className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                      />
-                       <svg className="w-5 h-5 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+               <div className="bg-white sticky top-0 z-10 shadow-sm border-b border-gray-200 px-6 py-4 mb-6 flex flex-col md:flex-row justify-between items-center rounded-b-xl gap-4">
+                  <div className="flex items-center w-full md:w-auto gap-2">
+                    <button onClick={closeBrowser} className="text-gray-500 hover:text-gray-900 transition-colors p-2 hover:bg-gray-100 rounded-full">
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                    </button>
+                    <span className="font-semibold text-gray-700 md:hidden">Prohlížeč otázek</span>
+                  </div>
+                  
+                  <div className="flex-1 w-full relative flex gap-2">
+                      <div className="relative flex-1">
+                        <input 
+                            type="text" 
+                            value={browserSearch}
+                            onChange={(e) => setBrowserSearch(e.target.value)}
+                            placeholder="Hledat otázku..."
+                            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none shadow-sm"
+                        />
+                        <svg className="w-5 h-5 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                      </div>
+                      
+                      {/* Tlačítko přepínače */}
+                      <button 
+                        onClick={handleToggleAll}
+                        className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors shadow-sm border whitespace-nowrap flex items-center gap-2 ${
+                            areAllExpanded 
+                                ? 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200' 
+                                : 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100'
+                        }`}
+                      >
+                        {areAllExpanded ? (
+                            <>
+                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
+                                Sbalit vše
+                            </>
+                        ) : (
+                            <>
+                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                                Rozbalit vše
+                            </>
+                        )}
+                      </button>
                   </div>
               </div>
 
@@ -196,8 +252,8 @@ const App: React.FC = () => {
                           <BrowserQuestionItem 
                               key={q.id} 
                               question={q} 
-                              isExpanded={expandedQuestionId === q.id}
-                              onToggle={() => setExpandedQuestionId(expandedQuestionId === q.id ? null : q.id)}
+                              isExpanded={expandedIds.has(q.id)}
+                              onToggle={() => toggleQuestion(q.id)}
                           />
                       ))
                   )}
@@ -294,7 +350,6 @@ const App: React.FC = () => {
 
           <div className="text-center mb-12">
               <h1 className="text-5xl font-bold text-gray-900 mb-4 tracking-tight">Maturitní testy</h1>
-              <p className="text-xl text-gray-500">Vyberte si předmět, který chcete procvičovat</p>
           </div>
 
           {/* Tlačítka pro výběr předmětu */}
@@ -332,7 +387,7 @@ const App: React.FC = () => {
 
           {/* Sekce Síň slávy na hlavní stránce */}
           <div className="w-full max-w-5xl mx-auto">
-              <h3 className="text-xl font-bold text-gray-400 uppercase tracking-widest text-center mb-6">Stats</h3>
+              <h3 className="text-xl font-bold text-gray-400 uppercase tracking-widest text-center mb-6">Statistiky</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Pro zobrazení celého žebříčku při kliku na "Zobrazit více" v kompaktu, použijeme setSubject a setMode.
                       Zároveň nastavíme příznak returnToMainMenu na true. */}

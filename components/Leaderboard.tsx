@@ -55,13 +55,15 @@ export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full'
     if (!statsA || !statsB) return 0;
 
     if (sortType === 'SCORE') {
+      // Primárně podle nejlepšího skóre, sekundárně podle průměru
       if (statsB.bestScorePercent !== statsA.bestScorePercent) {
         return statsB.bestScorePercent - statsA.bestScorePercent;
       }
-      const avgA = statsA.totalPoints / statsA.totalMaxPoints;
-      const avgB = statsB.totalPoints / statsB.totalMaxPoints;
+      const avgA = statsA.totalPoints / (statsA.totalMaxPoints || 1);
+      const avgB = statsB.totalPoints / (statsB.totalMaxPoints || 1);
       return avgB - avgA;
     } else {
+      // Primárně podle počtu testů
       if (statsB.testsTaken !== statsA.testsTaken) {
         return statsB.testsTaken - statsA.testsTaken;
       }
@@ -79,8 +81,14 @@ export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full'
     return "bg-white text-gray-600 border-gray-100";
   };
 
+  // Helper funkce pro výpočet průměru
+  const calculateAverage = (totalPoints: number, totalMaxPoints: number) => {
+      if (!totalMaxPoints || totalMaxPoints === 0) return 0;
+      return Math.round((totalPoints / totalMaxPoints) * 100);
+  };
+
   return (
-    <div className={`${variant === 'full' ? 'max-w-4xl mx-auto p-4 min-h-screen' : 'w-full h-full flex flex-col'}`}>
+    <div className={`${variant === 'full' ? 'max-w-5xl mx-auto p-4 min-h-screen' : 'w-full h-full flex flex-col'}`}>
       
       {/* Header */}
       <div className={`flex items-center justify-between ${variant === 'full' ? 'mb-8' : 'mb-4'}`}>
@@ -96,32 +104,28 @@ export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full'
         <h1 className={`font-bold ${variant === 'full' ? 'text-2xl' : 'text-lg'} ${subject === 'SPS' ? 'text-blue-600' : 'text-orange-600'}`}>
             {variant === 'full' ? `Žebříček ${subject}` : `Top ${subject}`}
         </h1>
-        {variant === 'full' && <div className="w-16"></div>}
-        
-        {/* Přepínač pro kompaktní verzi vpravo nahoře */}
-        {variant === 'compact' && (
-             <div className="flex bg-gray-100 p-0.5 rounded-lg border border-gray-200">
-                <button onClick={() => setSortType('SCORE')} className={`px-2 py-1 text-xs rounded transition-all ${sortType === 'SCORE' ? 'bg-white shadow text-gray-800 font-semibold' : 'text-gray-400 hover:text-gray-600'}`}>Skóre</button>
-                <button onClick={() => setSortType('GRIND')} className={`px-2 py-1 text-xs rounded transition-all ${sortType === 'GRIND' ? 'bg-white shadow text-gray-800 font-semibold' : 'text-gray-400 hover:text-gray-600'}`}>Pokusy</button>
-             </div>
-        )}
       </div>
 
-      {/* Přepínač pro plnou verzi uprostřed */}
+      {/* Přepínač řazení pouze pro plnou verzi (ve widgetu je to zbytečné, řadíme podle skóre) */}
       {variant === 'full' && (
-        <div className="flex justify-center gap-2 mb-8 bg-gray-100 p-1 rounded-lg w-fit mx-auto border border-gray-200">
-            <button 
-                onClick={() => setSortType('SCORE')}
-                className={`px-6 py-2 rounded-md font-medium transition-all ${sortType === 'SCORE' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'}`}
-            >
-                Top Skóre
-            </button>
-            <button 
-                onClick={() => setSortType('GRIND')}
-                className={`px-6 py-2 rounded-md font-medium transition-all ${sortType === 'GRIND' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'}`}
-            >
-                Veteráni
-            </button>
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6 bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
+            <div className="text-gray-500 text-sm">
+                Řadit podle:
+            </div>
+            <div className="flex gap-2 bg-gray-100 p-1 rounded-lg">
+                <button 
+                    onClick={() => setSortType('SCORE')}
+                    className={`px-4 py-2 rounded-md font-medium text-sm transition-all flex items-center gap-2 ${sortType === 'SCORE' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'}`}
+                >
+                    <span>🎯</span> Nejlepší výkon
+                </button>
+                <button 
+                    onClick={() => setSortType('GRIND')}
+                    className={`px-4 py-2 rounded-md font-medium text-sm transition-all flex items-center gap-2 ${sortType === 'GRIND' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'}`}
+                >
+                    <span>💪</span> Počet testů
+                </button>
+            </div>
         </div>
       )}
 
@@ -137,16 +141,32 @@ export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full'
                 <table className="w-full text-left border-collapse">
                     <thead>
                         <tr className="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider border-b border-gray-200">
-                            <th className={`${variant === 'compact' ? 'px-3 py-2' : 'px-6 py-4'} text-center w-10`}>#</th>
+                            <th className={`${variant === 'compact' ? 'px-3 py-2' : 'px-6 py-4'} text-center w-8`}>#</th>
                             <th className={`${variant === 'compact' ? 'px-3 py-2' : 'px-6 py-4'}`}>Jméno</th>
-                            <th className={`${variant === 'compact' ? 'px-3 py-2' : 'px-6 py-4'} text-center`}>
-                                {sortType === 'SCORE' ? '%' : 'Testy'}
-                            </th>
+                            
+                            {/* Sloupce - Plná verze (více místa) */}
+                            {variant === 'full' && (
+                                <>
+                                    <th className="px-6 py-4 text-center">Testy</th>
+                                    <th className="px-6 py-4 text-center">Průměr</th>
+                                    <th className="px-6 py-4 text-center">Nejlepší</th>
+                                </>
+                            )}
+
+                            {/* Sloupce - Kompaktní verze (všechny 3, ale úsporněji) */}
+                            {variant === 'compact' && (
+                                <>
+                                    <th className="px-1 py-2 text-center text-[10px] w-12" title="Počet testů">Testy</th>
+                                    <th className="px-1 py-2 text-center text-[10px] w-12" title="Průměrná úspěšnost">Ø</th>
+                                    <th className="px-1 py-2 text-center text-[10px] w-14" title="Nejlepší výsledek">Max</th>
+                                </>
+                            )}
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
                         {displayUsers.map((user, index) => {
                             const stats = getStats(user)!;
+                            const avgPercent = calculateAverage(stats.totalPoints, stats.totalMaxPoints);
                             
                             return (
                                 <tr key={index} className="hover:bg-gray-50 transition-colors">
@@ -155,12 +175,41 @@ export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full'
                                             {index + 1}
                                         </div>
                                     </td>
-                                    <td className={`${variant === 'compact' ? 'px-3 py-2' : 'px-6 py-4'} font-medium text-gray-900 truncate max-w-[120px]`}>
+                                    <td className={`${variant === 'compact' ? 'px-3 py-2' : 'px-6 py-4'} font-medium text-gray-900 truncate max-w-[100px] sm:max-w-none`}>
                                         {user.displayName}
                                     </td>
-                                    <td className={`${variant === 'compact' ? 'px-3 py-2' : 'px-6 py-4'} text-center font-bold ${variant === 'compact' ? 'text-gray-700' : 'text-lg text-gray-800'}`}>
-                                        {sortType === 'SCORE' ? `${Math.round(stats.bestScorePercent)}%` : stats.testsTaken}
-                                    </td>
+
+                                    {/* Plná verze tabulky */}
+                                    {variant === 'full' && (
+                                        <>
+                                            <td className="px-6 py-4 text-center text-gray-600">
+                                                {stats.testsTaken}x
+                                            </td>
+                                            <td className="px-6 py-4 text-center">
+                                                <span className={`inline-block px-2 py-1 rounded text-sm ${avgPercent >= 80 ? 'bg-green-100 text-green-800' : avgPercent >= 50 ? 'bg-blue-50 text-blue-800' : 'bg-gray-100 text-gray-600'}`}>
+                                                    {avgPercent}%
+                                                </span>
+                                            </td>
+                                            <td className="px-6 py-4 text-center font-bold text-gray-800 text-lg">
+                                                {Math.round(stats.bestScorePercent)}%
+                                            </td>
+                                        </>
+                                    )}
+
+                                    {/* Kompaktní verze widgetu - zobrazíme vše */}
+                                    {variant === 'compact' && (
+                                        <>
+                                            <td className="px-1 py-2 text-center text-xs text-gray-500">
+                                                {stats.testsTaken}
+                                            </td>
+                                            <td className="px-1 py-2 text-center text-xs text-gray-500">
+                                                {avgPercent}%
+                                            </td>
+                                            <td className="px-1 py-2 text-center text-sm font-bold text-gray-800">
+                                                {Math.round(stats.bestScorePercent)}%
+                                            </td>
+                                        </>
+                                    )}
                                 </tr>
                             );
                         })}
@@ -169,7 +218,7 @@ export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full'
             </div>
             {variant === 'compact' && sortedUsers.length > 5 && (
                 <div 
-                    onClick={onBack} // V compact módu funguje jako "zobrazit více" pokud je předán onBack (použijeme pro přepnutí na full)
+                    onClick={onBack} 
                     className="bg-gray-50 p-2 text-center text-xs text-gray-500 hover:text-blue-600 hover:bg-gray-100 cursor-pointer border-t border-gray-100 transition-colors"
                 >
                     Zobrazit všech {sortedUsers.length} studentů...
