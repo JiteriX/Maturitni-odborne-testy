@@ -2,6 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import { Question, AppMode } from '../types';
 
+// Definice pro globální objekt KaTeX, který načítáme v index.html
+declare global {
+  interface Window {
+    katex: any;
+  }
+}
+
 interface Props {
   question: Question;
   mode: AppMode;
@@ -24,7 +31,6 @@ export const QuestionCard: React.FC<Props> = ({
   useEffect(() => {
     setSelected(userAnswer ?? null);
     setImgError(false);
-    // Resetujeme zdroj obrázku na výchozí hodnotu (což je obvykle .png z constants.ts)
     setCurrentImgSrc(question.imageUrl);
   }, [question, userAnswer]);
 
@@ -38,13 +44,69 @@ export const QuestionCard: React.FC<Props> = ({
   };
 
   const handleImageError = () => {
-      // Pokud se nepodařilo načíst obrázek a končí na .png, zkusíme .jpg
       if (currentImgSrc && currentImgSrc.endsWith('.png')) {
           setCurrentImgSrc(currentImgSrc.replace('.png', '.jpg'));
       } else {
-          // Pokud už to není .png (nebo už jsme zkusili .jpg), tak je to finální chyba
           setImgError(true);
       }
+  };
+
+  // --- VYLEPŠENÝ PARSER MATEMATICKÝCH VZORCŮ S KATEX ---
+  const renderMathText = (text: string) => {
+    if (!text) return text;
+    
+    // Použijeme KaTeX pouze pokud text obsahuje odmocninu 'sqrt' (pro otázku 75 SPS)
+    // nebo složitější indexy, které vyžadují profesionální sazbu.
+    const useKatex = text.includes('sqrt') || (text.includes('_') && text.includes('^'));
+
+    if (useKatex && window.katex) {
+        try {
+            // Převod našeho zjednodušeného zápisu do LaTeX syntaxe
+            let latex = text;
+
+            // 1. Odmocnina: sqrt(...) -> \sqrt{...}
+            // Nahradíme sqrt(...) za \sqrt{...}
+            // Pozor: toto je jednoduchý regex, pro složitější vnoření by byl potřeba parser, 
+            // ale pro naše otázky to stačí.
+            latex = latex.replace(/sqrt\((.+?)\)/g, '\\sqrt{$1}');
+
+            // 2. Násobení: 3xM -> 3 \cdot M nebo 3 \times M
+            // Nahradíme 'x' za \cdot, pokud je mezi znaky
+            latex = latex.replace(/(\d|[a-zA-Z])x([a-zA-Z]|\d)/g, '$1 \\cdot $2');
+            
+            // 3. Indexy: M_RED -> M_{RED} (složené závorky jsou v LaTeXu nutné pro více znaků)
+            // Najdeme podtržítko následované alfanumerickými znaky a obalíme je {}
+            latex = latex.replace(/_([a-zA-Z0-9]+)/g, '_{$1}');
+
+            // 4. Pokud je tam 'M_RED =', chceme to hezky zarovnat, v LaTeXu je to standard.
+            
+            // Vykreslení pomocí KaTeX do HTML stringu
+            const html = window.katex.renderToString(latex, {
+                throwOnError: false,
+                displayMode: false // Inline mód
+            });
+
+            return <span dangerouslySetInnerHTML={{ __html: html }} />;
+        } catch (e) {
+            console.error("KaTeX error:", e);
+            // Fallback na starý render, pokud KaTeX selže
+        }
+    }
+
+    // --- FALLBACK (Starý parser pro jednoduché věci nebo pokud KaTeX chybí) ---
+    let html = text;
+    
+    // Jednoduché formátování pro texty bez odmocnin
+    if (text.includes('_') || text.includes('^')) {
+         html = html.replace(/(\d)x([A-Z])/g, '$1&times;$2');
+         html = html.replace(/(\d)x(\d)/g, '$1&times;$2');
+         html = html.replace(/ x /g, ' &times; ');
+         html = html.replace(/([a-zA-Z0-9])_([a-zA-Z0-9]+)/g, '$1<sub>$2</sub>');
+         html = html.replace(/\^([0-9]+)/g, '<sup>$1</sup>');
+         return <span dangerouslySetInnerHTML={{ __html: html }} />;
+    }
+
+    return text;
   };
 
   const getOptionClass = (index: number) => {
@@ -76,7 +138,7 @@ export const QuestionCard: React.FC<Props> = ({
       <div className="flex justify-between items-start mb-4">
         <h3 className="text-lg font-semibold text-gray-900 leading-relaxed">
           <span className="text-blue-600 mr-2">#{question.id}</span>
-          {question.text}
+          {renderMathText(question.text)}
         </h3>
       </div>
 
@@ -110,7 +172,8 @@ export const QuestionCard: React.FC<Props> = ({
                 ${selected === idx ? 'border-current' : 'border-gray-300'}`}>
                 {selected === idx && <div className="w-2.5 h-2.5 rounded-full bg-current" />}
             </div>
-            <span>{opt}</span>
+            {/* Zde se aplikuje renderování vzorce */}
+            <span className="flex-1">{renderMathText(opt)}</span>
           </button>
         ))}
       </div>
