@@ -6,10 +6,9 @@ interface Props {
   question: Question;
   isExpanded: boolean;
   onToggle: () => void;
-  onReport: (question: Question) => void;
 }
 
-export const BrowserQuestionItem: React.FC<Props> = ({ question, isExpanded, onToggle, onReport }) => {
+export const BrowserQuestionItem: React.FC<Props> = ({ question, isExpanded, onToggle }) => {
   const [imgError, setImgError] = useState(false);
   const [currentImgSrc, setCurrentImgSrc] = useState<string | undefined>(question.imageUrl);
 
@@ -72,27 +71,11 @@ export const BrowserQuestionItem: React.FC<Props> = ({ question, isExpanded, onT
 
   return (
     <div 
-        className={`bg-white p-5 rounded-xl shadow-sm border transition-all relative ${isExpanded ? 'border-blue-400 ring-2 ring-blue-100' : 'border-gray-100 hover:border-blue-200 hover:shadow-md'}`}
+        className={`bg-white p-5 rounded-xl shadow-sm border transition-all ${isExpanded ? 'border-blue-400 ring-2 ring-blue-100' : 'border-gray-100 hover:border-blue-200 hover:shadow-md'}`}
     >
-        {/* Tlačítko nahlásit chybu - viditelné po rozbalení nebo najetí */}
-        <button 
-            onClick={(e) => {
-                e.stopPropagation();
-                onReport(question);
-            }}
-            className="absolute top-4 right-14 text-gray-300 hover:text-red-500 transition-colors p-1 rounded-full hover:bg-red-50"
-            title="Nahlásit chybu"
-        >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21v-8a2 2 0 012-2h10a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11l-3-3m0 0l-3 3m3-3v8" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1zM4 22v-7" />
-            </svg>
-        </button>
-
         <div className="cursor-pointer" onClick={onToggle}>
             <div className="flex justify-between items-start gap-4">
-                <div className="flex-1 pr-12">
+                <div className="flex-1">
                     <span className="font-bold text-blue-600 text-sm block mb-1">Otázka #{question.id}</span>
                     <p className="text-gray-800 font-medium text-lg leading-snug">{renderText(question.text)}</p>
                 </div>

@@ -4,7 +4,6 @@ import { Question, AppMode, TestResult } from '../types';
 import { QuestionCard } from './QuestionCard';
 import { db, auth } from '../firebaseConfig';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { ReportModal } from './ReportModal';
 
 interface Props {
   mode: AppMode;
@@ -27,9 +26,6 @@ export const TestRunner: React.FC<Props> = ({ mode, mistakeIds, onComplete, onEx
   const [timeLeft, setTimeLeft] = useState(30 * 60); // 30 mins in seconds
   const [currentIndex, setCurrentIndex] = useState(0);
   
-  // State pro Report Modal
-  const [reportQuestion, setReportQuestion] = useState<Question | null>(null);
-
   // Initialize Test
   useEffect(() => {
     let q: Question[] = [];
@@ -196,7 +192,6 @@ export const TestRunner: React.FC<Props> = ({ mode, mistakeIds, onComplete, onEx
             onAnswer={handleAnswer}
             showFeedback={mode !== AppMode.MOCK_TEST} // Show feedback in Review/Training/Mistakes
             userAnswer={answers[currentQ.id]}
-            onReport={(q) => setReportQuestion(q)}
           />
       </div>
 
@@ -241,16 +236,6 @@ export const TestRunner: React.FC<Props> = ({ mode, mistakeIds, onComplete, onEx
             )
         )}
       </div>
-
-      {/* Report Modal */}
-      {reportQuestion && subject && (
-          <ReportModal 
-            questionId={reportQuestion.id}
-            subject={subject}
-            questionText={reportQuestion.text}
-            onClose={() => setReportQuestion(null)}
-          />
-      )}
     </div>
   );
 };
