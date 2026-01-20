@@ -10,6 +10,7 @@ import { AppUser } from './users';
 import { db, auth } from './firebaseConfig';
 import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { ReportModal } from './components/ReportModal';
 
 const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<AppUser | null>(null);
@@ -32,6 +33,17 @@ const App: React.FC = () => {
   
   const [lastTestQuestions, setLastTestQuestions] = useState<Question[]>([]);
   const [lastUserAnswers, setLastUserAnswers] = useState<Record<number, number>>({});
+
+  // Stavy pro STT Disclaimer Modal
+  const [showSttModal, setShowSttModal] = useState(false);
+  const [sttDoNotShowAgain, setSttDoNotShowAgain] = useState(false);
+
+  // Stavy pro SPS Disclaimer Modal
+  const [showSpsModal, setShowSpsModal] = useState(false);
+  const [spsDoNotShowAgain, setSpsDoNotShowAgain] = useState(false);
+
+  // Stav pro Report Modal v prohlížeči
+  const [reportQuestion, setReportQuestion] = useState<Question | null>(null);
 
   // 1. SLEDOVÁNÍ STAVU PŘIHLÁŠENÍ (Firebase Auth)
   useEffect(() => {
@@ -175,6 +187,46 @@ const App: React.FC = () => {
   const getMenuButtonClass = (color: string) => 
     `w-full p-6 rounded-xl shadow-md transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl flex flex-col items-center justify-center gap-3 text-center border border-gray-100 ${color}`;
 
+  // --- LOGIKA PRO STT MODAL ---
+  const handleSttSelect = () => {
+      const skip = localStorage.getItem('skip_stt_warning');
+      if (skip === 'true') {
+          setSubject('STT');
+          setBrowserSearch("");
+      } else {
+          setShowSttModal(true);
+      }
+  };
+
+  const confirmSttModal = () => {
+      if (sttDoNotShowAgain) {
+          localStorage.setItem('skip_stt_warning', 'true');
+      }
+      setShowSttModal(false);
+      setSubject('STT');
+      setBrowserSearch("");
+  };
+
+  // --- LOGIKA PRO SPS MODAL ---
+  const handleSpsSelect = () => {
+      const skip = localStorage.getItem('skip_sps_warning');
+      if (skip === 'true') {
+          setSubject('SPS');
+          setBrowserSearch("");
+      } else {
+          setShowSpsModal(true);
+      }
+  };
+
+  const confirmSpsModal = () => {
+      if (spsDoNotShowAgain) {
+          localStorage.setItem('skip_sps_warning', 'true');
+      }
+      setShowSpsModal(false);
+      setSubject('SPS');
+      setBrowserSearch("");
+  };
+
   const renderBrowser = () => {
       const filtered = currentQuestions.filter(q => 
           q.text.toLowerCase().includes(browserSearch.toLowerCase()) || 
@@ -254,6 +306,7 @@ const App: React.FC = () => {
                               question={q} 
                               isExpanded={expandedIds.has(q.id)}
                               onToggle={() => toggleQuestion(q.id)}
+                              onReport={(q) => setReportQuestion(q)}
                           />
                       ))
                   )}
@@ -355,10 +408,7 @@ const App: React.FC = () => {
           {/* Tlačítka pro výběr předmětu */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl mx-auto mb-16">
               <button 
-                  onClick={() => {
-                      setSubject('SPS');
-                      setBrowserSearch(""); 
-                  }}
+                  onClick={handleSpsSelect}
                   className="group relative overflow-hidden bg-white p-8 rounded-2xl shadow-lg border border-gray-100 hover:shadow-2xl hover:border-blue-300 transition-all duration-300 transform hover:-translate-y-1 text-center"
               >
                   <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
@@ -370,10 +420,7 @@ const App: React.FC = () => {
               </button>
 
               <button 
-                  onClick={() => {
-                      setSubject('STT');
-                      setBrowserSearch(""); 
-                  }}
+                  onClick={handleSttSelect}
                   className="group relative overflow-hidden bg-white p-8 rounded-2xl shadow-lg border border-gray-100 hover:shadow-2xl hover:border-orange-300 transition-all duration-300 transform hover:-translate-y-1 text-center"
               >
                   <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-orange-500 to-red-600"></div>
@@ -382,6 +429,7 @@ const App: React.FC = () => {
                   </div>
                   <h2 className="text-3xl font-bold text-gray-800 mb-2">STT</h2>
                   <p className="text-gray-500">Strojírenská technologie</p>
+                  <p className="text-red-500 font-bold text-sm mt-2 uppercase tracking-wider bg-red-50 inline-block px-3 py-1 rounded-full border border-red-100">NEDODĚLANÉ</p>
               </button>
           </div>
 
@@ -418,6 +466,109 @@ const App: React.FC = () => {
              © 2026 Matyáš Korec | Verze 2.2.1
           </div>
       </div>
+      )}
+
+      {/* STT WARNING MODAL */}
+      {showSttModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[200] p-4">
+            <div className="bg-white rounded-2xl p-8 max-w-lg w-full shadow-2xl animate-in fade-in zoom-in duration-200">
+                <div className="flex items-center gap-4 mb-6">
+                    <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center text-yellow-600 flex-shrink-0">
+                        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                    </div>
+                    <h2 className="text-xl font-bold text-gray-900">Upozornění k STT testům</h2>
+                </div>
+                
+                <div className="space-y-4 text-gray-700 text-sm leading-relaxed mb-8">
+                    <div className="flex gap-3 items-start">
+                        <span className="font-bold text-gray-400">1.</span>
+                        <p>V STT testu mohou být chyby (spíš tam jsou).</p>
+                    </div>
+                    <div className="flex gap-3 items-start">
+                        <span className="font-bold text-gray-400">2.</span>
+                        <p>Pokud otázka nemá obrázek, pravděpodobně je to tím, že ten obrázek vůbec neexistuje, což často znamená, že odpověď je také špatně.</p>
+                    </div>
+                    <div className="flex gap-3 items-start">
+                        <span className="font-bold text-gray-400">3.</span>
+                        <p>Pokud nějaká odpověď končí třemi tečkami (...), znamená to, že není dopsaná. Prosím o nahlášení.</p>
+                    </div>
+                    <div className="flex gap-3 items-start">
+                        <span className="font-bold text-gray-400">4.</span>
+                        <p>Pokud v otázce jsou jen 3 možnosti, je to proto, že v originále jsou také jen 3 možnosti.</p>
+                    </div>
+                    <div className="flex gap-3 items-start">
+                        <span className="font-bold text-gray-400">5.</span>
+                        <p>Pokud zjistíte, že je nějaká odpověď vyloženě špatně (mimo chybějící obrázky), prosím nahlaste tu otázku.</p>
+                    </div>
+                </div>
+
+                <div className="flex flex-col gap-4">
+                    <label className="flex items-center gap-3 p-3 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-50 transition-colors">
+                        <input 
+                            type="checkbox" 
+                            checked={sttDoNotShowAgain}
+                            onChange={(e) => setSttDoNotShowAgain(e.target.checked)}
+                            className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500 border-gray-300"
+                        />
+                        <span className="text-sm font-medium text-gray-700">Příště nezobrazovat</span>
+                    </label>
+                    
+                    <button 
+                        onClick={confirmSttModal}
+                        className="w-full py-3 bg-gray-900 text-white font-bold rounded-xl hover:bg-gray-800 transition-all shadow-lg hover:shadow-gray-200"
+                    >
+                        Rozumím a pokračovat
+                    </button>
+                </div>
+            </div>
+        </div>
+      )}
+
+      {/* SPS INFO MODAL */}
+      {showSpsModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[200] p-4">
+            <div className="bg-white rounded-2xl p-8 max-w-lg w-full shadow-2xl animate-in fade-in zoom-in duration-200">
+                <div className="flex items-center gap-4 mb-6">
+                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 flex-shrink-0">
+                        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    </div>
+                    <h2 className="text-xl font-bold text-gray-900">Informace k SPS testu</h2>
+                </div>
+                
+                <div className="text-gray-700 text-base leading-relaxed mb-8">
+                    <p>V tomto testu by mělo být všechno dobře, ale v takovém časovém limitu projít 500 otázek není lehké, takže kdyby jste něco našli, tak tu otázku prosím nahlaste.</p>
+                </div>
+
+                <div className="flex flex-col gap-4">
+                    <label className="flex items-center gap-3 p-3 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-50 transition-colors">
+                        <input 
+                            type="checkbox" 
+                            checked={spsDoNotShowAgain}
+                            onChange={(e) => setSpsDoNotShowAgain(e.target.checked)}
+                            className="w-5 h-5 text-blue-600 rounded focus:ring-blue-500 border-gray-300"
+                        />
+                        <span className="text-sm font-medium text-gray-700">Příště nezobrazovat</span>
+                    </label>
+                    
+                    <button 
+                        onClick={confirmSpsModal}
+                        className="w-full py-3 bg-gray-900 text-white font-bold rounded-xl hover:bg-gray-800 transition-all shadow-lg hover:shadow-gray-200"
+                    >
+                        Rozumím a pokračovat
+                    </button>
+                </div>
+            </div>
+        </div>
+      )}
+
+      {/* REPORT MODAL (PRO BROWSER) */}
+      {reportQuestion && subject && (
+          <ReportModal 
+            questionId={reportQuestion.id}
+            subject={subject}
+            questionText={reportQuestion.text}
+            onClose={() => setReportQuestion(null)}
+          />
       )}
 
       {/* ZOBRAZENÍ PLNÉHO ŽEBŘÍČKU (přepnutím na LEADERBOARD mód) */}

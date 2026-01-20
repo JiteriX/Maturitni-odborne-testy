@@ -40,8 +40,7 @@ const STT_IMAGE_IDS: (number | [number, number])[] = [
   [438, 450], // Zahrnuje 438, 441, 448-450
   [452, 453], // Zahrnuje 453
   [456, 463], // Zahrnuje 456-463
-  467, // Přidáno 467
-  472, 473, 474, // Přidáno 473, 474
+  472, 473, 474, // Přidáno 473, 474 (467 odstraněno)
   [475, 479], // Zahrnuje 478, 479
   483, 484, 485, // Přidáno 484
   [489, 492], // Přidáno 489
