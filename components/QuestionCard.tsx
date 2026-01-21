@@ -15,6 +15,7 @@ interface Props {
   onAnswer: (questionId: number, selectedIndex: number, isCorrect: boolean) => void;
   showFeedback: boolean;
   userAnswer?: number | null;
+  onReportRequest?: (qId: number) => void;
 }
 
 export const QuestionCard: React.FC<Props> = ({
@@ -22,7 +23,8 @@ export const QuestionCard: React.FC<Props> = ({
   mode,
   onAnswer,
   showFeedback,
-  userAnswer
+  userAnswer,
+  onReportRequest
 }) => {
   const [selected, setSelected] = useState<number | null>(userAnswer ?? null);
   const [imgError, setImgError] = useState(false);
@@ -56,19 +58,15 @@ export const QuestionCard: React.FC<Props> = ({
     if (!text) return text;
 
     // 1. PRIORITA: HTML (např. pro červený text v STT otázce 273)
-    // Pokud text obsahuje HTML tagy (< a >), vykreslíme ho přímo jako HTML.
-    // Tím zajistíme, že se <span class="..."> nevykreslí jako text.
     if (text.includes('<') && text.includes('>')) {
         return <span dangerouslySetInnerHTML={{ __html: text }} />;
     }
     
     // 2. PRIORITA: KaTeX (Matematika)
-    // Použijeme KaTeX pouze pokud text obsahuje odmocninu 'sqrt' nebo složitější indexy
     const useKatex = text.includes('sqrt') || (text.includes('_') && text.includes('^'));
 
     if (useKatex && window.katex) {
         try {
-            // Převod našeho zjednodušeného zápisu do LaTeX syntaxe
             let latex = text;
             latex = latex.replace(/sqrt\((.+?)\)/g, '\\sqrt{$1}');
             latex = latex.replace(/(\d|[a-zA-Z])x([a-zA-Z]|\d)/g, '$1 \\cdot $2');
@@ -125,11 +123,20 @@ export const QuestionCard: React.FC<Props> = ({
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 max-w-3xl mx-auto mb-6">
-      <div className="flex justify-between items-start mb-4">
-        <h3 className="text-lg font-semibold text-gray-900 leading-relaxed">
+      <div className="flex justify-between items-start mb-4 gap-4">
+        <h3 className="text-lg font-semibold text-gray-900 leading-relaxed flex-1">
           <span className="text-blue-600 mr-2">#{question.id}</span>
           {renderMathText(question.text)}
         </h3>
+        {onReportRequest && (
+          <button 
+            onClick={() => onReportRequest(question.id)}
+            className="text-gray-300 hover:text-red-400 p-1 transition-colors group"
+            title="Nahlásit chybu v otázce"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" /></svg>
+          </button>
+        )}
       </div>
 
       {question.imageUrl && !imgError && currentImgSrc && (
@@ -146,7 +153,7 @@ export const QuestionCard: React.FC<Props> = ({
       
       {question.imageUrl && imgError && (
           <div className="mb-6 p-4 text-center text-sm text-red-400 italic bg-red-50 rounded-lg border border-red-100">
-             Obrázek se nepodařilo načíst: {question.imageUrl} (ani .jpg varianta)
+             Obrázek se nepodařilo načíst: {question.imageUrl}
           </div>
       )}
 
@@ -162,7 +169,6 @@ export const QuestionCard: React.FC<Props> = ({
                 ${selected === idx ? 'border-current' : 'border-gray-300'}`}>
                 {selected === idx && <div className="w-2.5 h-2.5 rounded-full bg-current" />}
             </div>
-            {/* Zde se aplikuje renderování vzorce */}
             <span className="flex-1">{renderMathText(opt)}</span>
           </button>
         ))}

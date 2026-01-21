@@ -1,22 +1,36 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 
 interface Props {
   onClose: () => void;
 }
 
 export const ApiKeyModal: React.FC<Props> = ({ onClose }) => {
+  // Check if API key is already selected on mount as per guidelines
+  useEffect(() => {
+    const checkKey = async () => {
+      if (window.aistudio && window.aistudio.hasSelectedApiKey) {
+        const hasKey = await window.aistudio.hasSelectedApiKey();
+        if (hasKey) {
+          onClose();
+        }
+      }
+    };
+    checkKey();
+  }, [onClose]);
+
   const handleConnect = async () => {
     try {
-        if(window.aistudio && window.aistudio.openSelectKey){
-             await window.aistudio.openSelectKey();
-             // Assuming successful selection if promise resolves
-             onClose();
-        } else {
-            alert("AI Studio helper not found. Please ensure the script is loaded.");
-        }
+      if (window.aistudio && window.aistudio.openSelectKey) {
+        // Trigger key selection dialog
+        await window.aistudio.openSelectKey();
+        // Assume successful selection and proceed as per guidelines
+        onClose();
+      } else {
+        alert("AI Studio helper not found. Please ensure the script is loaded.");
+      }
     } catch (e) {
-        console.error(e);
-        alert("Failed to select key.");
+      console.error(e);
+      alert("Failed to select key.");
     }
   };
 
@@ -27,7 +41,10 @@ export const ApiKeyModal: React.FC<Props> = ({ onClose }) => {
         <p className="text-gray-600 mb-6">
           Pro využití AI Tutora a vysvětlení otázek je potřeba propojit aplikaci s Google Gemini.
           <br/>
-          <a href="https://ai.google.dev/gemini-api/docs/billing" target="_blank" className="text-blue-600 underline text-sm">Informace o cenách</a>
+          {/* Link to billing documentation as required by guidelines */}
+          <a href="https://ai.google.dev/gemini-api/docs/billing" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline text-sm">
+            Informace o cenách a fakturaci
+          </a>
         </p>
         
         <button

@@ -11,35 +11,66 @@ export type Subject = 'SPS' | 'STT';
 
 export enum AppMode {
   MENU = 'MENU',
-  MOCK_TEST = 'MOCK_TEST',     // 1. Test nanečisto (40 questions, 30 min, hidden answers)
-  TRAINING = 'TRAINING',       // 2. Náhodný trénink (Instant feedback)
-  BROWSER = 'BROWSER',         // 3. Prohlížení (Search)
-  MISTAKES = 'MISTAKES',       // 4. Oprava chyb
-  REVIEW = 'REVIEW',           // 5. Prohlédnutí výsledků testu
-  LEADERBOARD = 'LEADERBOARD', // 6. Žebříček (Novinka)
+  MOCK_TEST = 'MOCK_TEST',
+  TRAINING = 'TRAINING',
+  BROWSER = 'BROWSER',
+  MISTAKES = 'MISTAKES',
+  REVIEW = 'REVIEW',
+  LEADERBOARD = 'LEADERBOARD',
+  BATTLE = 'BATTLE', // Nový režim
 }
 
 export interface TestResult {
   score: number;
   total: number;
   passed: boolean;
-  mistakes: number[]; // IDs of wrong questions
+  mistakes: number[];
   timeElapsed: number;
-  userAnswers: Record<number, number>; // Map of QuestionID -> SelectedIndex
-  questionsUsed: Question[]; // The specific list of questions used in that test run
+  userAnswers: Record<number, number>;
+  questionsUsed: Question[];
 }
 
-// Statistiky pro jeden předmět
 export interface SubjectStats {
-  testsTaken: number;      // Počet dokončených testů
-  totalPoints: number;     // Celkový počet získaných bodů ze všech testů
-  totalMaxPoints: number;  // Celkový počet možných bodů
-  bestScorePercent: number; // Nejlepší výsledek v procentech (0-100)
+  testsTaken: number;
+  totalPoints: number;
+  totalMaxPoints: number;
+  bestScorePercent: number;
+  // Limity pro bitvy
+  battlesPlayedToday?: number;
+  lastBattleDate?: string; // YYYY-MM-DD
 }
 
-// Rozšířený uživatel o statistiky (pro načítání žebříčku)
 export interface LeaderboardUser {
   displayName: string;
   statsSPS?: SubjectStats;
   statsSTT?: SubjectStats;
+}
+
+export interface QuestionReport {
+  questionId: number;
+  subject: Subject;
+  reason: string;
+  userName: string;
+  timestamp: string;
+}
+
+// Rozhraní pro 1v1 Bitvu
+export interface BattlePlayerData {
+  uid: string;
+  displayName: string;
+  progress: number; // 0-20
+  score: number;
+  finished: boolean;
+  ready: boolean;
+}
+
+export interface BattleRoom {
+  id: string;
+  code: string;
+  subject: Subject;
+  status: 'WAITING' | 'STARTING' | 'IN_PROGRESS' | 'FINISHED';
+  questions: number[]; // Seznam ID otázek
+  players: Record<string, BattlePlayerData>;
+  createdAt: any;
+  expiresAt?: number; // Timestamp vypršení hry (ms)
 }

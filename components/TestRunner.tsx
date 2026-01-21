@@ -10,6 +10,7 @@ interface Props {
   mistakeIds?: number[]; // IDs for "Oprava chyb" mode
   onComplete: (result: TestResult) => void;
   onExit: () => void;
+  onReportRequest?: (qId: number) => void;
   
   // The full dataset for the current subject
   initialQuestionsForMode: Question[];
@@ -20,7 +21,7 @@ interface Props {
   subject?: 'SPS' | 'STT'; // Potřebujeme vědět předmět pro ukládání statistik
 }
 
-export const TestRunner: React.FC<Props> = ({ mode, mistakeIds, onComplete, onExit, initialQuestionsForMode, initialQuestions, initialAnswers, subject }) => {
+export const TestRunner: React.FC<Props> = ({ mode, mistakeIds, onComplete, onExit, onReportRequest, initialQuestionsForMode, initialQuestions, initialAnswers, subject }) => {
   const [currentQuestions, setCurrentQuestions] = useState<Question[]>([]);
   const [answers, setAnswers] = useState<Record<number, number>>({}); // qId -> selectedIndex
   const [timeLeft, setTimeLeft] = useState(30 * 60); // 30 mins in seconds
@@ -72,9 +73,6 @@ export const TestRunner: React.FC<Props> = ({ mode, mistakeIds, onComplete, onEx
   };
 
   const saveStats = async (score: number, total: number) => {
-      // Statistiky ukládáme pouze pro kompletní testy (MOCK_TEST) nebo trénink,
-      // ale pro žebříček je nejspravedlivější počítat hlavně MOCK_TEST nebo větší sady.
-      // Pro jednoduchost budeme zatím počítat MOCK_TEST, kde je skóre relevantní.
       if (mode !== AppMode.MOCK_TEST || !subject || !auth.currentUser) return;
 
       try {
@@ -119,12 +117,10 @@ export const TestRunner: React.FC<Props> = ({ mode, mistakeIds, onComplete, onEx
       }
     });
 
-    // 44% threshold
     const total = currentQuestions.length;
     const percentage = total === 0 ? 0 : (score / total) * 100;
     const passed = percentage >= 44;
 
-    // Uložit statistiky do DB (nečekáme na dokončení)
     saveStats(score, total);
 
     onComplete({
@@ -148,7 +144,6 @@ export const TestRunner: React.FC<Props> = ({ mode, mistakeIds, onComplete, onEx
     );
   }
 
-  // Formatting time
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60);
     const s = seconds % 60;
@@ -190,8 +185,9 @@ export const TestRunner: React.FC<Props> = ({ mode, mistakeIds, onComplete, onEx
             question={currentQ}
             mode={mode}
             onAnswer={handleAnswer}
-            showFeedback={mode !== AppMode.MOCK_TEST} // Show feedback in Review/Training/Mistakes
+            showFeedback={mode !== AppMode.MOCK_TEST}
             userAnswer={answers[currentQ.id]}
+            onReportRequest={onReportRequest}
           />
       </div>
 

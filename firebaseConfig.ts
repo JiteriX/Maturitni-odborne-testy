@@ -1,7 +1,8 @@
 
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+// added comment above fix: Using a namespace import for 'firebase/app' can resolve issues where named exports are not correctly identified by the module loader or TypeScript compiler.
+import * as FirebaseApp from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 
 // Konfigurace pro projekt "Maturita app"
 const firebaseConfig = {
@@ -14,9 +15,8 @@ const firebaseConfig = {
   measurementId: "G-4CT3YBS8FQ"
 };
 
-// Inicializace aplikace
-// Standardní modular inicializace (bez přetypování as any)
-const app = initializeApp(firebaseConfig);
+// added comment above fix: Initialize the Firebase app using the initializeApp function from the namespace to ensure member availability.
+const app = FirebaseApp.initializeApp(firebaseConfig);
 
 // Export služeb pro zbytek aplikace
 export const auth = getAuth(app);

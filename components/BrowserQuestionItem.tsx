@@ -6,9 +6,10 @@ interface Props {
   question: Question;
   isExpanded: boolean;
   onToggle: () => void;
+  onReportRequest?: (qId: number) => void;
 }
 
-export const BrowserQuestionItem: React.FC<Props> = ({ question, isExpanded, onToggle }) => {
+export const BrowserQuestionItem: React.FC<Props> = ({ question, isExpanded, onToggle, onReportRequest }) => {
   const [imgError, setImgError] = useState(false);
   const [currentImgSrc, setCurrentImgSrc] = useState<string | undefined>(question.imageUrl);
 
@@ -27,16 +28,13 @@ export const BrowserQuestionItem: React.FC<Props> = ({ question, isExpanded, onT
     }
   };
 
-  // Stejná logika pro renderování textu jako v QuestionCard
   const renderText = (text: string) => {
     if (!text) return text;
 
-    // 1. HTML (např. červený text)
     if (text.includes('<') && text.includes('>')) {
         return <span dangerouslySetInnerHTML={{ __html: text }} />;
     }
     
-    // 2. KaTeX / Matematika
     const useKatex = text.includes('sqrt') || (text.includes('_') && text.includes('^'));
     if (useKatex && window.katex) {
         try {
@@ -55,7 +53,6 @@ export const BrowserQuestionItem: React.FC<Props> = ({ question, isExpanded, onT
         }
     }
 
-    // 3. Fallback formátování
     let html = text;
     if (text.includes('_') || text.includes('^')) {
          html = html.replace(/(\d)x([A-Z])/g, '$1&times;$2');
@@ -73,13 +70,25 @@ export const BrowserQuestionItem: React.FC<Props> = ({ question, isExpanded, onT
     <div 
         className={`bg-white p-5 rounded-xl shadow-sm border transition-all ${isExpanded ? 'border-blue-400 ring-2 ring-blue-100' : 'border-gray-100 hover:border-blue-200 hover:shadow-md'}`}
     >
-        <div className="cursor-pointer" onClick={onToggle}>
-            <div className="flex justify-between items-start gap-4">
-                <div className="flex-1">
-                    <span className="font-bold text-blue-600 text-sm block mb-1">Otázka #{question.id}</span>
-                    <p className="text-gray-800 font-medium text-lg leading-snug">{renderText(question.text)}</p>
-                </div>
-                <div className="text-gray-400 mt-1">
+        <div className="flex justify-between items-start gap-4">
+            <div className="flex-1 cursor-pointer" onClick={onToggle}>
+                <span className="font-bold text-blue-600 text-sm block mb-1">Otázka #{question.id}</span>
+                <p className="text-gray-800 font-medium text-lg leading-snug">{renderText(question.text)}</p>
+            </div>
+            <div className="flex items-center gap-3 mt-1">
+                {onReportRequest && (
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onReportRequest(question.id);
+                    }}
+                    className="text-gray-300 hover:text-red-400 transition-colors p-1"
+                    title="Nahlásit chybu"
+                  >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" /></svg>
+                  </button>
+                )}
+                <div onClick={onToggle} className="text-gray-400 cursor-pointer">
                     {isExpanded ? (
                         <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
                     ) : (
@@ -105,7 +114,7 @@ export const BrowserQuestionItem: React.FC<Props> = ({ question, isExpanded, onT
                 
                 {question.imageUrl && imgError && (
                     <div className="mb-6 p-4 text-center text-sm text-gray-400 italic bg-gray-50 rounded-lg border border-gray-100">
-                        Obrázek se nepodařilo načíst (ani .jpg varianta)
+                        Obrázek se nepodařilo načíst
                     </div>
                 )}
 
