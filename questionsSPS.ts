@@ -443,7 +443,7 @@ export const RAW_SPS: any[] = [
   [441, "Pro proč je potřeba přidávat palivo do parního kotle?", ["Je to nosič chemické energie", "Kvůli chlazení při spalování", "Pro zlepšení hoření vzduchu", "Je to nosič kinetické energie"], 0],
   [442, "Která složka nevstupuje do parního kotle?", ["Voda", "Palivo", "Vzduch", "Vodní pára"], 3],
   [443, "Co vzniká hořením paliva se vzduchem?", ["Voda", "Spaliny", "Led", "Vodní pára"], 1],
-  [444, "Jakou teplotu hat zhruba u současných parních generátorů vystupující vodní pára?", ["Kolem 250°C", "Kolem 550°C", "Kolem 850°C", "Kolem 1150°C"], 1],
+  [444, "Jakou teplotu má zhruba u současných parních generátorů vystupující vodní pára?", ["Kolem 250°C", "Kolem 550°C", "Kolem 850°C", "Kolem 1150°C"], 1],
   [445, "Jaký tlak vodní páry se označuje jako 'kritický'?", ["2,21 MPa", "20,1 MPa", "22,1 MPa", "2,01 MPa"], 2],
   [446, "Do jakého tlaku přibližnĕ se vodní pára používá k vytápĕní?", ["Do 0,15 MPa", "Do 1,5 MPa", "Do 11,5 MPa", "Do 115 MPa"], 0],
   [447, "Které ze zmínĕných paliv NELZE zařadit mezi tuhá paliva?", ["Hnĕdé uhlí", "Dřevo", "Biomasa", "Mazut"], 3],

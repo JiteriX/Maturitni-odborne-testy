@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo, useEffect } from 'react';
 import { QUESTIONS_SPS, QUESTIONS_STT } from './constants';
 import { AppMode, TestResult, Question, Subject } from './types';
@@ -9,6 +10,7 @@ import { SPSInfoModal } from './components/SPSInfoModal';
 import { STTInfoModal } from './components/STTInfoModal';
 import { ReportModal } from './components/ReportModal';
 import { BattleManager } from './components/BattleManager';
+import { SuddenDeathGame } from './components/SuddenDeathGame'; // Import nové hry
 import { AppUser } from './users';
 import { db, auth } from './firebaseConfig';
 import { doc, setDoc, onSnapshot } from 'firebase/firestore';
@@ -237,6 +239,47 @@ const App: React.FC = () => {
       </div>
       )}
 
+      {/* Battle Hub - Rozcestník pro bojové módy */}
+      {subject && mode === AppMode.BATTLE_HUB && (
+        <div className="max-w-4xl mx-auto min-h-screen flex flex-col p-4 md:p-8 animate-in zoom-in duration-200">
+           <div className="flex justify-between items-center mb-8">
+              <button onClick={() => setMode(AppMode.MENU)} className="text-gray-500 hover:text-gray-800 font-medium flex items-center gap-2">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                Zpět do menu
+              </button>
+              <h1 className="text-3xl font-black text-gray-900 uppercase italic tracking-tighter">ARÉNA</h1>
+           </div>
+
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+              {/* Karta pro 1v1 Battle */}
+              <button onClick={() => setMode(AppMode.BATTLE)} className="group relative overflow-hidden bg-white rounded-3xl p-8 shadow-xl border-2 border-transparent hover:border-blue-500 transition-all duration-300 text-left hover:shadow-2xl hover:-translate-y-1">
+                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <span className="text-9xl">⚔️</span>
+                 </div>
+                 <div className="relative z-10">
+                    <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6 text-3xl shadow-sm group-hover:scale-110 transition-transform">⚔️</div>
+                    <h2 className="text-2xl font-black text-gray-900 mb-2">1v1 Duel</h2>
+                    <p className="text-gray-500 mb-4 font-medium">1v1 souboj v reálném čase.</p>
+                    <div className="inline-block bg-blue-50 text-blue-700 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wide">Multiplayer</div>
+                 </div>
+              </button>
+
+              {/* Karta pro Sudden Death */}
+              <button onClick={() => setMode(AppMode.SUDDEN_DEATH)} className="group relative overflow-hidden bg-gray-900 rounded-3xl p-8 shadow-xl border-2 border-transparent hover:border-red-500 transition-all duration-300 text-left hover:shadow-2xl hover:-translate-y-1">
+                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <span className="text-9xl">☠️</span>
+                 </div>
+                 <div className="relative z-10">
+                    <div className="w-16 h-16 bg-red-600 rounded-2xl flex items-center justify-center mb-6 text-3xl shadow-lg shadow-red-900/50 group-hover:scale-110 transition-transform">☠️</div>
+                    <h2 className="text-2xl font-black text-white mb-2">Náhlá smrt</h2>
+                    <p className="text-gray-400 mb-4 font-medium">Jedna chyba = konec, Hraje se o největší streak, omezeno časem.</p>
+                    <div className="inline-block bg-red-900/50 text-red-400 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wide border border-red-800">Hardcore</div>
+                 </div>
+              </button>
+           </div>
+        </div>
+      )}
+
       {subject && mode === AppMode.MENU && (
         <div className="max-w-6xl mx-auto min-h-screen flex flex-col p-4 md:p-8">
             <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
@@ -252,13 +295,14 @@ const App: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div className="space-y-4">
                     {subject === 'SPS' && (
-                        <button onClick={() => setMode(AppMode.BATTLE)} className={getMenuButtonClass("bg-gradient-to-br from-red-500 to-purple-600 text-white")}>
-                            <div className="bg-white/20 p-3 rounded-full">
-                                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                        /* Změna na BATTLE_HUB místo přímého BATTLE */
+                        <button onClick={() => setMode(AppMode.BATTLE_HUB)} className={getMenuButtonClass("bg-gradient-to-br from-gray-800 to-gray-900 text-white border-none")}>
+                            <div className="bg-white/10 p-3 rounded-full border border-white/20">
+                                <span className="text-2xl">🏆</span>
                             </div>
                             <div>
-                                <div className="font-bold text-lg text-white">1v1 BATTLE</div>
-                                <div className="text-white/80 text-sm font-normal">SPS Souboj s kamarádem ({2 - (statsSPS?.battlesPlayedToday || 0)}/2 dnes zbývá)</div>
+                                <div className="font-bold text-lg text-white uppercase tracking-wider">ARÉNA</div>
+                                <div className="text-gray-400 text-sm font-normal">1v1 Duel & Náhlá smrt</div>
                             </div>
                         </button>
                     )}
@@ -359,6 +403,15 @@ const App: React.FC = () => {
             subject={subject} 
             stats={statsSPS}
             onExit={() => setMode(AppMode.MENU)} 
+          />
+      )}
+
+      {/* Přidání renderování pro Sudden Death */}
+      {subject && mode === AppMode.SUDDEN_DEATH && currentUser && (
+          <SuddenDeathGame 
+            initialQuestions={currentQuestions}
+            currentUser={currentUser}
+            onExit={() => setMode(AppMode.MENU)}
           />
       )}
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { db } from '../firebaseConfig';
 import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
-import { BattleRoom, Question, AppMode } from '../types';
+import { BattleRoom, Question, AppMode, BattlePlayerData } from '../types';
 import { AppUser } from '../users';
 import { QUESTIONS_SPS } from '../constants';
 import { QuestionCard } from './QuestionCard';
@@ -21,7 +21,8 @@ export const BattleArena: React.FC<Props> = ({ room, currentUser, onExit, stats 
   const [myScore, setMyScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
   
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  // added comment above fix: Use 'any' instead of 'NodeJS.Timeout' to avoid namespace issues in browser environment.
+  const timerRef = useRef<any>(null);
 
   // Inicializace otázek při startu
   useEffect(() => {
@@ -36,7 +37,8 @@ export const BattleArena: React.FC<Props> = ({ room, currentUser, onExit, stats 
         const data = docSnap.data() as BattleRoom;
         setBattleData(data);
         
-        const players = Object.values(data.players);
+        // added comment above fix: Explicitly cast players to BattlePlayerData array to avoid 'unknown' type errors.
+        const players = Object.values(data.players) as BattlePlayerData[];
         // Pokud jsou oba hotoví, nebo je stav v DB 'FINISHED', ukončíme to lokálně
         if ((players.length === 2 && players.every(p => p.finished)) || data.status === 'FINISHED') {
             setFinished(true);
@@ -131,8 +133,10 @@ export const BattleArena: React.FC<Props> = ({ room, currentUser, onExit, stats 
     return `${m}:${s < 10 ? '0' : ''}${s}`;
   };
 
-  const opponent = Object.values(battleData.players).find(p => p.uid !== currentUser.uid);
-  const me = battleData.players[currentUser.uid];
+  // added comment above fix: Explicitly cast players values to BattlePlayerData to resolve 'unknown' property access errors.
+  const playersList = Object.values(battleData.players) as BattlePlayerData[];
+  const opponent = playersList.find(p => p.uid !== currentUser.uid);
+  const me = battleData.players[currentUser.uid] as BattlePlayerData | undefined;
 
   // Ochrana před neexistujícími daty o hráči při načítání
   if (!me) return <div className="text-center mt-20 text-gray-500 font-medium">Načítám data bitvy...</div>;

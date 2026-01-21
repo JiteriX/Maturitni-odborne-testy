@@ -10,7 +10,7 @@ interface Props {
   variant?: 'full' | 'compact'; // 'full' = celá stránka, 'compact' = widget do menu
 }
 
-type SortType = 'SCORE' | 'GRIND';
+type SortType = 'SCORE' | 'GRIND' | 'STREAK';
 
 export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full' }) => {
   const [users, setUsers] = useState<LeaderboardUser[]>([]);
@@ -55,18 +55,22 @@ export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full'
     if (!statsA || !statsB) return 0;
 
     if (sortType === 'SCORE') {
-      // Primárně podle nejlepšího skóre, sekundárně podle průměru
+      // Primárně podle nejlepšího skóre
       if (statsB.bestScorePercent !== statsA.bestScorePercent) {
         return statsB.bestScorePercent - statsA.bestScorePercent;
       }
-      const avgA = statsA.totalPoints / (statsA.totalMaxPoints || 1);
-      const avgB = statsB.totalPoints / (statsB.totalMaxPoints || 1);
-      return avgB - avgA;
-    } else {
+      return (statsB.bestStreak || 0) - (statsA.bestStreak || 0);
+    } else if (sortType === 'GRIND') {
       // Primárně podle počtu testů
       if (statsB.testsTaken !== statsA.testsTaken) {
         return statsB.testsTaken - statsA.testsTaken;
       }
+      return statsB.bestScorePercent - statsA.bestScorePercent;
+    } else {
+      // Primárně podle streaku
+      const streakA = statsA.bestStreak || 0;
+      const streakB = statsB.bestStreak || 0;
+      if (streakB !== streakA) return streakB - streakA;
       return statsB.bestScorePercent - statsA.bestScorePercent;
     }
   });
@@ -88,7 +92,7 @@ export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full'
   };
 
   return (
-    <div className={`${variant === 'full' ? 'max-w-5xl mx-auto p-4 min-h-screen' : 'w-full h-full flex flex-col'}`}>
+    <div className={`${variant === 'full' ? 'max-w-6xl mx-auto p-4 min-h-screen' : 'w-full h-full flex flex-col'}`}>
       
       {/* Header */}
       <div className={`flex items-center justify-between ${variant === 'full' ? 'mb-8' : 'mb-4'}`}>
@@ -106,13 +110,13 @@ export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full'
         </h1>
       </div>
 
-      {/* Přepínač řazení pouze pro plnou verzi (ve widgetu je to zbytečné, řadíme podle skóre) */}
+      {/* Přepínač řazení pouze pro plnou verzi */}
       {variant === 'full' && (
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6 bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
             <div className="text-gray-500 text-sm">
                 Řadit podle:
             </div>
-            <div className="flex gap-2 bg-gray-100 p-1 rounded-lg">
+            <div className="flex flex-wrap gap-2 bg-gray-100 p-1 rounded-lg">
                 <button 
                     onClick={() => setSortType('SCORE')}
                     className={`px-4 py-2 rounded-md font-medium text-sm transition-all flex items-center gap-2 ${sortType === 'SCORE' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'}`}
@@ -124,6 +128,12 @@ export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full'
                     className={`px-4 py-2 rounded-md font-medium text-sm transition-all flex items-center gap-2 ${sortType === 'GRIND' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'}`}
                 >
                     <span>💪</span> Počet testů
+                </button>
+                <button 
+                    onClick={() => setSortType('STREAK')}
+                    className={`px-4 py-2 rounded-md font-medium text-sm transition-all flex items-center gap-2 ${sortType === 'STREAK' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'}`}
+                >
+                    <span>🔥</span> Streak
                 </button>
             </div>
         </div>
@@ -147,18 +157,20 @@ export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full'
                             {/* Sloupce - Plná verze (více místa) */}
                             {variant === 'full' && (
                                 <>
-                                    <th className="px-6 py-4 text-center">Testy</th>
-                                    <th className="px-6 py-4 text-center">Průměr</th>
-                                    <th className="px-6 py-4 text-center">Nejlepší</th>
+                                    <th className="px-6 py-4 text-center whitespace-nowrap" title="Počet dokončených testů">Počet testů</th>
+                                    <th className="px-6 py-4 text-center whitespace-nowrap" title="Průměr ze všech testů">Průměr</th>
+                                    <th className="px-6 py-4 text-center whitespace-nowrap" title="Nejlepší výsledek testu">Nejlepší</th>
+                                    <th className="px-6 py-4 text-center text-red-600 whitespace-nowrap" title="Největší skóre v náhlé smrti">Sudden Death 🔥</th>
                                 </>
                             )}
 
-                            {/* Sloupce - Kompaktní verze (všechny 3, ale úsporněji) */}
+                            {/* Sloupce - Kompaktní verze */}
                             {variant === 'compact' && (
                                 <>
-                                    <th className="px-1 py-2 text-center text-[10px] w-12" title="Počet testů">Testy</th>
-                                    <th className="px-1 py-2 text-center text-[10px] w-12" title="Průměrná úspěšnost">Ø</th>
-                                    <th className="px-1 py-2 text-center text-[10px] w-14" title="Nejlepší výsledek">Max</th>
+                                    <th className="px-1 py-2 text-center text-[10px] w-8" title="Počet testů">Testy</th>
+                                    <th className="px-1 py-2 text-center text-[10px] w-8" title="Průměr">Ø</th>
+                                    <th className="px-1 py-2 text-center text-[10px] w-10" title="Nejlepší">Max</th>
+                                    <th className="px-1 py-2 text-center text-[10px] w-8 text-red-600" title="Streak">🔥</th>
                                 </>
                             )}
                         </tr>
@@ -167,6 +179,7 @@ export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full'
                         {displayUsers.map((user, index) => {
                             const stats = getStats(user)!;
                             const avgPercent = calculateAverage(stats.totalPoints, stats.totalMaxPoints);
+                            const bestStreak = stats.bestStreak || 0;
                             
                             return (
                                 <tr key={index} className="hover:bg-gray-50 transition-colors">
@@ -182,31 +195,35 @@ export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full'
                                     {/* Plná verze tabulky */}
                                     {variant === 'full' && (
                                         <>
-                                            <td className="px-6 py-4 text-center text-gray-600">
+                                            <td className="px-6 py-4 text-center text-gray-600 font-medium">
                                                 {stats.testsTaken}x
                                             </td>
-                                            <td className="px-6 py-4 text-center">
-                                                <span className={`inline-block px-2 py-1 rounded text-sm ${avgPercent >= 80 ? 'bg-green-100 text-green-800' : avgPercent >= 50 ? 'bg-blue-50 text-blue-800' : 'bg-gray-100 text-gray-600'}`}>
-                                                    {avgPercent}%
-                                                </span>
+                                            <td className="px-6 py-4 text-center font-medium text-blue-600">
+                                                {avgPercent}%
                                             </td>
                                             <td className="px-6 py-4 text-center font-bold text-gray-800 text-lg">
                                                 {Math.round(stats.bestScorePercent)}%
                                             </td>
+                                            <td className="px-6 py-4 text-center font-black text-red-600 text-lg">
+                                                {bestStreak}
+                                            </td>
                                         </>
                                     )}
 
-                                    {/* Kompaktní verze widgetu - zobrazíme vše */}
+                                    {/* Kompaktní verze widgetu */}
                                     {variant === 'compact' && (
                                         <>
                                             <td className="px-1 py-2 text-center text-xs text-gray-500">
                                                 {stats.testsTaken}
                                             </td>
-                                            <td className="px-1 py-2 text-center text-xs text-gray-500">
+                                            <td className="px-1 py-2 text-center text-xs font-medium text-blue-600">
                                                 {avgPercent}%
                                             </td>
                                             <td className="px-1 py-2 text-center text-sm font-bold text-gray-800">
                                                 {Math.round(stats.bestScorePercent)}%
+                                            </td>
+                                            <td className="px-1 py-2 text-center text-sm font-black text-red-600">
+                                                {bestStreak}
                                             </td>
                                         </>
                                     )}

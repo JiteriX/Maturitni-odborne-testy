@@ -17,7 +17,9 @@ export enum AppMode {
   MISTAKES = 'MISTAKES',
   REVIEW = 'REVIEW',
   LEADERBOARD = 'LEADERBOARD',
-  BATTLE = 'BATTLE', // Nový režim
+  BATTLE_HUB = 'BATTLE_HUB', // Rozcestník pro bojové módy
+  BATTLE = 'BATTLE', // 1v1
+  SUDDEN_DEATH = 'SUDDEN_DEATH', // Náhlá smrt
 }
 
 export interface TestResult {
@@ -38,6 +40,8 @@ export interface SubjectStats {
   // Limity pro bitvy
   battlesPlayedToday?: number;
   lastBattleDate?: string; // YYYY-MM-DD
+  // Statistiky pro Sudden Death
+  bestStreak?: number;
 }
 
 export interface LeaderboardUser {
