@@ -1,8 +1,8 @@
-
 import React, { useState } from 'react';
 import { AppUser } from '../users';
 import { auth } from '../firebaseConfig';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+// added comment above fix: Use @firebase/auth to ensure correct modular exports resolution in this environment
+import { signInWithEmailAndPassword } from '@firebase/auth';
 
 interface Props {
   onLogin: (user: AppUser) => void;
@@ -14,20 +14,13 @@ export const LoginScreen: React.FC<Props> = ({ onLogin }) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Funkce pro zpracování vstupu (buď celé jméno nebo generování domény)
   const processEmail = (userInput: string) => {
       const trimmedInput = userInput.trim();
-
-      // 1. Pokud uživatel zadal celý email (obsahuje @), použijeme ho tak, jak je.
       if (trimmedInput.includes('@')) {
           return trimmedInput;
       }
-
-      // 2. Pokud uživatel zadal jen jméno (pro studenty), vygenerujeme @maturita.app
       let cleanName = trimmedInput.toLowerCase();
-      // Odstraníme diakritiku a mezery
       cleanName = cleanName.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '');
-      
       return `${cleanName}@maturita.app`;
   };
 
@@ -60,11 +53,9 @@ export const LoginScreen: React.FC<Props> = ({ onLogin }) => {
     }
 
     const emailToUse = processEmail(input);
-    console.log("Pokus o přihlášení jako:", emailToUse);
 
     try {
         const userCredential = await signInWithEmailAndPassword(auth, emailToUse, password);
-        
         onLogin({
             uid: userCredential.user.uid,
             email: emailToUse,
@@ -72,7 +63,6 @@ export const LoginScreen: React.FC<Props> = ({ onLogin }) => {
         });
 
     } catch (loginErr: any) {
-        console.error("Login Error:", loginErr);
         setError(getErrorMessage(loginErr));
     } finally {
         setLoading(false);

@@ -1,10 +1,8 @@
-
-// added comment above fix: Using a namespace import for 'firebase/app' can resolve issues where named exports are not correctly identified by the module loader or TypeScript compiler.
-import * as FirebaseApp from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
+// added comment above fix: Use @firebase/auth to ensure correct modular exports resolution in this environment
+import { getAuth } from '@firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
-// Konfigurace pro projekt "Maturita app"
 const firebaseConfig = {
   apiKey: "AIzaSyC9vto5dYtih7Pfly514ksV76I0QuSiTd8",
   authDomain: "maturita-app.firebaseapp.com",
@@ -15,9 +13,7 @@ const firebaseConfig = {
   measurementId: "G-4CT3YBS8FQ"
 };
 
-// added comment above fix: Initialize the Firebase app using the initializeApp function from the namespace to ensure member availability.
-const app = FirebaseApp.initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
-// Export služeb pro zbytek aplikace
 export const auth = getAuth(app);
 export const db = getFirestore(app);

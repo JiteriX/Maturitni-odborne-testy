@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo, useEffect } from 'react';
 import { QUESTIONS_SPS, QUESTIONS_STT } from './constants';
 import { AppMode, TestResult, Question, Subject } from './types';
@@ -10,11 +9,12 @@ import { SPSInfoModal } from './components/SPSInfoModal';
 import { STTInfoModal } from './components/STTInfoModal';
 import { ReportModal } from './components/ReportModal';
 import { BattleManager } from './components/BattleManager';
-import { SuddenDeathGame } from './components/SuddenDeathGame'; // Import nové hry
+import { SuddenDeathGame } from './components/SuddenDeathGame';
 import { AppUser } from './users';
 import { db, auth } from './firebaseConfig';
 import { doc, setDoc, onSnapshot } from 'firebase/firestore';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
+// added comment above fix: Use @firebase/auth to ensure correct modular exports resolution in this environment
+import { onAuthStateChanged, signOut } from '@firebase/auth';
 
 const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<AppUser | null>(null);
@@ -232,14 +232,12 @@ const App: React.FC = () => {
               </div>
           </div>
 
-          {/* Patička s autorskými právy a verzí */}
           <footer className="mt-auto py-12 text-center text-[#94a3b8] text-base font-normal select-none">
             © 2026 Matyáš Korec | Verze 2.3.1
           </footer>
       </div>
       )}
 
-      {/* Battle Hub - Rozcestník pro bojové módy */}
       {subject && mode === AppMode.BATTLE_HUB && (
         <div className="max-w-4xl mx-auto min-h-screen flex flex-col p-4 md:p-8 animate-in zoom-in duration-200">
            <div className="flex justify-between items-center mb-8">
@@ -251,7 +249,6 @@ const App: React.FC = () => {
            </div>
 
            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-              {/* Karta pro 1v1 Battle */}
               <button onClick={() => setMode(AppMode.BATTLE)} className="group relative overflow-hidden bg-white rounded-3xl p-8 shadow-xl border-2 border-transparent hover:border-blue-500 transition-all duration-300 text-left hover:shadow-2xl hover:-translate-y-1">
                  <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                     <span className="text-9xl">⚔️</span>
@@ -264,7 +261,6 @@ const App: React.FC = () => {
                  </div>
               </button>
 
-              {/* Karta pro Sudden Death */}
               <button onClick={() => setMode(AppMode.SUDDEN_DEATH)} className="group relative overflow-hidden bg-gray-900 rounded-3xl p-8 shadow-xl border-2 border-transparent hover:border-red-500 transition-all duration-300 text-left hover:shadow-2xl hover:-translate-y-1">
                  <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                     <span className="text-9xl">☠️</span>
@@ -295,7 +291,6 @@ const App: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div className="space-y-4">
                     {subject === 'SPS' && (
-                        /* Změna na BATTLE_HUB místo přímého BATTLE */
                         <button onClick={() => setMode(AppMode.BATTLE_HUB)} className={getMenuButtonClass("bg-gradient-to-br from-gray-800 to-gray-900 text-white border-none")}>
                             <div className="bg-white/10 p-3 rounded-full border border-white/20">
                                 <span className="text-2xl">🏆</span>
@@ -331,9 +326,7 @@ const App: React.FC = () => {
 
       {subject && mode === AppMode.BROWSER && (
         <div className="max-w-4xl mx-auto p-4 md:p-8">
-            {/* Navigace a hledání sjednocené podle vizuálního návrhu */}
             <div className="flex items-center gap-4 mb-8 sticky top-0 bg-slate-50 py-4 z-20">
-                {/* Šipka zpět */}
                 <button 
                   onClick={() => setMode(AppMode.MENU)} 
                   className="p-2 text-gray-500 hover:text-blue-600 hover:bg-white rounded-full transition-all shadow-none hover:shadow-sm"
@@ -344,7 +337,6 @@ const App: React.FC = () => {
                     </svg>
                 </button>
 
-                {/* Vyhledávací pole */}
                 <div className="relative flex-1">
                     <input 
                         type="text" 
@@ -358,7 +350,6 @@ const App: React.FC = () => {
                     </svg>
                 </div>
 
-                {/* Tlačítko Rozbalit/Zabalit vše */}
                 <button 
                     onClick={expandedIds.size > 0 ? collapseAll : expandAllVisible}
                     className="flex items-center gap-2 px-5 py-3 bg-[#f0f7ff] text-[#2563eb] rounded-xl font-bold hover:bg-blue-100 transition-colors shadow-sm whitespace-nowrap"
@@ -406,7 +397,6 @@ const App: React.FC = () => {
           />
       )}
 
-      {/* Přidání renderování pro Sudden Death */}
       {subject && mode === AppMode.SUDDEN_DEATH && currentUser && (
           <SuddenDeathGame 
             initialQuestions={currentQuestions}
