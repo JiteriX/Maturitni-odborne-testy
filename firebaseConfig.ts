@@ -1,6 +1,5 @@
 import { initializeApp } from 'firebase/app';
-// added comment above fix: Use @firebase/auth to ensure correct modular exports resolution in this environment
-import { getAuth } from '@firebase/auth';
+import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {

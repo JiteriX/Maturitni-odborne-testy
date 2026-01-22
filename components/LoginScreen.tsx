@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { AppUser } from '../users';
 import { auth } from '../firebaseConfig';
-// added comment above fix: Use @firebase/auth to ensure correct modular exports resolution in this environment
-import { signInWithEmailAndPassword } from '@firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 interface Props {
   onLogin: (user: AppUser) => void;

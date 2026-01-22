@@ -13,8 +13,7 @@ import { SuddenDeathGame } from './components/SuddenDeathGame';
 import { AppUser } from './users';
 import { db, auth } from './firebaseConfig';
 import { doc, setDoc, onSnapshot } from 'firebase/firestore';
-// added comment above fix: Use @firebase/auth to ensure correct modular exports resolution in this environment
-import { onAuthStateChanged, signOut } from '@firebase/auth';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 
 const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<AppUser | null>(null);
