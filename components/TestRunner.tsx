@@ -110,7 +110,11 @@ export const TestRunner: React.FC<Props> = ({ mode, mistakeIds, onComplete, onEx
     const mistakes: number[] = [];
     
     currentQuestions.forEach(q => {
-      if (answers[q.id] === q.correctAnswerIndex) {
+      const userAns = answers[q.id];
+      // Uznáváme jak preferovanou správnou (correctAnswerIndex), tak uznatelnou alternativu (acceptableAnswerIndex)
+      const isCorrect = userAns === q.correctAnswerIndex || (q.acceptableAnswerIndex !== undefined && userAns === q.acceptableAnswerIndex);
+      
+      if (isCorrect) {
         score++;
       } else {
         mistakes.push(q.id);

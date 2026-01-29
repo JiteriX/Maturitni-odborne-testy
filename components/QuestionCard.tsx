@@ -41,7 +41,8 @@ export const QuestionCard: React.FC<Props> = ({
     if (mode === AppMode.REVIEW) return;
     
     setSelected(index);
-    const isCorrect = index === question.correctAnswerIndex;
+    // Považujeme za správné, pokud je to preference NEBO uznatelná alternativa
+    const isCorrect = index === question.correctAnswerIndex || index === question.acceptableAnswerIndex;
     onAnswer(question.id, index, isCorrect);
   };
 
@@ -109,10 +110,19 @@ export const QuestionCard: React.FC<Props> = ({
     if (showFeedback || mode === AppMode.TRAINING || mode === AppMode.MISTAKES || mode === AppMode.REVIEW) {
         if (selected === null && mode !== AppMode.REVIEW) return base + "border-gray-200 hover:bg-gray-50 text-gray-700";
 
+        // 1. Preferovaná správná odpověď (Zelená)
         if (index === question.correctAnswerIndex) {
             return base + "border-green-500 bg-green-50 text-green-900 ring-2 ring-green-200 font-medium";
         }
-        if (selected === index && index !== question.correctAnswerIndex) {
+        // 2. Uznatelná alternativní odpověď (Žlutá)
+        if (index === question.acceptableAnswerIndex) {
+            // Pokud je vybrána uživatelem, svítí žlutě. V Review módu svítí žlutě vždy.
+            if (selected === index || mode === AppMode.REVIEW) {
+               return base + "border-yellow-500 bg-yellow-50 text-yellow-900 ring-2 ring-yellow-200 font-medium";
+            }
+        }
+        // 3. Špatná vybraná odpověď (Červená)
+        if (selected === index && index !== question.correctAnswerIndex && index !== question.acceptableAnswerIndex) {
             return base + "border-red-500 bg-red-50 text-red-900 ring-2 ring-red-200";
         }
         return base + "border-gray-200 opacity-60";
@@ -173,6 +183,16 @@ export const QuestionCard: React.FC<Props> = ({
           </button>
         ))}
       </div>
+
+      {/* Speciální vysvětlení pro vybrané otázky s více správnými odpověďmi */}
+      {((question.id === 224) || (question.id === 422)) && (showFeedback || mode === AppMode.REVIEW || (selected !== null && mode !== AppMode.MOCK_TEST)) && (
+        <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-100">
+          <p className="text-[11px] text-blue-700 italic">
+            {question.id === 224 && "Poznámka: Pokud vyberete odpověď C, je také uznána jako správná. Odpověď A je však technicky přesnější preference."}
+            {question.id === 422 && "Poznámka: Odpovědi B i D jsou v tomto testu identické a obě jsou uznávány jako správné."}
+          </p>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Question } from '../types';
 
@@ -66,6 +65,32 @@ export const BrowserQuestionItem: React.FC<Props> = ({ question, isExpanded, onT
     return text;
   };
 
+  const getOptionClass = (idx: number) => {
+    const isCorrect = idx === question.correctAnswerIndex;
+    const isAcceptable = idx === question.acceptableAnswerIndex;
+
+    if (isCorrect) {
+      return 'bg-green-50 border-green-500 text-green-900 font-semibold';
+    }
+    if (isAcceptable) {
+      return 'bg-yellow-50 border-yellow-500 text-yellow-900 font-semibold';
+    }
+    return 'bg-white border-gray-200 text-gray-500';
+  };
+
+  const getIconClass = (idx: number) => {
+    const isCorrect = idx === question.correctAnswerIndex;
+    const isAcceptable = idx === question.acceptableAnswerIndex;
+
+    if (isCorrect) {
+      return 'border-green-600 bg-green-600 text-white';
+    }
+    if (isAcceptable) {
+      return 'border-yellow-600 bg-yellow-600 text-white';
+    }
+    return 'border-gray-300';
+  };
+
   return (
     <div 
         className={`bg-white p-5 rounded-xl shadow-sm border transition-all ${isExpanded ? 'border-blue-400 ring-2 ring-blue-100' : 'border-gray-100 hover:border-blue-200 hover:shadow-md'}`}
@@ -121,25 +146,30 @@ export const BrowserQuestionItem: React.FC<Props> = ({ question, isExpanded, onT
                 <div className="space-y-2">
                     {question.options.map((opt, idx) => {
                         const isCorrect = idx === question.correctAnswerIndex;
+                        const isAcceptable = idx === question.acceptableAnswerIndex;
                         return (
                             <div 
                                 key={idx} 
-                                className={`p-4 rounded-lg text-base border flex items-center gap-3 ${
-                                    isCorrect 
-                                        ? 'bg-green-50 border-green-500 text-green-900 font-semibold' 
-                                        : 'bg-white border-gray-200 text-gray-500'
-                                }`}
+                                className={`p-4 rounded-lg text-base border flex items-center gap-3 ${getOptionClass(idx)}`}
                             >
-                                <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
-                                    isCorrect ? 'border-green-600 bg-green-600 text-white' : 'border-gray-300'
-                                }`}>
-                                    {isCorrect && <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
+                                <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${getIconClass(idx)}`}>
+                                    {(isCorrect || isAcceptable) && <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
                                 </div>
                                 <span className="flex-1">{renderText(opt)}</span>
                             </div>
                         )
                     })}
                 </div>
+
+                {/* Speciální vysvětlení pro otázky s více správnými odpověďmi i v prohlížeči */}
+                {((question.id === 224) || (question.id === 422)) && (
+                    <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-100">
+                        <p className="text-[11px] text-blue-700 italic">
+                            {question.id === 224 && "Poznámka: Pokud vyberete odpověď C, je také uznána jako správná. Odpověď A je však technicky přesnější preference."}
+                            {question.id === 422 && "Poznámka: Odpovědi B i D jsou v tomto testu identické a obě jsou uznávány jako správné."}
+                        </p>
+                    </div>
+                )}
             </div>
         )}
     </div>

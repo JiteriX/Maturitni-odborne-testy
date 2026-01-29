@@ -1,4 +1,3 @@
-
 import { Question } from './types';
 import { RAW_SPS } from './questionsSPS';
 import { RAW_STT } from './questionsSTT';
@@ -13,18 +12,18 @@ const SPS_IMAGE_IDS: (number | [number, number])[] = [
 ];
 
 // Definice rozsahů a konkrétních ID pro STT - PLNÝ SEZNAM
-// Pokud soubor chybí, aplikace zobrazí "Obrázek se nenačetl", což slouží jako kontrola.
 const STT_IMAGE_IDS: (number | [number, number])[] = [
   [91, 174], 
   186, 
   235, 
-  241, 242, 244, 245,
-  [247, 263], // Rozšířeno o 247-263
-  265, 266, 267, 268, 269, 270, 271, 272, 273, // Rozšířeno o 268, 273
+  [241, 246], // Rozšířeno o 243 a 246 (uživatel má soubory)
+  [247, 263], 
+  [265, 273],
   [283, 289], 
   293, 
   [295, 298], 
-  [302, 303], [305, 308], 
+  [302, 303], 
+  [305, 308], // Zahrnuje 306 a 307 (uživatel má soubory)
   [375, 377], 
   [380, 381], 
   384, 
@@ -33,28 +32,28 @@ const STT_IMAGE_IDS: (number | [number, number])[] = [
   396, 
   401, 
   [404, 406], 
-  [409, 413], // Přidáno 409-413
-  [420, 425], // Zahrnuje 424
-  [426, 429], // Přidáno 426, 427, 429
-  [432, 433], // Přidáno 433
-  [438, 450], // Zahrnuje 438, 441, 448-450
-  [452, 453], // Zahrnuje 453
-  [456, 463], // Zahrnuje 456-463
-  467, // Přidáno 467
-  472, 473, 474, // Přidáno 473, 474
-  [475, 479], // Zahrnuje 478, 479
-  483, 484, 485, // Přidáno 484
-  [489, 492], // Přidáno 489
+  [409, 413], 
+  [420, 425], 
+  [426, 429], 
+  432, 433, 
+  [438, 450], 
+  452, 453, 
+  [456, 463], 
+  467, 
+  [472, 474], 
+  [475, 479], 
+  [483, 485], 
+  [489, 492], 
   496, 497, 
   499, 500, 
   505, 
-  511, 512, 513, // Přidáno 512
-  [516, 522], // Zahrnuje 519, 520, 521, 522
-  [524, 529], // Zahrnuje 525, 527, 529
-  676, 677, // Přidáno 677
-  679, 680, 681, // Přidáno 680, 681
+  [511, 513], 
+  [516, 522], 
+  [524, 529], 
+  [676, 677], 
+  679, [680, 681], 
   [685, 686], 
-  688, 689 // Přidáno 689
+  688, 689
 ];
 
 const checkHasImage = (id: number, config: (number | [number, number])[]): boolean => {
@@ -70,7 +69,7 @@ const parseQuestions = (raw: any[], subject: 'SPS' | 'STT'): Question[] => {
   const imageConfig = subject === 'SPS' ? SPS_IMAGE_IDS : STT_IMAGE_IDS;
   
   return raw.map(item => {
-    const [id, text, options, correct] = item;
+    const [id, text, options, correct, acceptable] = item;
     
     const hasImage = checkHasImage(id, imageConfig);
     
@@ -83,6 +82,7 @@ const parseQuestions = (raw: any[], subject: 'SPS' | 'STT'): Question[] => {
       text,
       options,
       correctAnswerIndex: correct,
+      acceptableAnswerIndex: acceptable,
       imageUrl: imagePath
     };
   });
