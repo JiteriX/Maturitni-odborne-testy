@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo, useEffect } from 'react';
 import { QUESTIONS_SPS, QUESTIONS_STT } from './constants';
 import { AppMode, TestResult, Question, Subject } from './types';
@@ -314,7 +315,7 @@ const App: React.FC = () => {
                         <div className={`${currentMistakes.length > 0 ? 'bg-orange-100' : 'bg-gray-200'} p-3 rounded-full`}><svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></div>
                         <div><div className="font-bold text-lg">Oprava chyb</div><div className="text-sm font-normal">{currentMistakes.length} chyb v paměti</div></div>
                     </button>
-                    <button onClick={() => setMode(AppMode.BROWSER)} className={getMenuButtonClass("bg-white hover:bg-indigo-50 text-indigo-700")}>
+                    <button onClick={() => { setMode(AppMode.BROWSER); setBrowserSearch(""); setExpandedIds(new Set()); }} className={getMenuButtonClass("bg-white hover:bg-indigo-50 text-indigo-700")}>
                         <div className="bg-indigo-100 p-3 rounded-full"><svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg></div>
                         <div><div className="font-bold text-lg">Prohlížet otázky</div><div className="text-sm text-gray-500 font-normal">Databáze {currentQuestions.length} otázek</div></div>
                     </button>
@@ -327,7 +328,7 @@ const App: React.FC = () => {
         <div className="max-w-4xl mx-auto p-4 md:p-8">
             <div className="flex items-center gap-4 mb-8 sticky top-0 bg-slate-50 py-4 z-20">
                 <button 
-                  onClick={() => setMode(AppMode.MENU)} 
+                  onClick={() => { setMode(AppMode.MENU); setBrowserSearch(""); setExpandedIds(new Set()); }} 
                   className="p-2 text-gray-500 hover:text-blue-600 hover:bg-white rounded-full transition-all shadow-none hover:shadow-sm"
                   title="Zpět do menu"
                 >
