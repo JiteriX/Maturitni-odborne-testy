@@ -257,7 +257,6 @@ const App: React.FC = () => {
                     <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6 text-3xl shadow-sm group-hover:scale-110 transition-transform">⚔️</div>
                     <h2 className="text-2xl font-black text-gray-900 mb-2">1v1 Duel</h2>
                     <p className="text-gray-500 mb-4 font-medium">1v1 souboj v reálném čase.</p>
-                    <div className="inline-block bg-blue-50 text-blue-700 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wide">Multiplayer</div>
                  </div>
               </button>
 
@@ -269,7 +268,6 @@ const App: React.FC = () => {
                     <div className="w-16 h-16 bg-red-600 rounded-2xl flex items-center justify-center mb-6 text-3xl shadow-lg shadow-red-900/50 group-hover:scale-110 transition-transform">☠️</div>
                     <h2 className="text-2xl font-black text-white mb-2">Náhlá smrt</h2>
                     <p className="text-gray-400 mb-4 font-medium">Jedna chyba = konec, Hraje se o největší streak, omezeno časem.</p>
-                    <div className="inline-block bg-red-900/50 text-red-400 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wide border border-red-800">Hardcore</div>
                  </div>
               </button>
            </div>
