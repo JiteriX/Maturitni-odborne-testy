@@ -231,10 +231,10 @@ const App: React.FC = () => {
               <h2 className="text-center text-2xl font-bold text-slate-400 uppercase tracking-widest mb-10">Statistiky</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                   <div className="animate-in fade-in slide-in-from-left duration-700">
-                      <Leaderboard subject="SPS" variant="compact" />
+                      <Leaderboard subject="SPS" variant="compact" currentUserId={currentUser.uid} />
                   </div>
                   <div className="animate-in fade-in slide-in-from-right duration-700 delay-150">
-                      <Leaderboard subject="STT" variant="compact" />
+                      <Leaderboard subject="STT" variant="compact" currentUserId={currentUser.uid} />
                   </div>
               </div>
           </div>
