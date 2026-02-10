@@ -1,7 +1,7 @@
 
 export const part1 = [
   [1, "Nástrojové úhly – platí α, β, γ, δ jsou úhly:", ["α čela, β břitu, γ hřbetu, δ řezu", "α břitu, β hřbetu, γ čela, δ řezu", "α čela, β břitu, γ řezu, δ hřbetu", "α hřbetu, β břitu, γ čela, δ řezu"], 3],
-  [2, "Nástrojové úhly – platí ε, χ, χ´ jsou úhly:", ["ε špičky nástroje, χ nastavení hlavního ostří, χ´ nastavení vedlejšího ostří", "ε špičky nástroje, χ nastavení vedlejšího ostří, χ´ nastavení hlavního ostří", "ε řezu, χ nastavení hlavního ostří, χ´ nastavení vedlejšího ostří", "ε čela, χ´nastavení hlavního ostří, χ nastavení vedlejšího ostří"], 3],
+  [2, "Nástrojové úhly – platí ε, χ, χ´ jsou úhly:", ["ε špičky nástroje, χ nastavení hlavního ostří, χ´ nastavení vedlejšího ostří", "ε špičky nástroje, χ nastavení vedlejšího ostří, χ´ nastavení hlavního ostří", "ε řezu, χ nastavení hlavního ostří, χ´ nastavení vedlejšího ostří", "ε čela, χ´nastavení hlavního ostří, χ nastavení vedlejšího ostří"], 0],
   [3, "Nástrojové úhly - δ je úhel řezu a platí:", ["δ = γ + β", "δ = α + β", "δ = α + ε", "δ = α + γ"], 1],
   [4, "Kinematika obrábění – hlavní řezný pohyb při soustružení je:", ["přímočarý vratný nástroje", "rotační obrobku", "rotační nástroje", "posuvný obrobku"], 1],
   [5, "Kinematika obrábění – hlavní řezný pohyb při frézování je:", ["posuvný obrobku", "rotační obrobku", "přímočarý vratný nástroje", "rotační nástroje"], 3],
@@ -12,7 +12,7 @@ export const part1 = [
   [10, "Nástrojové oceli jsou:", ["nelegované, legované, rychlořezné, na lité nástroje", "slinuté karbidy, legované, rychlořezné, technické diamanty", "technické diamanty, nelegované, rychlořezné, na lité nástroje", "technické diamanty, legované, rychlořezné, na lité nástroje"], 0],
   [11, "Tvrdé řezné materiály jsou:", ["slinuté karbidy, nelegované oceli, technické diamanty, kubický nitrid boru", "slinuté karbidy, keramické materiály, legované oceli, kubický nitrid boru", "slinuté karbidy, keramické materiály, technické diamanty, legované oceli", "slinuté karbidy, keramické materiály, technické diamanty, kubický nitrid boru"], 3],
   [12, "Tříska tvářená plynulá nebo tvářená článkovitá je charakteristická pro:", ["křehké nekovové materiály", "křehké kovové materiály", "sklo, dřevo", "houževnaté materiály"], 3],
-  [13, "Tříska elementární vytrhávaná je charakteristická pro:", ["houževnaté kovové materiály", "houževnaté nekovové materiály", "slitiny hliníku", "sklo, porcelán"], 0],
+  [13, "Tříska elementární vytrhávaná je charakteristická pro:", ["houževnaté kovové materiály", "houževnaté nekovové materiály", "slitiny hliníku", "sklo, porcelán"], 3],
   [14, "Největší vliv na drsnost obrobené plochy má:", ["řezná rychlost", "geometrie břitu", "posuv", "řezné prostředí"], 2],
   [15, "Tepelná bilance obrábění nám říká:", ["teplo vzniklé při obrábění je rovno teplu, které někam odchází", "teplo vzniklé při obrábění nikam neodchází", "teplo vzniklé při obrábění je menší než teplo, které někam odchází", "teplo vzniklé při obrábění je větší než teplo, které někam odchází"], 0],
   [16, "Teplo, které při obrábění vzniká, odchází do:", ["třísky, obrobku, nástroje, okolí", "třísky, nástroje, obrobku", "nástroje, třísky, prostředí", "nástroje, okolí, třísky"], 0],
@@ -29,7 +29,7 @@ export const part1 = [
   [27, "Soustružení – řezná rychlost vc = (π·D·n)⁄1000 (mmin-1), kde D znamená průměr obrobku:", ["před obrobením – jednotky metry", "po obrobení – jednotky metry", "před obrobením – jednotky milimetry", "po obrobení – jednotky milimetry"], 2],
   [28, "Při soustružení na hrubo platí – Ra volím:", ["o stupeň větší (horší) jak na výkrese a nechávám max přídavek na obrábění", "stejné jako na výkrese a nechávám min přídavek na obrábění", "o stupeň větší (horší) jak na výkrese a nechávám min přídavek na obrábění", "o stupeň menší (lepší) jak na výkrese a nechávám min přídavek na obrábění"], 2],
   [29, "Jaký je rozdíl mezi VRTÁNÍM a VYVRTÁVÁNÍM?", ["vyvrtáváme i vrtáme do plného materiálu", "vrtáme do plného materiálu a vyvrtáváme do před chystané díry", "vyvrtáváme do plného materiálu a vrtáme do před chystané díry", "vyvrtáváme i vrtáme do před chystané díry"], 1],
-  [30, "KOPINATÉ vrtáky:", ["mají špatný odvod třísky, používají se na vrtání krátkých děr velkých průměrů", "mají dobrý odvod třísky, používají se na vrtání dlouhých děr velkých průměrů", "mají špatný odvod třísky, používají se na vrtání krátkých děr malých průměrů", "mají dobrý odvod třísky, používají se na vrtání dlouhých děr malých průměrů"], 1],
+  [30, "KOPINATÉ vrtáky:", ["mají špatný odvod třísky, používají se na vrtání krátkých děr velkých průměrů", "mají dobrý odvod třísky, používají se na vrtání dlouhých děr velkých průměrů", "mají špatný odvod třísky, používají se na vrtání krátkých děr malých průměrů", "mají dobrý odvod třísky, používají se na vrtání dlouhých děr malých průměrů"], 0],
   [31, "ŠROUBOVITÝ vrták pro vrtání oceli a litiny má úhel špičky nástroje roven:", ["90°", "118°", "100°", "145°"], 1],
   [32, "ŠROUBOVITÝ vrták z rychlořezné oceli má:", ["dvě hlavní ostří a jedno příčné", "jedno hlavní ostří a dvě příčné", "dvě hlavní ostří a dvě příčné", "jedno hlavní ostří a jedno příčné"], 0],
   [33, "Při broušení ŠROUBOVITÉHO vrtáku z rychlořezné oceli dochází ke změně jeho:", ["délky i průměru", "délky", "nepřebrušuje se", "průměru"], 1],

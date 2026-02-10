@@ -47,8 +47,15 @@ export const QuestionCard: React.FC<Props> = ({
   };
 
   const handleImageError = () => {
-      if (currentImgSrc && currentImgSrc.endsWith('.png')) {
-          setCurrentImgSrc(currentImgSrc.replace('.png', '.jpg'));
+      if (!currentImgSrc) return;
+
+      // Zkoušíme postupně: .png -> .PNG -> .jpg -> .JPG
+      if (currentImgSrc.endsWith('.png')) {
+          setCurrentImgSrc(currentImgSrc.replace('.png', '.PNG'));
+      } else if (currentImgSrc.endsWith('.PNG')) {
+          setCurrentImgSrc(currentImgSrc.replace('.PNG', '.jpg'));
+      } else if (currentImgSrc.endsWith('.jpg')) {
+          setCurrentImgSrc(currentImgSrc.replace('.jpg', '.JPG'));
       } else {
           setImgError(true);
       }
@@ -163,7 +170,7 @@ export const QuestionCard: React.FC<Props> = ({
       
       {question.imageUrl && imgError && (
           <div className="mb-6 p-4 text-center text-sm text-red-400 italic bg-red-50 rounded-lg border border-red-100">
-             Obrázek se nepodařilo načíst: {question.imageUrl}
+             Obrázek se nepodařilo načíst (zkoušeno .png, .PNG, .jpg)
           </div>
       )}
 

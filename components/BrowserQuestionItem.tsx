@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Question } from '../types';
 
@@ -20,8 +21,15 @@ export const BrowserQuestionItem: React.FC<Props> = ({ question, isExpanded, onT
   }, [isExpanded, question.imageUrl]);
 
   const handleImageError = () => {
-    if (currentImgSrc && currentImgSrc.endsWith('.png')) {
-        setCurrentImgSrc(currentImgSrc.replace('.png', '.jpg'));
+    if (!currentImgSrc) return;
+
+    // Zkoušíme postupně: .png -> .PNG -> .jpg -> .JPG
+    if (currentImgSrc.endsWith('.png')) {
+        setCurrentImgSrc(currentImgSrc.replace('.png', '.PNG'));
+    } else if (currentImgSrc.endsWith('.PNG')) {
+        setCurrentImgSrc(currentImgSrc.replace('.PNG', '.jpg'));
+    } else if (currentImgSrc.endsWith('.jpg')) {
+        setCurrentImgSrc(currentImgSrc.replace('.jpg', '.JPG'));
     } else {
         setImgError(true);
     }
@@ -138,8 +146,8 @@ export const BrowserQuestionItem: React.FC<Props> = ({ question, isExpanded, onT
                 )}
                 
                 {question.imageUrl && imgError && (
-                    <div className="mb-6 p-4 text-center text-sm text-gray-400 italic bg-gray-50 rounded-lg border border-gray-100">
-                        Obrázek se nepodařilo načíst
+                    <div className="mb-6 p-4 text-center text-sm text-gray-400 italic bg-red-50 rounded-lg border border-red-100">
+                        Obrázek se nepodařilo načíst (zkoušeno .png, .PNG, .jpg)
                     </div>
                 )}
 
