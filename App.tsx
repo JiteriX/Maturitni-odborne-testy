@@ -68,6 +68,13 @@ const App: React.FC = () => {
   useEffect(() => {
     if (currentUser && db) {
         const userDocRef = doc(db, "users", currentUser.uid);
+        
+        // OPRAVA: Uložíme jméno uživatele do databáze, aby bylo vidět v žebříčku
+        setDoc(userDocRef, { 
+            displayName: currentUser.displayName,
+            email: currentUser.email 
+        }, { merge: true }).catch(err => console.error("Chyba při ukládání jména:", err));
+
         const unsubDoc = onSnapshot(userDocRef, (docSnap) => {
             if (docSnap.exists()) {
                 const data = docSnap.data();
