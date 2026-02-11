@@ -191,12 +191,14 @@ export const QuestionCard: React.FC<Props> = ({
         ))}
       </div>
 
-      {/* Speciální vysvětlení pro vybrané otázky s více správnými odpověďmi */}
-      {((question.id === 224) || (question.id === 422)) && (showFeedback || mode === AppMode.REVIEW || (selected !== null && mode !== AppMode.MOCK_TEST)) && (
+      {/* Speciální vysvětlení pro vybrané otázky s více správnými odpověďmi nebo faktickými chybami */}
+      {((question.id === 224) || (question.id === 422) || (question.id === 253) || (question.id === 254)) && (showFeedback || mode === AppMode.REVIEW || (selected !== null && mode !== AppMode.MOCK_TEST)) && (
         <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-100">
           <p className="text-[11px] text-blue-700 italic">
             {question.id === 224 && "Poznámka: Pokud vyberete odpověď C, je také uznána jako správná. Odpověď A je však technicky přesnější preference."}
             {question.id === 422 && "Poznámka: Odpovědi B i D jsou v tomto testu identické a obě jsou uznávány jako správné."}
+            {question.id === 253 && "Poznámka: Správná odpověď by měla být: Třecí síla je větší než setrvačná. V tomto testu je původní možnost označena žlutě (uznatelná)."}
+            {question.id === 254 && "Poznámka: Žádná odpověď není správně. Tato otázka je vyřazena z ostrých testů a arény. Původní možnost je označena žlutě."}
           </p>
         </div>
       )}

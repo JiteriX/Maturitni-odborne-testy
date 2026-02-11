@@ -1,6 +1,10 @@
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import * as firebaseApp from 'firebase/app';
+import * as firebaseAuth from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+
+// Workaround for potential type definition mismatches
+const initializeApp = (firebaseApp as any).initializeApp;
+const getAuth = (firebaseAuth as any).getAuth;
 
 const firebaseConfig = {
   apiKey: "AIzaSyC9vto5dYtih7Pfly514ksV76I0QuSiTd8",

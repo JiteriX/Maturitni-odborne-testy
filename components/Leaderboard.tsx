@@ -8,11 +8,12 @@ interface Props {
   subject: Subject;
   onBack?: () => void;
   variant?: 'full' | 'compact'; // 'full' = celá stránka, 'compact' = widget do menu
+  currentUserId?: string;
 }
 
 type SortType = 'SCORE' | 'GRIND' | 'STREAK';
 
-export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full' }) => {
+export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full', currentUserId }) => {
   const [users, setUsers] = useState<LeaderboardUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [sortType, setSortType] = useState<SortType>('SCORE');
@@ -27,9 +28,9 @@ export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full'
         querySnapshot.forEach((doc) => {
           const data = doc.data();
           if (subject === 'SPS' && data.statsSPS) {
-            loadedUsers.push({ displayName: data.displayName || 'Neznámý', statsSPS: data.statsSPS });
+            loadedUsers.push({ uid: doc.id, displayName: data.displayName || 'Neznámý', statsSPS: data.statsSPS });
           } else if (subject === 'STT' && data.statsSTT) {
-            loadedUsers.push({ displayName: data.displayName || 'Neznámý', statsSTT: data.statsSTT });
+            loadedUsers.push({ uid: doc.id, displayName: data.displayName || 'Neznámý', statsSTT: data.statsSTT });
           }
         });
         
@@ -75,8 +76,25 @@ export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full'
     }
   });
 
-  // V kompaktním režimu ukážeme jen TOP 5
-  const displayUsers = variant === 'compact' ? sortedUsers.slice(0, 5) : sortedUsers;
+  // Logika pro zobrazení
+  let displayUsers = sortedUsers;
+  let currentUserRankIndex = -1;
+
+  if (currentUserId) {
+      currentUserRankIndex = sortedUsers.findIndex(u => u.uid === currentUserId);
+  }
+
+  // V kompaktním režimu ukážeme jen TOP 5, ale pokud je uživatel níže, přidáme ho nakonec
+  if (variant === 'compact') {
+      displayUsers = sortedUsers.slice(0, 5);
+      
+      // Pokud je uživatel v seznamu, ale není v TOP 5, přidáme ho
+      if (currentUserRankIndex > 4) {
+          // Přidáme "..." (reprezentováno null) a pak uživatele
+          // Použijeme typ any v poli pro zjednodušení renderování oddělovače
+          displayUsers = [...displayUsers, null as any, sortedUsers[currentUserRankIndex]];
+      }
+  }
 
   const getMedalColor = (index: number) => {
     if (index === 0) return "bg-yellow-100 text-yellow-700 border-yellow-300";
@@ -141,7 +159,7 @@ export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full'
 
       {loading ? (
         <div className="text-center py-8 text-gray-400 text-sm">Načítám data...</div>
-      ) : displayUsers.length === 0 ? (
+      ) : sortedUsers.length === 0 ? (
         <div className="text-center py-8 bg-white rounded-xl shadow-sm border border-gray-200 border-dashed">
             <p className="text-gray-400 text-sm">Zatím žádné statistiky.</p>
         </div>
@@ -176,20 +194,35 @@ export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full'
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
-                        {displayUsers.map((user, index) => {
+                        {displayUsers.map((user, i) => {
+                            // Render oddělovače (pokud je user null)
+                            if (!user) {
+                                return (
+                                    <tr key="separator" className="bg-gray-50">
+                                        <td colSpan={variant === 'compact' ? 6 : 6} className="text-center py-1 text-gray-400 text-xs">
+                                            • • •
+                                        </td>
+                                    </tr>
+                                );
+                            }
+
+                            // Musíme najít skutečný rank v sortedUsers poli
+                            const realRank = sortedUsers.findIndex(u => u.uid === user.uid);
+                            const isMe = user.uid === currentUserId;
+
                             const stats = getStats(user)!;
                             const avgPercent = calculateAverage(stats.totalPoints, stats.totalMaxPoints);
                             const bestStreak = stats.bestStreak || 0;
                             
                             return (
-                                <tr key={index} className="hover:bg-gray-50 transition-colors">
+                                <tr key={user.uid} className={`transition-colors ${isMe ? 'bg-blue-50/80 border-l-4 border-l-blue-500' : 'hover:bg-gray-50'}`}>
                                     <td className={`${variant === 'compact' ? 'px-3 py-2' : 'px-6 py-4'} text-center`}>
-                                        <div className={`${variant === 'compact' ? 'w-6 h-6 text-xs' : 'w-8 h-8'} rounded-full flex items-center justify-center mx-auto font-bold border ${getMedalColor(index)}`}>
-                                            {index + 1}
+                                        <div className={`${variant === 'compact' ? 'w-6 h-6 text-xs' : 'w-8 h-8'} rounded-full flex items-center justify-center mx-auto font-bold border ${getMedalColor(realRank)}`}>
+                                            {realRank + 1}
                                         </div>
                                     </td>
                                     <td className={`${variant === 'compact' ? 'px-3 py-2' : 'px-6 py-4'} font-medium text-gray-900 truncate max-w-[100px] sm:max-w-none`}>
-                                        {user.displayName}
+                                        {user.displayName} {isMe && <span className="text-[10px] text-blue-600 ml-1">(Ty)</span>}
                                     </td>
 
                                     {/* Plná verze tabulky */}
@@ -233,7 +266,7 @@ export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full'
                     </tbody>
                 </table>
             </div>
-            {variant === 'compact' && sortedUsers.length > 5 && (
+            {variant === 'compact' && sortedUsers.length > 5 && currentUserRankIndex <= 4 && (
                 <div 
                     onClick={onBack} 
                     className="bg-gray-50 p-2 text-center text-xs text-gray-500 hover:text-blue-600 hover:bg-gray-100 cursor-pointer border-t border-gray-100 transition-colors"

@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { AppUser } from '../users';
 import { auth } from '../firebaseConfig';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import * as firebaseAuth from 'firebase/auth';
+
+// Workaround for potential type definition mismatches
+const { signInWithEmailAndPassword } = firebaseAuth as any;
 
 interface Props {
   onLogin: (user: AppUser) => void;

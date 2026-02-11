@@ -1,10 +1,11 @@
+
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebaseConfig';
 import { doc, setDoc, getDoc, collection, query, where, getDocs, updateDoc, serverTimestamp, deleteDoc, onSnapshot } from 'firebase/firestore';
 import { Subject, BattleRoom, AppMode } from '../types';
 import { AppUser } from '../users';
 import { BattleArena } from './BattleArena';
-import { QUESTIONS_SPS } from '../constants';
+import { QUESTIONS_SPS_FILTERED } from '../constants';
 
 interface Props {
   currentUser: AppUser;
@@ -53,7 +54,8 @@ export const BattleManager: React.FC<Props> = ({ currentUser, subject, stats, on
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     const roomId = `room_${Date.now()}`;
     
-    const shuffled = [...QUESTIONS_SPS].sort(() => 0.5 - Math.random()).slice(0, 20);
+    // Používáme filtrovaný seznam pro bitvu
+    const shuffled = [...QUESTIONS_SPS_FILTERED].sort(() => 0.5 - Math.random()).slice(0, 20);
     const questionIds = shuffled.map(q => q.id);
 
     const newRoom: BattleRoom = {

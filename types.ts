@@ -18,9 +18,24 @@ export enum AppMode {
   MISTAKES = 'MISTAKES',
   REVIEW = 'REVIEW',
   LEADERBOARD = 'LEADERBOARD',
-  BATTLE_HUB = 'BATTLE_HUB', // Rozcestník pro bojové módy
-  BATTLE = 'BATTLE', // 1v1
-  SUDDEN_DEATH = 'SUDDEN_DEATH', // Náhlá smrt
+  BATTLE_HUB = 'BATTLE_HUB', 
+  BATTLE = 'BATTLE', 
+  SUDDEN_DEATH = 'SUDDEN_DEATH',
+  CATEGORY_SELECT = 'CATEGORY_SELECT', // Nový mód pro výběr kategorie
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  subject: Subject;
+  questionRanges: [number, number][]; // List of [minId, maxId]
+}
+
+export interface CategoryResult {
+  categoryId: string;
+  categoryName: string;
+  correct: number;
+  total: number;
 }
 
 export interface TestResult {
@@ -31,6 +46,7 @@ export interface TestResult {
   timeElapsed: number;
   userAnswers: Record<number, number>;
   questionsUsed: Question[];
+  categoryResults?: CategoryResult[]; // Rozbor podle témat
 }
 
 export interface SubjectStats {
@@ -38,14 +54,13 @@ export interface SubjectStats {
   totalPoints: number;
   totalMaxPoints: number;
   bestScorePercent: number;
-  // Limity pro bitvy
   battlesPlayedToday?: number;
-  lastBattleDate?: string; // YYYY-MM-DD
-  // Statistiky pro Sudden Death
+  lastBattleDate?: string; 
   bestStreak?: number;
 }
 
 export interface LeaderboardUser {
+  uid: string; 
   displayName: string;
   statsSPS?: SubjectStats;
   statsSTT?: SubjectStats;
@@ -59,11 +74,10 @@ export interface QuestionReport {
   timestamp: string;
 }
 
-// Rozhraní pro 1v1 Bitvu
 export interface BattlePlayerData {
   uid: string;
   displayName: string;
-  progress: number; // 0-20
+  progress: number; 
   score: number;
   finished: boolean;
   ready: boolean;
@@ -74,8 +88,8 @@ export interface BattleRoom {
   code: string;
   subject: Subject;
   status: 'WAITING' | 'STARTING' | 'IN_PROGRESS' | 'FINISHED';
-  questions: number[]; // Seznam ID otázek
+  questions: number[]; 
   players: Record<string, BattlePlayerData>;
   createdAt: any;
-  expiresAt?: number; // Timestamp vypršení hry (ms)
+  expiresAt?: number; 
 }
