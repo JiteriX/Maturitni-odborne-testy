@@ -22,6 +22,8 @@ export const TestRunner: React.FC<Props> = ({ mode, mistakeIds, onComplete, onEx
   const [answers, setAnswers] = useState<Record<number, number>>({}); 
   const [timeLeft, setTimeLeft] = useState(30 * 60); 
   const [currentIndex, setCurrentIndex] = useState(0);
+  // Nový stav pro sledování, zda byl test již vyhodnocen
+  const [isFinished, setIsFinished] = useState(false);
   
   useEffect(() => {
     let q: Question[] = [];
@@ -45,7 +47,9 @@ export const TestRunner: React.FC<Props> = ({ mode, mistakeIds, onComplete, onEx
   }, [mode, mistakeIds, initialQuestions, initialAnswers, initialQuestionsForMode]);
 
   useEffect(() => {
-    if (mode !== AppMode.MOCK_TEST) return;
+    // Pokud není mód MOCK_TEST nebo pokud je test již dokončen, časovač nespouštíme
+    if (mode !== AppMode.MOCK_TEST || isFinished) return;
+    
     const timer = setInterval(() => {
       setTimeLeft(prev => {
         if (prev <= 1) {
@@ -57,9 +61,10 @@ export const TestRunner: React.FC<Props> = ({ mode, mistakeIds, onComplete, onEx
       });
     }, 1000);
     return () => clearInterval(timer);
-  }, [mode]);
+  }, [mode, isFinished]); // Přidána závislost na isFinished
 
   const handleAnswer = (qId: number, idx: number, isCorrect: boolean) => {
+    if (isFinished) return; // Zabrání změně odpovědí po dokončení
     setAnswers(prev => ({ ...prev, [qId]: idx }));
   };
 
@@ -87,6 +92,10 @@ export const TestRunner: React.FC<Props> = ({ mode, mistakeIds, onComplete, onEx
   };
 
   const finishTest = async () => {
+    // Pokud už byl test vyhodnocen, nedělej nic (prevence dvojího vyhodnocení časovačem)
+    if (isFinished) return;
+    setIsFinished(true);
+
     let score = 0;
     const mistakes: number[] = [];
     
@@ -114,7 +123,8 @@ export const TestRunner: React.FC<Props> = ({ mode, mistakeIds, onComplete, onEx
     const percentage = total === 0 ? 0 : (score / total) * 100;
     const passed = percentage >= 44;
 
-    saveStats(score, total);
+    // DŮLEŽITÉ: Čekáme na uložení statistik před zobrazením výsledku
+    await saveStats(score, total);
 
     onComplete({ score, total, passed, mistakes, timeElapsed: (30 * 60) - timeLeft, userAnswers: answers, questionsUsed: relevantQuestions });
   };
