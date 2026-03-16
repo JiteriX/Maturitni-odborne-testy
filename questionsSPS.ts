@@ -134,7 +134,7 @@ export const RAW_SPS: any[] = [
   [132, "Který parametr není důležitý při kontrole zubu ozubeného kola na ohyb?", ["Přenášený moment", "Modul ozubení", "Materiál ozubeného kola", "Drsnost boku zubu"], 3],
   [133, "Co NEPATŘÍ mezi výhody čelních ozubených kol se šikmými zuby (v porovnání s přímými zuby)?", ["Tichý chod", "Menší rozměry (moduly) (resp. větší únosnost)", "Přenos vĕtších výkonů", "Menší namáhání ložisek"], 3],
   [134, "Jaká je hlavní výhoda šnekových soukolí?", ["Velká účinnost", "Přenos obrovských výkonů", "Malé namáhání ložisek", "Velké převodové pomĕry"], 3],
-  [135, "Která z tĕchto sil je u kuželového ozubeného kola (úhel os 90°) při zábĕru nulová?", ["Tangenciální síla", "Radiální síla", "Axiální síla", "Axiální, radiální i tangenciální are nenulové."], 3],
+  [135, "Která z tĕchto sil je u kuželového ozubeného kola (úhel os 90°) při zábĕru nulová?", ["Tangenciální síla", "Radiální síla", "Axiální síla", "Axiální, radiální i tangenciální jsou nenulové."], 3],
   [136, "Čím vzniklo typické poškození ozubeného kola na obrázku?", ["Pittingem", "Lomovým porušením", "Gallingem", "Abrazí"], 0],
   [137, "O jaký druh ozubeného soukolí na obrázku se jedná?", ["Čelní", "Paloidní", "Hypoidní", "Šnekové"], 2],
   [138, "Jaký typ ozubeného kola je na obrázku?", ["Čelní ozubené kola s přímými zuby", "Kuželové ozubené kolo", "Čelní ozubené kola s šikmými zuby", "Šnekové ozubené kola"], 3],
