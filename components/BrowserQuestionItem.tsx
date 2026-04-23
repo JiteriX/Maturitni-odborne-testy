@@ -7,9 +7,10 @@ interface Props {
   isExpanded: boolean;
   onToggle: () => void;
   onReportRequest?: (qId: number) => void;
+  subject?: string;
 }
 
-export const BrowserQuestionItem: React.FC<Props> = ({ question, isExpanded, onToggle, onReportRequest }) => {
+export const BrowserQuestionItem: React.FC<Props> = ({ question, isExpanded, onToggle, onReportRequest, subject }) => {
   const [imgError, setImgError] = useState(false);
   const [currentImgSrc, setCurrentImgSrc] = useState<string | undefined>(question.imageUrl);
 
@@ -75,7 +76,7 @@ export const BrowserQuestionItem: React.FC<Props> = ({ question, isExpanded, onT
 
   const getOptionClass = (idx: number) => {
     const isCorrect = idx === question.correctAnswerIndex;
-    const isAcceptable = idx === question.acceptableAnswerIndex;
+    const isAcceptable = Array.isArray(question.acceptableAnswerIndex) ? question.acceptableAnswerIndex.includes(idx) : idx === question.acceptableAnswerIndex;
 
     if (isCorrect) {
       return 'bg-green-50 border-green-500 text-green-900 font-semibold';
@@ -88,7 +89,7 @@ export const BrowserQuestionItem: React.FC<Props> = ({ question, isExpanded, onT
 
   const getIconClass = (idx: number) => {
     const isCorrect = idx === question.correctAnswerIndex;
-    const isAcceptable = idx === question.acceptableAnswerIndex;
+    const isAcceptable = Array.isArray(question.acceptableAnswerIndex) ? question.acceptableAnswerIndex.includes(idx) : idx === question.acceptableAnswerIndex;
 
     if (isCorrect) {
       return 'border-green-600 bg-green-600 text-white';
@@ -154,7 +155,7 @@ export const BrowserQuestionItem: React.FC<Props> = ({ question, isExpanded, onT
                 <div className="space-y-2">
                     {question.options.map((opt, idx) => {
                         const isCorrect = idx === question.correctAnswerIndex;
-                        const isAcceptable = idx === question.acceptableAnswerIndex;
+                        const isAcceptable = Array.isArray(question.acceptableAnswerIndex) ? question.acceptableAnswerIndex.includes(idx) : idx === question.acceptableAnswerIndex;
                         return (
                             <div 
                                 key={idx} 
@@ -170,13 +171,17 @@ export const BrowserQuestionItem: React.FC<Props> = ({ question, isExpanded, onT
                 </div>
 
                 {/* Speciální vysvětlení pro otázky s více správnými odpověďmi i v prohlížeči */}
-                {((question.id === 224) || (question.id === 422) || (question.id === 253) || (question.id === 254)) && (
+                {((question.id === 224) || (question.id === 422) || (question.id === 253 && subject === 'SPS') || (question.id === 254 && subject === 'SPS') || (question.id === 274 && subject === 'STT') || (question.id === 285 && subject === 'STT') || (question.id === 286 && subject === 'STT') || (question.id === 309 && subject === 'STT')) && (
                     <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-100">
                         <p className="text-[11px] text-blue-700 italic">
                             {question.id === 224 && "Poznámka: Pokud vyberete odpověď C, je také uznána jako správná. Odpověď A je však technicky přesnější preference."}
                             {question.id === 422 && "Poznámka: Odpovědi B i D jsou v tomto testu identické a obě jsou uznávány jako správné."}
-                            {question.id === 253 && "Poznámka: Správná odpověď by měla být: Třecí síla je větší než setrvačná. V tomto testu je původní možnost označena žlutě (uznatelná)."}
-                            {question.id === 254 && "Poznámka: Žádná odpověď není správně. Tato otázka je vyřazena z ostrých testů a arény. Původní možnost je označena žlutě."}
+                            {question.id === 253 && subject === 'SPS' && "Poznámka: Správná odpověď by měla být: Třecí síla je větší než setrvačná. V tomto testu je původní možnost označena žlutě (uznatelná)."}
+                            {question.id === 254 && subject === 'SPS' && "Poznámka: Žádná odpověď není správně. Tato otázka je vyřazena z ostrých testů a arény. Původní možnost je označena žlutě."}
+                            {question.id === 274 && subject === 'STT' && "Poznámka: Teoreticky jsou správně odpovědi A, B i C. Zde uznávány všechny tyto možnosti. Původní odpovědi A a D jsou označeny žlutě."}
+                            {question.id === 285 && subject === 'STT' && "Poznámka: Na obrázku je vnitřní i vnější ozubení. Varianta C je zde označena žlutě."}
+                            {question.id === 286 && subject === 'STT' && "Poznámka: Varianta B je v tomto testu označena žlutě a je rovněž považována za správnou."}
+                            {question.id === 309 && subject === 'STT' && "Poznámka: Varianta A je v tomto testu označena žlutě a je rovněž považována za správnou."}
                         </p>
                     </div>
                 )}

@@ -10,9 +10,10 @@ interface Props {
   initialQuestions: Question[];
   onExit: () => void;
   currentUser: any;
+  subject?: string;
 }
 
-export const SuddenDeathGame: React.FC<Props> = ({ initialQuestions, onExit, currentUser }) => {
+export const SuddenDeathGame: React.FC<Props> = ({ initialQuestions, onExit, currentUser, subject }) => {
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
   const [streak, setStreak] = useState(0);
   const [timeLeft, setTimeLeft] = useState(20); // Změna na 20s
@@ -182,6 +183,7 @@ export const SuddenDeathGame: React.FC<Props> = ({ initialQuestions, onExit, cur
         mode={AppMode.MOCK_TEST} // Používáme mock test mód pro vzhled (bez okamžitého vyhodnocení v kartě)
         onAnswer={handleAnswer}
         showFeedback={false}
+        subject={subject}
       />
       
       <div className="text-center mt-8">

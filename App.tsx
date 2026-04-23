@@ -169,7 +169,8 @@ const App: React.FC = () => {
             if (cat) {
                 if (!categoryMap[cat.id]) categoryMap[cat.id] = { correct: 0, total: 0, name: cat.name };
                 categoryMap[cat.id].total++;
-                const isCorrect = result.userAnswers[q.id] === q.correctAnswerIndex || result.userAnswers[q.id] === q.acceptableAnswerIndex;
+                const accepted = Array.isArray(q.acceptableAnswerIndex) ? q.acceptableAnswerIndex.includes(result.userAnswers[q.id]) : result.userAnswers[q.id] === q.acceptableAnswerIndex;
+                const isCorrect = result.userAnswers[q.id] === q.correctAnswerIndex || accepted;
                 if (isCorrect) categoryMap[cat.id].correct++;
             }
         });
@@ -381,14 +382,14 @@ const App: React.FC = () => {
             </div>
             <div className="space-y-4">
                 {(mode === AppMode.BROWSER ? (browserSearch.trim() ? (subject === 'SPS' ? QUESTIONS_SPS : QUESTIONS_STT).filter(q => q.id.toString() === browserSearch || q.text.toLowerCase().includes(browserSearch.toLowerCase())) : (subject === 'SPS' ? QUESTIONS_SPS : QUESTIONS_STT)) : []).map(q => (
-                    <BrowserQuestionItem key={q.id} question={q} isExpanded={expandedIds.has(q.id)} onToggle={() => setExpandedIds(prev => { const next = new Set(prev); if (next.has(q.id)) next.delete(q.id); else next.add(q.id); return next; })} onReportRequest={(id) => setReportingQuestionId(id)} />
+                    <BrowserQuestionItem key={q.id} question={q} isExpanded={expandedIds.has(q.id)} onToggle={() => setExpandedIds(prev => { const next = new Set(prev); if (next.has(q.id)) next.delete(q.id); else next.add(q.id); return next; })} onReportRequest={(id) => setReportingQuestionId(id)} subject={subject} />
                 ))}
             </div>
         </div>
       )}
 
       {subject && mode === AppMode.BATTLE && currentUser && <BattleManager currentUser={currentUser} subject={subject} stats={statsSPS} onExit={() => setMode(AppMode.MENU)} />}
-      {subject && mode === AppMode.SUDDEN_DEATH && currentUser && <SuddenDeathGame initialQuestions={currentQuestions} currentUser={currentUser} onExit={() => setMode(AppMode.MENU)} />}
+      {subject && mode === AppMode.SUDDEN_DEATH && currentUser && <SuddenDeathGame initialQuestions={currentQuestions} currentUser={currentUser} onExit={() => setMode(AppMode.MENU)} subject={subject} />}
       {subject && (mode === AppMode.MOCK_TEST || mode === AppMode.TRAINING || mode === AppMode.MISTAKES || mode === AppMode.REVIEW) && (
         <TestRunner 
             key={subject + mode + selectedCategoryId} 

@@ -252,7 +252,7 @@ export const RAW_SPS: any[] = [
   [250, "Jaký materiál lze přepravovat pomocí válečkové tratĕ?", ["Jakýkoliv", "Pouze sypké materiály", "Pouze materiály v kapalném stavu", "Pouze kusové materiály"], 3],
   [251, "Jak nemůže být přepravován materiál pomocí válečkové tratĕ?", ["Posouváním lidskou silou", "Samočinnĕ gravitací", "Pomocí pohonu válečků", "Překonáním setrvačné síly"], 3],
   [252, "Při rychlém pohybu vibračního dopravníku vzad (proti smĕru dopravy materiálu) je...", ["třecí síla vĕtší než setrvačná.", "setrvačná síla vĕtší než třecí.", "třecí síla vĕtší než gravitační.", "třecí síla nulová."], 1],
-  [253, "Při pomalém pohybu vibračního dopravníku vpřed (ve smĕru dopravy materiálu) je...", ["třecí síla vĕtší než gravitační.", "setrvačná síla vĕtší než třecí.", "setrvačná síla menší než gravitační.", "třecí síla nulová."], -1, 1],
+  [253, "Při pomalém pohybu vibračního dopravníku vpřed (ve smĕru dopravy materiálu) je...", ["třecí síla vĕtší než gravitační.", "setrvačná síla vĕtší než třecí.", "setrvačná síla menší než gravitační.", "třecí síla nulová."], 0, 1],
   [254, "U pohánĕné válečkové tratĕ musí být pohánĕn ...", ["každý váleček.", "alespoň každý druhý váleček.", "alespoň každý třetí váleček.", "alespoň každý čtvrtý váleček."], -1, 1],
   [255, "U kterého z tĕchto dopravníků bez tažného elementu haje nejmenší roli smykové tření?", ["Šnekový dopravník", "Dopravní žlab", "Válečková trať", "Vibrační dopravník"], 2],
   [256, "Jaký druh dopravníku bez tažného elementu je na obrázku?", ["Nejedná se o dopravník bez tažného elementu, ale s tažným elementem", "Vibrační", "Válečkový", "Šnekový"], 1],

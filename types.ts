@@ -4,7 +4,7 @@ export interface Question {
   text: string;
   options: string[];
   correctAnswerIndex: number; // 0-3
-  acceptableAnswerIndex?: number; // Alternativní uznatelná odpověď
+  acceptableAnswerIndex?: number | number[]; // Alternativní uznatelná odpověď(i)
   imageUrl?: string;
 }
 

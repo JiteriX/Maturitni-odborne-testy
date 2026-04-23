@@ -240,6 +240,7 @@ export const BattleArena: React.FC<Props> = ({ room, currentUser, onExit, stats 
                 mode={AppMode.MOCK_TEST}
                 onAnswer={handleAnswer}
                 showFeedback={false}
+                subject={room.subject}
             />
             
             {/* Tlačítko Vzdát se */}

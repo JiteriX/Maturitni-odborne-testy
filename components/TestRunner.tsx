@@ -184,7 +184,7 @@ export const TestRunner: React.FC<Props> = ({ mode, mistakeIds, onComplete, onEx
       </div>
 
       <div className="px-4">
-          <QuestionCard question={currentQ} mode={mode} onAnswer={handleAnswer} showFeedback={mode !== AppMode.MOCK_TEST} userAnswer={answers[currentQ.id]} onReportRequest={onReportRequest} />
+          <QuestionCard question={currentQ} mode={mode} onAnswer={handleAnswer} showFeedback={mode !== AppMode.MOCK_TEST} userAnswer={answers[currentQ.id]} onReportRequest={onReportRequest} subject={subject} />
       </div>
 
       <div className="flex justify-between items-center px-6 py-8">
