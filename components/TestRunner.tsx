@@ -121,7 +121,7 @@ export const TestRunner: React.FC<Props> = ({ mode, mistakeIds, onComplete, onEx
 
     const total = relevantQuestions.length;
     const percentage = total === 0 ? 0 : (score / total) * 100;
-    const passed = percentage >= 44;
+    const passed = percentage >= 33;
 
     // DŮLEŽITÉ: Čekáme na uložení statistik před zobrazením výsledku
     await saveStats(score, total);

@@ -113,7 +113,7 @@ export const part3 = [
   [611, "Jaký druh vrtačky se používá pro přesné vrtání malých otvorů?", ["Ruční", "Radiální", "Stolní", "Stojanová"], 2],
   [612, "Jaký druh vrtačky se používá pro těžké kusy?", ["Radiální", "Ruční", "Stolní", "Sloupová"], 0],
   [613, "K čemu slouží vyvrtávání?", ["K řezání závitů", "K hrubování", "K přesnému zvětšení otvorů", "K výrobě závitů"], 2],
-  [614, "Jaký nástroj se používá při vyvrtávání?", ["Vyvrtávací tyč", "Soustružnický nůž", "Pilník", "Vrták"], 0],
+  [614, "Jaký nástroj se používá při vyvrtávání?", ["Vyvrtávací tyč", "Soustružnický nůž", "Pilník", "Vrták"], 3],
   [615, "Co je výstružník?", ["Nástroj na dokončování otvorů", "Nástroj na frézování", "Nástroj na broušení", "Nástroj na soustružení"], 0],
   [616, "Co určuje posuv při vrtání?", ["Otáčky vřetena", "Posuv na otáčku", "Druh chladiva", "Průměr dílce"], 1],
   [617, "Jaké otáčky se volí pro větší průměr vrtáku?", ["Vyšší", "Střední", "Nižší", "Nemění se"], 2],

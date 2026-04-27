@@ -250,10 +250,10 @@ const App: React.FC = () => {
                                     <div key={cat.categoryId} className="bg-white border border-gray-100 rounded-xl p-3 shadow-sm">
                                         <div className="flex justify-between items-center mb-2">
                                             <span className="text-sm font-bold text-gray-700 truncate mr-2">{cat.categoryName}</span>
-                                            <span className={`text-xs font-black px-2 py-0.5 rounded-full ${percent >= 44 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{percent}%</span>
+                                            <span className={`text-xs font-black px-2 py-0.5 rounded-full ${percent >= 33 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{percent}%</span>
                                         </div>
                                         <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                                            <div className={`h-full transition-all duration-1000 ${percent >= 44 ? 'bg-green-500' : 'bg-red-500'}`} style={{width: `${percent}%`}}></div>
+                                            <div className={`h-full transition-all duration-1000 ${percent >= 33 ? 'bg-green-500' : 'bg-red-500'}`} style={{width: `${percent}%`}}></div>
                                         </div>
                                     </div>
                                 );

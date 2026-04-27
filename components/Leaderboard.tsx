@@ -55,24 +55,29 @@ export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full'
 
     if (!statsA || !statsB) return 0;
 
+    const scoreA = statsA.bestScorePercent || 0;
+    const scoreB = statsB.bestScorePercent || 0;
+    const streakA = statsA.bestStreak || 0;
+    const streakB = statsB.bestStreak || 0;
+    const testsA = statsA.testsTaken || 0;
+    const testsB = statsB.testsTaken || 0;
+
     if (sortType === 'SCORE') {
       // Primárně podle nejlepšího skóre
-      if (statsB.bestScorePercent !== statsA.bestScorePercent) {
-        return statsB.bestScorePercent - statsA.bestScorePercent;
+      if (scoreB !== scoreA) {
+        return scoreB - scoreA;
       }
-      return (statsB.bestStreak || 0) - (statsA.bestStreak || 0);
+      return streakB - streakA;
     } else if (sortType === 'GRIND') {
       // Primárně podle počtu testů
-      if (statsB.testsTaken !== statsA.testsTaken) {
-        return statsB.testsTaken - statsA.testsTaken;
+      if (testsB !== testsA) {
+        return testsB - testsA;
       }
-      return statsB.bestScorePercent - statsA.bestScorePercent;
+      return scoreB - scoreA;
     } else {
       // Primárně podle streaku
-      const streakA = statsA.bestStreak || 0;
-      const streakB = statsB.bestStreak || 0;
       if (streakB !== streakA) return streakB - streakA;
-      return statsB.bestScorePercent - statsA.bestScorePercent;
+      return scoreB - scoreA;
     }
   });
 
@@ -211,8 +216,10 @@ export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full'
                             const isMe = user.uid === currentUserId;
 
                             const stats = getStats(user)!;
-                            const avgPercent = calculateAverage(stats.totalPoints, stats.totalMaxPoints);
+                            const avgPercent = calculateAverage(stats.totalPoints || 0, stats.totalMaxPoints || 0);
+                            const bestScore = stats.bestScorePercent ? Math.round(stats.bestScorePercent) : 0;
                             const bestStreak = stats.bestStreak || 0;
+                            const testsTaken = stats.testsTaken || 0;
                             
                             return (
                                 <tr key={user.uid} className={`transition-colors ${isMe ? 'bg-blue-50/80 border-l-4 border-l-blue-500' : 'hover:bg-gray-50'}`}>
@@ -229,13 +236,13 @@ export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full'
                                     {variant === 'full' && (
                                         <>
                                             <td className="px-6 py-4 text-center text-gray-600 font-medium">
-                                                {stats.testsTaken}x
+                                                {testsTaken}x
                                             </td>
                                             <td className="px-6 py-4 text-center font-medium text-blue-600">
                                                 {avgPercent}%
                                             </td>
                                             <td className="px-6 py-4 text-center font-bold text-gray-800 text-lg">
-                                                {Math.round(stats.bestScorePercent)}%
+                                                {bestScore}%
                                             </td>
                                             <td className="px-6 py-4 text-center font-black text-red-600 text-lg">
                                                 {bestStreak}
@@ -247,13 +254,13 @@ export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full'
                                     {variant === 'compact' && (
                                         <>
                                             <td className="px-1 py-2 text-center text-xs text-gray-500">
-                                                {stats.testsTaken}
+                                                {testsTaken}
                                             </td>
                                             <td className="px-1 py-2 text-center text-xs font-medium text-blue-600">
                                                 {avgPercent}%
                                             </td>
                                             <td className="px-1 py-2 text-center text-sm font-bold text-gray-800">
-                                                {Math.round(stats.bestScorePercent)}%
+                                                {bestScore}%
                                             </td>
                                             <td className="px-1 py-2 text-center text-sm font-black text-red-600">
                                                 {bestStreak}
