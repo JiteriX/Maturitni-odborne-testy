@@ -178,7 +178,7 @@ export const part2 = [
   [426, "Na obrázku je polotovar pro výrobu obalových nádob, urči název polotovaru", ["piston", "pilot", "prison", "parison"], 3],
   [427, "Na obrázku je obalova nádoba (PET láhev), určete kterou technlogií je vyrobena", ["vyfukováním z parisonu", "lisováním", "vyfukováním z rukávce", "vstřikováním"], 0],
   [428, "Na obrázku je technologie výroby plastů", ["lisování plastů", "kombinace mechanického a vakuového tvarování plastů C17- vakuové tvarování na kopytu - vakuové tvarování ve formě", "vakuové tvarovaní plastů", "mechanické tvarování plastů"], 2],
-  [429, "Na obrázku je technologie", ["vakuové tvarování ve formě", "vakuové tvarování na kopytu", "mechanické tvarování na kopytu", "laminování na kopytu"], 0],
+  [429, "Na obrázku je technologie", ["vakuové tvarování ve formě", "vakuové tvarování na kopytu", "mechanické tvarování na kopytu", "laminování na kopytu"], 1],
   [430, "Urči,který z uvedených materiálů se nepoužívá jako výzhtuha při technologii laminování tvz. kompozitních plastů", ["rohože z kokosových vláken", "rohože se skelných vláken tkané", "rohože ze skelných vláken netkané-vrstvené", "rohože z bambusových štěpků"], 3],
   [431, "Urči, který materiál se používá pro odlévání, pracuj s lteraturou: Strojnické tabulky, Leinveber,Vávra, vyd. Albra", ["PS", "EP", "PE", "PA"], 1],
   [432, "Na obrázku je polystyren EPS , jehož postup výroby je následující :", ["polotovar je ztekucený polystyrén, ke zvětšení objemu se mění tlak", "polotovar je předpěněný polystyrén ve formě kuliček, ke zvětšení objemu se používá pára", "polotovar je ztekucený polystyrén, ke zvětšení objemu se zvyšuje teplota", "polotovar je předpěněný polystyrén ve formě kuliček, ke zvětšení objemu se používá změna tlaku"], 1],

@@ -43,6 +43,7 @@ const parseQuestions = (raw: any[], subject: 'SPS' | 'STT'): Question[] => {
 export const QUESTIONS_SPS: Question[] = parseQuestions(RAW_SPS, 'SPS');
 export const QUESTIONS_STT: Question[] = parseQuestions(RAW_STT, 'STT');
 export const QUESTIONS_SPS_FILTERED: Question[] = QUESTIONS_SPS.filter(q => q.id !== 253 && q.id !== 254);
+export const QUESTIONS_STT_FILTERED: Question[] = QUESTIONS_STT.filter(q => ![241, 242, 244, 256, 296, 376, 401, 406, 409, 411, 412, 413, 426, 433, 450, 453, 467, 473, 484, 489, 490, 491, 512, 519, 529, 689].includes(q.id));
 
 export const CATEGORIES_SPS: Category[] = [
   { id: 'sps_1', name: 'Spoje a spojovací součásti', subject: 'SPS', questionRanges: [[1, 120]] },

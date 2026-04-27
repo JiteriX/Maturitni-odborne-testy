@@ -5,7 +5,7 @@ import { doc, setDoc, getDoc, collection, query, where, getDocs, updateDoc, serv
 import { Subject, BattleRoom, AppMode } from '../types';
 import { AppUser } from '../users';
 import { BattleArena } from './BattleArena';
-import { QUESTIONS_SPS_FILTERED } from '../constants';
+import { QUESTIONS_SPS_FILTERED, QUESTIONS_STT_FILTERED } from '../constants';
 
 interface Props {
   currentUser: AppUser;
@@ -55,7 +55,8 @@ export const BattleManager: React.FC<Props> = ({ currentUser, subject, stats, on
     const roomId = `room_${Date.now()}`;
     
     // Používáme filtrovaný seznam pro bitvu
-    const shuffled = [...QUESTIONS_SPS_FILTERED].sort(() => 0.5 - Math.random()).slice(0, 20);
+    const questionList = subject === 'SPS' ? QUESTIONS_SPS_FILTERED : QUESTIONS_STT_FILTERED;
+    const shuffled = [...questionList].sort(() => 0.5 - Math.random()).slice(0, 20);
     const questionIds = shuffled.map(q => q.id);
 
     const newRoom: BattleRoom = {

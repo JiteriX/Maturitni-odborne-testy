@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { QUESTIONS_SPS, QUESTIONS_STT, QUESTIONS_SPS_FILTERED, CATEGORIES_SPS, CATEGORIES_STT, getCategoryForQuestion } from './constants';
+import { QUESTIONS_SPS, QUESTIONS_STT, QUESTIONS_SPS_FILTERED, QUESTIONS_STT_FILTERED, CATEGORIES_SPS, CATEGORIES_STT, getCategoryForQuestion } from './constants';
 import { AppMode, TestResult, Question, Subject, CategoryResult } from './types';
 import { TestRunner } from './components/TestRunner';
 import { BrowserQuestionItem } from './components/BrowserQuestionItem';
@@ -136,7 +136,7 @@ const App: React.FC = () => {
     if (subject === 'SPS') {
         baseList = isCompetitive ? QUESTIONS_SPS_FILTERED : QUESTIONS_SPS;
     } else if (subject === 'STT') {
-        baseList = QUESTIONS_STT;
+        baseList = isCompetitive ? QUESTIONS_STT_FILTERED : QUESTIONS_STT;
     } else {
         return [];
     }
@@ -203,6 +203,32 @@ const App: React.FC = () => {
 
   if (loadingUser) return <div className="min-h-screen flex items-center justify-center text-gray-500">Načítám...</div>;
   if (!currentUser) return <LoginScreen onLogin={(user) => setCurrentUser(user)} />;
+
+  const normalizeText = (text: string) => text.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+  const getFilteredBrowserQuestions = () => {
+      if (mode !== AppMode.BROWSER) return [];
+      const allQs = subject === 'SPS' ? QUESTIONS_SPS : QUESTIONS_STT;
+      if (!browserSearch.trim()) return allQs;
+
+      const normalizedSearchTerms = browserSearch.trim().split(' ').filter(t => t).map(normalizeText);
+
+      return allQs.filter(q => {
+          // Keep exact ID match priority
+          if (q.id.toString() === browserSearch.trim()) return true;
+          
+          const normalizedQuestionText = normalizeText(q.text);
+          // Join all option texts so we can search within answers as well
+          const normalizedOptions = q.options.map(opt => normalizeText(opt)).join(' ');
+          
+          const fullTextToSearch = `${normalizedQuestionText} ${normalizedOptions}`;
+
+          // All typed search words must be present in the question or options
+          return normalizedSearchTerms.every(term => fullTextToSearch.includes(term));
+      });
+  };
+
+  const filteredBrowserQuestions = getFilteredBrowserQuestions();
 
   return (
     <div className="min-h-screen bg-slate-50 text-gray-900 font-sans relative">
@@ -313,7 +339,7 @@ const App: React.FC = () => {
               </button>
           </div>
           <div className="w-full max-w-5xl mx-auto mb-10"><h2 className="text-center text-2xl font-bold text-slate-400 uppercase tracking-widest mb-10">Statistiky</h2><div className="grid grid-cols-1 md:grid-cols-2 gap-12"><div><Leaderboard subject="SPS" variant="compact" currentUserId={currentUser.uid} /></div><div><Leaderboard subject="STT" variant="compact" currentUserId={currentUser.uid} /></div></div></div>
-          <footer className="mt-auto py-12 text-center text-[#94a3b8] text-base font-normal select-none">© 2026 Matyáš Korec | Verze 2.4.3</footer>
+          <footer className="mt-auto py-12 text-center text-[#94a3b8] text-base font-normal select-none">© 2026 Matyáš Korec | Verze 2.5.0</footer>
       </div>
       )}
 
@@ -358,12 +384,10 @@ const App: React.FC = () => {
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div className="space-y-4">
-                    {subject === 'SPS' && (
-                        <button onClick={() => setMode(AppMode.BATTLE_HUB)} className={getMenuButtonClass("bg-gradient-to-br from-gray-800 to-gray-900 text-white border-none")}>
-                            <div className="bg-white/10 p-3 rounded-full border border-white/20"><span className="text-2xl">🏆</span></div>
-                            <div><div className="font-bold text-lg text-white uppercase tracking-wider">ARÉNA</div><div className="text-gray-400 text-sm font-normal">1v1 Duel & Náhlá smrt</div></div>
-                        </button>
-                    )}
+                    <button onClick={() => setMode(AppMode.BATTLE_HUB)} className={getMenuButtonClass("bg-gradient-to-br from-gray-800 to-gray-900 text-white border-none")}>
+                        <div className="bg-white/10 p-3 rounded-full border border-white/20"><span className="text-2xl">🏆</span></div>
+                        <div><div className="font-bold text-lg text-white uppercase tracking-wider">ARÉNA</div><div className="text-gray-400 text-sm font-normal">1v1 Duel & Náhlá smrt</div></div>
+                    </button>
                     <button onClick={() => setMode(AppMode.MOCK_TEST)} className={getMenuButtonClass("bg-white hover:bg-blue-50 text-blue-700")}>
                         <div className="bg-blue-100 p-3 rounded-full"><svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></div>
                         <div><div className="font-bold text-lg">Test nanečisto</div><div className="text-sm text-gray-500 font-normal">40 otázek • 30 minut</div></div>
@@ -391,18 +415,18 @@ const App: React.FC = () => {
         <div className="max-w-4xl mx-auto p-4 md:p-8">
             <div className="flex items-center gap-4 mb-8 sticky top-0 bg-slate-50 py-4 z-20">
                 <button onClick={() => { setMode(AppMode.MENU); setBrowserSearch(""); setExpandedIds(new Set()); }} className="p-2 text-gray-500 hover:text-blue-600 hover:bg-white rounded-full transition-all shadow-none hover:shadow-sm" title="Zpět do menu"><svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg></button>
-                <div className="relative flex-1"><input type="text" placeholder="Hledat otázku..." value={browserSearch} onChange={(e) => setBrowserSearch(e.target.value)} className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none bg-white shadow-sm transition-all" /><svg className="w-5 h-5 absolute left-4 top-3.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg></div>
+                <div className="relative flex-1"><input type="text" placeholder="Hledat podle ID, textu nebo odpovědí (i bez diakritiky)..." value={browserSearch} onChange={(e) => setBrowserSearch(e.target.value)} className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none bg-white shadow-sm transition-all" /><svg className="w-5 h-5 absolute left-4 top-3.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg></div>
                 <button onClick={expandedIds.size > 0 ? () => setExpandedIds(new Set()) : () => setExpandedIds(new Set((subject === 'SPS' ? QUESTIONS_SPS : QUESTIONS_STT).map(q => q.id)))} className="flex items-center gap-2 px-5 py-3 bg-[#f0f7ff] text-[#2563eb] rounded-xl font-bold hover:bg-blue-100 transition-colors shadow-sm whitespace-nowrap">{expandedIds.size > 0 ? "Zabalit vše" : "Rozbalit vše"}</button>
             </div>
             <div className="space-y-4">
-                {(mode === AppMode.BROWSER ? (browserSearch.trim() ? (subject === 'SPS' ? QUESTIONS_SPS : QUESTIONS_STT).filter(q => q.id.toString() === browserSearch || q.text.toLowerCase().includes(browserSearch.toLowerCase())) : (subject === 'SPS' ? QUESTIONS_SPS : QUESTIONS_STT)) : []).map(q => (
+                {filteredBrowserQuestions.map(q => (
                     <BrowserQuestionItem key={q.id} question={q} isExpanded={expandedIds.has(q.id)} onToggle={() => setExpandedIds(prev => { const next = new Set(prev); if (next.has(q.id)) next.delete(q.id); else next.add(q.id); return next; })} onReportRequest={(id) => setReportingQuestionId(id)} subject={subject} />
                 ))}
             </div>
         </div>
       )}
 
-      {subject && mode === AppMode.BATTLE && currentUser && <BattleManager currentUser={currentUser} subject={subject} stats={statsSPS} onExit={() => setMode(AppMode.MENU)} />}
+      {subject && mode === AppMode.BATTLE && currentUser && <BattleManager currentUser={currentUser} subject={subject} stats={subject === 'SPS' ? statsSPS : statsSTT} onExit={() => setMode(AppMode.MENU)} />}
       {subject && mode === AppMode.SUDDEN_DEATH && currentUser && <SuddenDeathGame initialQuestions={currentQuestions} currentUser={currentUser} onExit={() => setMode(AppMode.MENU)} subject={subject} />}
       {subject && (mode === AppMode.MOCK_TEST || mode === AppMode.TRAINING || mode === AppMode.MISTAKES || mode === AppMode.REVIEW) && (
         <TestRunner 
