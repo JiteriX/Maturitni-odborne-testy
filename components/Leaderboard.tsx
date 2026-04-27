@@ -7,13 +7,14 @@ import { collection, getDocs } from 'firebase/firestore';
 interface Props {
   subject: Subject;
   onBack?: () => void;
+  onShowFull?: () => void;
   variant?: 'full' | 'compact'; // 'full' = celá stránka, 'compact' = widget do menu
   currentUserId?: string;
 }
 
 type SortType = 'SCORE' | 'GRIND' | 'STREAK';
 
-export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full', currentUserId }) => {
+export const Leaderboard: React.FC<Props> = ({ subject, onBack, onShowFull, variant = 'full', currentUserId }) => {
   const [users, setUsers] = useState<LeaderboardUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [sortType, setSortType] = useState<SortType>('SCORE');
@@ -83,22 +84,36 @@ export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full'
   });
 
   // Logika pro zobrazení
-  let displayUsers = sortedUsers;
+  let displayUsers = [...sortedUsers];
   let currentUserRankIndex = -1;
 
   if (currentUserId) {
       currentUserRankIndex = sortedUsers.findIndex(u => u.uid === currentUserId);
+      
+      // Pokud uživatel vůbec není v listu (nemá stats), uměle ho tam přidáme na konec s 0
+      if (currentUserRankIndex === -1) {
+          const dummyUser: LeaderboardUser = {
+              uid: currentUserId,
+              displayName: 'Já',
+              statsSPS: { testsTaken: 0, totalPoints: 0, totalMaxPoints: 0, bestScorePercent: 0, bestStreak: 0 },
+              statsSTT: { testsTaken: 0, totalPoints: 0, totalMaxPoints: 0, bestScorePercent: 0, bestStreak: 0 }
+          };
+          displayUsers.push(dummyUser);
+          sortedUsers.push(dummyUser); // přidat i sem, aby realRank počítal správně případně na poslední místo
+          currentUserRankIndex = sortedUsers.length - 1;
+      }
   }
 
   // V kompaktním režimu ukážeme jen TOP 5, ale pokud je uživatel níže, přidáme ho nakonec
   if (variant === 'compact' && !isExpanded) {
-      displayUsers = sortedUsers.slice(0, 5);
+      const top5 = sortedUsers.slice(0, 5);
       
       // Pokud je uživatel v seznamu, ale není v TOP 5, přidáme ho
       if (currentUserRankIndex > 4) {
           // Přidáme "..." (reprezentováno null) a pak uživatele
-          // Použijeme typ any v poli pro zjednodušení renderování oddělovače
-          displayUsers = [...displayUsers, null as any, sortedUsers[currentUserRankIndex]];
+          displayUsers = [...top5, null as any, sortedUsers[currentUserRankIndex]];
+      } else {
+          displayUsers = top5;
       }
   }
 
@@ -274,20 +289,15 @@ export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full'
                     </tbody>
                 </table>
             </div>
-            {variant === 'compact' && !isExpanded && sortedUsers.length > 5 && (
+            {variant === 'compact' && sortedUsers.length > 5 && (
                 <div 
-                    onClick={() => setIsExpanded(true)} 
-                    className="bg-gray-50 p-2 text-center text-xs text-gray-500 hover:text-blue-600 hover:bg-gray-100 cursor-pointer border-t border-gray-100 transition-colors"
+                    onClick={() => {
+                        if (onShowFull) onShowFull();
+                        else setIsExpanded(!isExpanded);
+                    }} 
+                    className="bg-gray-50 p-3 text-center text-sm font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-100 cursor-pointer border-t border-gray-100 transition-colors"
                 >
-                    Zobrazit všechny
-                </div>
-            )}
-            {variant === 'compact' && isExpanded && sortedUsers.length > 5 && (
-                <div 
-                    onClick={() => setIsExpanded(false)} 
-                    className="bg-gray-50 p-2 text-center text-xs text-gray-500 hover:text-blue-600 hover:bg-gray-100 cursor-pointer border-t border-gray-100 transition-colors"
-                >
-                    Zobrazit méně
+                    {onShowFull ? 'Zobrazit celý žebříček' : (isExpanded ? 'Zobrazit méně' : 'Zobrazit všechny')}
                 </div>
             )}
         </div>

@@ -120,10 +120,23 @@ const App: React.FC = () => {
         const unsubDoc = onSnapshot(userDocRef, (docSnap) => {
             if (docSnap.exists()) {
                 const data = docSnap.data();
+                
+                let sSPS = data.statsSPS;
+                const localStatsSPS = localStorage.getItem('app_stats_SPS');
+                if (!sSPS && localStatsSPS) {
+                    try { sSPS = JSON.parse(localStatsSPS); setDoc(userDocRef, { statsSPS: sSPS }, { merge: true }); localStorage.removeItem('app_stats_SPS'); } catch (e) {}
+                }
+                
+                let sSTT = data.statsSTT;
+                const localStatsSTT = localStorage.getItem('app_stats_STT');
+                if (!sSTT && localStatsSTT) {
+                    try { sSTT = JSON.parse(localStatsSTT); setDoc(userDocRef, { statsSTT: sSTT }, { merge: true }); localStorage.removeItem('app_stats_STT'); } catch (e) {}
+                }
+
                 setMistakesSPS(data.mistakesSPS || []);
                 setMistakesSTT(data.mistakesSTT || []);
-                setStatsSPS(data.statsSPS || null);
-                setStatsSTT(data.statsSTT || null);
+                setStatsSPS(sSPS || null);
+                setStatsSTT(sSTT || null);
             }
         });
         return () => unsubDoc();
@@ -163,7 +176,7 @@ const App: React.FC = () => {
       }
   };
 
-  const handleTestComplete = (result: TestResult) => {
+  const handleTestComplete = async (result: TestResult) => {
     if (subject) {
         const categoryMap: Record<string, { correct: number, total: number, name: string }> = {};
         result.questionsUsed.forEach(q => {
@@ -188,6 +201,35 @@ const App: React.FC = () => {
     // Uložíme data posledního testu vždy, aby šlo kliknout na "Zkontrolovat chyby" u jakéhokoliv testu
     setLastTestQuestions(result.questionsUsed);
     setLastUserAnswers(result.userAnswers);
+
+    const isCompetitive = mode === AppMode.MOCK_TEST || mode === AppMode.SUDDEN_DEATH || mode === AppMode.BATTLE;
+    
+    if (isCompetitive && subject && currentUser && db) {
+        const currentStats = subject === 'SPS' ? statsSPS : statsSTT;
+        const newScorePercent = (result.score / result.total) * 100;
+        
+        let newStreak = (currentStats?.bestStreak || 0);
+        if (mode === AppMode.SUDDEN_DEATH) {
+            newStreak = Math.max(newStreak, result.score);
+        }
+
+        const newStats = {
+            testsTaken: (currentStats?.testsTaken || 0) + 1,
+            totalPoints: (currentStats?.totalPoints || 0) + result.score,
+            totalMaxPoints: (currentStats?.totalMaxPoints || 0) + result.total,
+            bestScorePercent: Math.max((currentStats?.bestScorePercent || 0), newScorePercent),
+            bestStreak: newStreak,
+            battlesPlayedToday: currentStats?.battlesPlayedToday || 0,
+            lastBattleDate: currentStats?.lastBattleDate || ''
+        };
+        
+        if (subject === 'SPS') setStatsSPS(newStats);
+        else setStatsSTT(newStats);
+
+        const userDocRef = doc(db, "users", currentUser.uid);
+        const updateData = subject === 'SPS' ? { statsSPS: newStats } : { statsSTT: newStats };
+        await setDoc(userDocRef, updateData, { merge: true });
+    }
 
     if (mode === AppMode.MOCK_TEST || mode === AppMode.TRAINING) {
         // V režimu Test nanečisto I V REŽIMU TRÉNINKU přidáváme nové chyby k těm stávajícím
@@ -428,6 +470,14 @@ const App: React.FC = () => {
 
       {subject && mode === AppMode.BATTLE && currentUser && <BattleManager currentUser={currentUser} subject={subject} stats={subject === 'SPS' ? statsSPS : statsSTT} onExit={() => setMode(AppMode.MENU)} />}
       {subject && mode === AppMode.SUDDEN_DEATH && currentUser && <SuddenDeathGame initialQuestions={currentQuestions} currentUser={currentUser} onExit={() => setMode(AppMode.MENU)} subject={subject} />}
+      {subject && mode === AppMode.LEADERBOARD && (
+          <Leaderboard 
+              subject={subject} 
+              variant="full" 
+              currentUserId={currentUser.uid} 
+              onBack={() => setMode(AppMode.MENU)} 
+          />
+      )}
       {subject && (mode === AppMode.MOCK_TEST || mode === AppMode.TRAINING || mode === AppMode.MISTAKES || mode === AppMode.REVIEW) && (
         <TestRunner 
             key={subject + mode + selectedCategoryId} 

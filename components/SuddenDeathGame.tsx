@@ -31,14 +31,15 @@ export const SuddenDeathGame: React.FC<Props> = ({ initialQuestions, onExit, cur
         const userRef = doc(db, "users", currentUser.uid);
         const snap = await getDoc(userRef);
         if (snap.exists()) {
-          setBestStreak(snap.data().statsSPS?.bestStreak || 0);
+          const stats = subject === 'SPS' ? snap.data().statsSPS : snap.data().statsSTT;
+          setBestStreak(stats?.bestStreak || 0);
         }
       }
     };
     loadBestStreak();
     nextQuestion();
     return () => stopTimer();
-  }, []);
+  }, [subject]);
 
   const stopTimer = () => {
     if (timerRef.current) clearInterval(timerRef.current);
@@ -85,11 +86,8 @@ export const SuddenDeathGame: React.FC<Props> = ({ initialQuestions, onExit, cur
       setBestStreak(streak);
       try {
         const userRef = doc(db, "users", currentUser.uid);
-        await setDoc(userRef, {
-          statsSPS: {
-            bestStreak: streak
-          }
-        }, { merge: true });
+        const updateData = subject === 'SPS' ? { statsSPS: { bestStreak: streak } } : { statsSTT: { bestStreak: streak } };
+        await setDoc(userRef, updateData, { merge: true });
       } catch (e) {
         console.error("Failed to save streak", e);
       }
