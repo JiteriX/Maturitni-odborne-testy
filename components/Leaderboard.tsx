@@ -17,6 +17,7 @@ export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full'
   const [users, setUsers] = useState<LeaderboardUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [sortType, setSortType] = useState<SortType>('SCORE');
+  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -90,7 +91,7 @@ export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full'
   }
 
   // V kompaktním režimu ukážeme jen TOP 5, ale pokud je uživatel níže, přidáme ho nakonec
-  if (variant === 'compact') {
+  if (variant === 'compact' && !isExpanded) {
       displayUsers = sortedUsers.slice(0, 5);
       
       // Pokud je uživatel v seznamu, ale není v TOP 5, přidáme ho
@@ -273,12 +274,20 @@ export const Leaderboard: React.FC<Props> = ({ subject, onBack, variant = 'full'
                     </tbody>
                 </table>
             </div>
-            {variant === 'compact' && sortedUsers.length > 5 && currentUserRankIndex <= 4 && (
+            {variant === 'compact' && !isExpanded && sortedUsers.length > 5 && (
                 <div 
-                    onClick={onBack} 
+                    onClick={() => setIsExpanded(true)} 
                     className="bg-gray-50 p-2 text-center text-xs text-gray-500 hover:text-blue-600 hover:bg-gray-100 cursor-pointer border-t border-gray-100 transition-colors"
                 >
-                    Zobrazit všech {sortedUsers.length} studentů...
+                    Zobrazit všechny
+                </div>
+            )}
+            {variant === 'compact' && isExpanded && sortedUsers.length > 5 && (
+                <div 
+                    onClick={() => setIsExpanded(false)} 
+                    className="bg-gray-50 p-2 text-center text-xs text-gray-500 hover:text-blue-600 hover:bg-gray-100 cursor-pointer border-t border-gray-100 transition-colors"
+                >
+                    Zobrazit méně
                 </div>
             )}
         </div>
