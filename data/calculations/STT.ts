@@ -12,7 +12,7 @@ export const STT_CALCULATIONS: CalculationData[] = [
 
 ### 1. Vstupní parametry a geometrie
 
-![Schéma střižné síly](/stt_calculations/strizna_sila.png)
+![Schéma střižné síly](./stt_calculations/strizna_sila.png)
 
 - Strana čtverce (a): 40 mm
 - Průměr otvoru (d): 20 mm
@@ -55,7 +55,7 @@ Na základě výpočtu byla stanovena celková střižná síla 313 748 N, což 
 
 Pro výpočet byly stanoveny následující hodnoty na základě technické dokumentace:
 
-![Schéma ohýbání](/stt_calculations/ohybeni.png)
+![Schéma ohýbání](./stt_calculations/ohybeni.png)
 
 - Délka úseku 1 (A): 40 mm
 - Délka úseku 2 (B): 50 mm
