@@ -12,6 +12,7 @@ import { ReportModal } from './components/ReportModal';
 import { BattleManager } from './components/BattleManager';
 import { SuddenDeathGame } from './components/SuddenDeathGame';
 import { CategorySelector } from './components/CategorySelector';
+import { CalculationsViewer } from './components/CalculationsViewer';
 import { AppUser } from './users';
 import { db, auth } from './firebaseConfig';
 import { doc, setDoc, onSnapshot, getDoc } from 'firebase/firestore';
@@ -116,7 +117,11 @@ const App: React.FC = () => {
     if (currentUser && db) {
         const userDocRef = doc(db, "users", currentUser.uid);
         // Ukládáme, ale díky logice v onAuthStateChanged už nepřepisujeme existující jméno na "Student"
-        setDoc(userDocRef, { displayName: currentUser.displayName, email: currentUser.email }, { merge: true });
+        setDoc(userDocRef, { 
+            displayName: currentUser.displayName, 
+            email: currentUser.email,
+            lastActive: new Date().toISOString()
+        }, { merge: true });
         const unsubDoc = onSnapshot(userDocRef, (docSnap) => {
             if (docSnap.exists()) {
                 const data = docSnap.data();
@@ -448,6 +453,12 @@ const App: React.FC = () => {
                         <div className="bg-indigo-100 p-3 rounded-full"><svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg></div>
                         <div><div className="font-bold text-lg">Prohlížet otázky</div><div className="text-sm text-gray-500 font-normal">Databáze {subject === 'SPS' ? QUESTIONS_SPS.length : QUESTIONS_STT.length} otázek</div></div>
                     </button>
+                    {subject === 'STT' && (
+                        <button onClick={() => setMode(AppMode.CALCULATIONS)} className={getMenuButtonClass("bg-white hover:bg-purple-50 text-purple-700")}>
+                            <div className="bg-purple-100 p-3 rounded-full"><svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg></div>
+                            <div><div className="font-bold text-lg">Výpočty</div><div className="text-sm text-gray-500 font-normal">Chráněno heslem</div></div>
+                        </button>
+                    )}
                 </div>
             </div>
         </div>
@@ -466,6 +477,10 @@ const App: React.FC = () => {
                 ))}
             </div>
         </div>
+      )}
+
+      {subject && mode === AppMode.CALCULATIONS && (
+        <CalculationsViewer subject={subject} onBack={() => setMode(AppMode.MENU)} />
       )}
 
       {subject && mode === AppMode.BATTLE && currentUser && <BattleManager currentUser={currentUser} subject={subject} stats={subject === 'SPS' ? statsSPS : statsSTT} onExit={() => setMode(AppMode.MENU)} />}

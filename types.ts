@@ -22,6 +22,7 @@ export enum AppMode {
   BATTLE = 'BATTLE', 
   SUDDEN_DEATH = 'SUDDEN_DEATH',
   CATEGORY_SELECT = 'CATEGORY_SELECT', // Nový mód pro výběr kategorie
+  CALCULATIONS = 'CALCULATIONS',
 }
 
 export interface Category {
