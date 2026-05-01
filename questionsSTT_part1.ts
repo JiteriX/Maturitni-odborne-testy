@@ -166,7 +166,7 @@ export const part1 = [
   [164, "Na obrázku je protahovačka, pozice 3 je:", ["píst", "obrobek", "protahovací trn", "hydraulický válec"], 3],
   [165, "Na obrázku je protahovačka:", ["kruhová", "šikmá", "vodorovná", "svislá"], 3],
   [166, "Na obrázku je protahovačka, pozice 4 je:", ["píst", "protahovací trn", "hydraulický válec", "obrobek"], 3],
-  [167, "Na obrázku je protahovačka, pozice 3 je:", ["hydraulický válec", "protahovací trn", "obrobek", "píst"], 1],
+  [167, "Na obrázku je protahovačka, pozice 3 je:", ["hydraulický válec", "protahovací trn", "obrobek", "píst"], 2],
   [168, "Na obrázku je broušení:", ["bezhroté", "hloubkové", "zápichové", "planetové"], 3],
   [169, "Na obrázku je broušení:", ["bezhroté", "hloubkové", "zápichové", "planetové"], 0],
   [170, "Na obrázku je broušení rovinné:", ["brousícím pásem", "obvodem kotouče", "brousící pastou", "čelem kotouče"], 1],
