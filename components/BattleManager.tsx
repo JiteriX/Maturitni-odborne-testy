@@ -85,9 +85,10 @@ export const BattleManager: React.FC<Props> = ({ currentUser, subject, stats, on
       const today = new Date().toISOString().split('T')[0];
       const newCount = stats?.lastBattleDate === today ? (stats?.battlesPlayedToday || 0) + 1 : 1;
       
+      const statsKey = subject === 'SPS' ? 'statsSPS' : 'statsSTT';
       await setDoc(userRef, { 
         displayName: currentUser.displayName,
-        statsSPS: {
+        [statsKey]: {
           battlesPlayedToday: newCount,
           lastBattleDate: today
         }
@@ -161,7 +162,7 @@ export const BattleManager: React.FC<Props> = ({ currentUser, subject, stats, on
 
   return (
     <div className="max-w-md mx-auto mt-20 p-6 bg-white rounded-2xl shadow-xl border border-gray-100">
-      <h2 className="text-2xl font-bold text-center mb-2">1v1 Bitva SPS</h2>
+      <h2 className="text-2xl font-bold text-center mb-2">1v1 Bitva {subject}</h2>
       <p className="text-center text-gray-500 text-sm mb-6">Souboj v reálném čase</p>
       
       {error && (

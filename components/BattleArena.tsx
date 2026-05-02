@@ -3,7 +3,7 @@ import { db } from '../firebaseConfig';
 import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { BattleRoom, Question, AppMode, BattlePlayerData } from '../types';
 import { AppUser } from '../users';
-import { QUESTIONS_SPS } from '../constants';
+import { QUESTIONS_SPS, QUESTIONS_STT } from '../constants';
 import { QuestionCard } from './QuestionCard';
 
 interface Props {
@@ -26,9 +26,10 @@ export const BattleArena: React.FC<Props> = ({ room, currentUser, onExit, stats 
 
   // Inicializace otázek při startu
   useEffect(() => {
-    const qs = room.questions.map(id => QUESTIONS_SPS.find(q => q.id === id)!).filter(Boolean);
+    const dataSource = room.subject === 'STT' ? QUESTIONS_STT : QUESTIONS_SPS;
+    const qs = room.questions.map(id => dataSource.find(q => q.id === id)!).filter(Boolean);
     setCurrentQuestions(qs);
-  }, [room.questions]);
+  }, [room.questions, room.subject]);
 
   // Sledování změn v bitvě (postup soupeře, stav hry)
   useEffect(() => {
@@ -155,7 +156,7 @@ export const BattleArena: React.FC<Props> = ({ room, currentUser, onExit, stats 
             <h2 className="text-4xl font-black mb-2">
                 {winner === 'win' ? 'Vítězství!' : winner === 'loss' ? 'Prohra' : 'Remíza'}
             </h2>
-            <p className="text-gray-500 mb-8 uppercase tracking-widest text-xs font-bold">Bitva SPS dokončena</p>
+            <p className="text-gray-500 mb-8 uppercase tracking-widest text-xs font-bold">Bitva {room.subject} dokončena</p>
             
             <div className="grid grid-cols-2 gap-6 mb-8">
                 <div className={`p-6 rounded-3xl border-2 ${winner === 'win' ? 'border-yellow-200 bg-yellow-50/30' : 'border-blue-100 bg-blue-50/30'}`}>
