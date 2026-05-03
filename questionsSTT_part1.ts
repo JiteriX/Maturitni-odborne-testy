@@ -114,7 +114,7 @@ export const part1 = [
   [112, "Na obrázku vidíme:", ["nožovou hlavu brusky", "nožovou hlavu frézky", "měřící přístroj na měření úhlů", "nožovou hlavu soustruhu"], 3],
   [113, "Revolverová hlava na obrázku slouží k upnutí:", ["nástrojů", "kalibrů", "obrobků", "měřících přístrojů"], 0],
   [114, "Na obrázku vidíme upnutí:", ["do kleštin", "na upínací lícní desku", "do sklíčidla", "mezi hroty"], 3],
-  [115, "Na obrázku vidíme:", ["univerzální tříčelisťové sklíčidlo", "lunetu", "univerzální čtyřčelisťové sklíčidlo", "lícní desku"], 2],
+  [115, "Na obrázku vidíme:", ["univerzální tříčelisťové sklíčidlo", "lunetu", "univerzální čtyřčelisťové sklíčidlo", "lícní desku"], 0],
   [116, "Na obrázku vidíme:", ["univerzální tříčelisťové sklíčidlo", "lícní desku", "lunetu", "kleštinu"], 2],
   [117, "Na obrázku vidíme upnutí obrobku:", ["do univerzálního tříčelisťového sklíčidla", "na lícní desku", "mezi hroty", "do kleštin"], 1],
   [118, "Na obrázku je univerzální hrotový soustruh - pozice 5 je:", ["sklíčidlo", "koník", "vřeteník", "suport"], 1],

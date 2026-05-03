@@ -186,6 +186,8 @@ Celková doba obrábění obou stupňů hřídele činí 186 sekund (tedy 3 minu
 
 ### 1. Vstupní parametry nádoby
 
+![Schéma tažení](/images/stt_calculations/tazeni.png)
+
 - Vnější průměr (D): 100 mm
 - Výška (H): 160 mm
 - Tloušťka plechu (t): 0,8 mm

@@ -171,16 +171,20 @@ export const BrowserQuestionItem: React.FC<Props> = ({ question, isExpanded, onT
                 </div>
 
                 {/* Speciální vysvětlení pro otázky s více správnými odpověďmi i v prohlížeči */}
-                {((question.id === 224) || (question.id === 422) || (question.id === 253 && subject === 'SPS') || (question.id === 254 && subject === 'SPS') || (question.id === 274 && subject === 'STT') || (question.id === 285 && subject === 'STT') || (question.id === 286 && subject === 'STT') || (question.id === 309 && subject === 'STT')) && (
+                {((question.id === 224) || (question.id === 422 && subject === 'SPS') || (question.id === 253 && subject === 'SPS') || (question.id === 254 && subject === 'SPS') || (question.id === 274 && subject === 'STT') || (question.id === 285 && subject === 'STT') || (question.id === 286 && subject === 'STT') || (question.id === 309 && subject === 'STT') || (question.id === 492 && subject === 'STT') || (question.id === 511 && subject === 'STT') || (question.id === 677 && subject === 'STT') || (question.id === 680 && subject === 'STT')) && (
                     <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-100">
                         <p className="text-[11px] text-blue-700 italic">
                             {question.id === 224 && "Poznámka: Pokud vyberete odpověď C, je také uznána jako správná. Odpověď A je však technicky přesnější preference."}
-                            {question.id === 422 && "Poznámka: Odpovědi B i D jsou v tomto testu identické a obě jsou uznávány jako správné."}
+                            {question.id === 422 && subject === 'SPS' && "Poznámka: Odpovědi B i D jsou v tomto testu identické a obě jsou uznávány jako správné."}
                             {question.id === 253 && subject === 'SPS' && "Poznámka: Správná odpověď by měla být: Třecí síla je větší než setrvačná. V tomto testu je původní možnost označena žlutě (uznatelná)."}
                             {question.id === 254 && subject === 'SPS' && "Poznámka: Žádná odpověď není správně. Tato otázka je vyřazena z ostrých testů a arény. Původní možnost je označena žlutě."}
                             {question.id === 274 && subject === 'STT' && "Poznámka: Teoreticky jsou správně odpovědi A, B i C. Zde uznávány všechny tyto možnosti. Původní odpovědi A a D jsou označeny žlutě."}
                             {question.id === 285 && subject === 'STT' && "Poznámka: Na obrázku je vnitřní i vnější ozubení. Varianta C je zde označena žlutě."}
                             {question.id === 286 && subject === 'STT' && "Poznámka: Varianta B je v tomto testu označena žlutě a je rovněž považována za správnou."}
+                            {question.id === 492 && subject === 'STT' && <span dangerouslySetInnerHTML={{ __html: "Poznámka:<br/>1. laserová hlavice<br/>2. rezonátor<br/>3. laserové médium<br/>4. polopropustné zrcadlo<br/>5. výstupní záření<br/>6. zdroj energie buzení<br/>7. budicí zařízení<br/>8. chladicí systém<br/>9. nepropustné zrcadlo"}} />}
+                            {question.id === 511 && subject === 'STT' && "Poznámka: AWJM abraziva jsou: křemičitý písek, olivín, kubický nitrid bóru"}
+                            {question.id === 677 && subject === 'STT' && "Poznámka: Žádný z diagramů na obrázku není správně. Tato otázka je vyřazena a nelze získat bod."}
+                            {question.id === 680 && subject === 'STT' && "Poznámka: Odpovědi A i D jsou v tomto testu identické a obě jsou uznávány jako správné."}
                             {question.id === 309 && subject === 'STT' && "Poznámka: Varianta A je v tomto testu označena žlutě a je rovněž považována za správnou."}
                         </p>
                     </div>
