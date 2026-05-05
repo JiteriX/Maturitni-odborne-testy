@@ -48,7 +48,7 @@ export const part3 = [
   [546, "Ekvivalentní obsah ulhíku hraje roli pro svařitelnost", ["Plastů", "Hliníku a neželezných kovů", "Legovaných ocelí", "Nelegovaných ocelí"], 2],
   [547, "Metoda svařování, kdy mezi dvěma elektrodami dojde pod tlakem bez přídavného materiálu k roztavení a svaření dvou materiálů se nazývá:", ["Bodové svařování", "Svařování metodou MAG", "Svařování plasmou", "svařování elektrickým obloukem"], 0],
   [548, "Jako inertní plyn se při svařování metodou MIG používá", ["Oxid uhličitý", "Helium", "Kyslík", "Vzduch"], 1],
-  [549, "Jak se nazývá spojování kovů působením tepla, kdy dochází k natavení základního i přídavného materiálu?", ["Letování", "Svařování", "Lisování", "Pájení"], 3],
+  [549, "Jak se nazývá spojování kovů působením tepla, kdy dochází k natavení základního i přídavného materiálu?", ["Letování", "Svařování", "Lisování", "Pájení"], 1],
   [550, "Co je hlavním účelem svarového spoje?", ["Umožnit snadnou demontáž", "Zvýšit tvrdost povrchu", "Zlepšit estetiku výrobku", "Trvale spojit součásti"], 3],
   [551, "Jak se nazývá oblast základního materiálu v blízkosti svaru, která byla zahřáta, ale neroztavila se?", ["Předehřátá oblast", "Přechodová zóna", "Tepelně ovlivněná oblast (TOO)", "Tavná linie"], 2],
   [552, "Která metoda svařování patří mezi tavné?", ["Svařování výbuchem", "Svařování třením", "Svařování tlakem za studena", "Obloukové svařování"], 3],
