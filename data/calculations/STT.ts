@@ -62,20 +62,20 @@ Pro výpočet byly stanoveny následující hodnoty na základě technické doku
 - Délka úseku 3 (C): 20 mm
 - Délka úseku 4 (D): 25 mm
 - Poloměr ohybu (R): 4 mm
-- Tloušťka materiálu (s): 4 mm
+- Tloušťka materiálu (t): 4 mm
 - Úhel sevření (α): 150°
 
 ### 2. Stanovení neutrální osy
 
-Při ohýbání dochází k deformaci materiálu. Pro přesný výpočet je nutné určit polohu neutrální osy pomocí součinitele x, který závisí na poměru R/s.
+Při ohýbání dochází k deformaci materiálu. Pro přesný výpočet je nutné určit polohu neutrální osy pomocí součinitele x, který závisí na poměru R/t.
 
 Výpočet poměru:
-R / s = 4 / 4 = 1,0
+R / t = 4 / 4 = 1,0
 
 Z tabulkových hodnot pro poměr 1,0 vyplývá hodnota součinitele x = 0,42.
 
 Výpočet poloměru neutrální osy (R0):
-R0 = R + x · s
+R0 = R + x · t
 R0 = 4 + 0,42 · 4 = 5,68 mm
 
 ### 3. Výpočet délek ohybů
