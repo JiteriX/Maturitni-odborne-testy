@@ -21,6 +21,42 @@ import * as firebaseAuth from 'firebase/auth';
 // Workaround for potential type definition mismatches
 const { onAuthStateChanged, signOut } = firebaseAuth as any;
 
+const MaturitaQuestionImage: React.FC<{ imageUrl?: string }> = ({ imageUrl }) => {
+    const [imgError, setImgError] = useState(false);
+    const [currentImgSrc, setCurrentImgSrc] = useState<string | undefined>(imageUrl);
+
+    useEffect(() => {
+        setCurrentImgSrc(imageUrl);
+        setImgError(false);
+    }, [imageUrl]);
+
+    const handleImageError = () => {
+        if (!currentImgSrc) return;
+        if (currentImgSrc.endsWith('.png')) {
+            setCurrentImgSrc(currentImgSrc.replace('.png', '.PNG'));
+        } else if (currentImgSrc.endsWith('.PNG')) {
+            setCurrentImgSrc(currentImgSrc.replace('.PNG', '.jpg'));
+        } else if (currentImgSrc.endsWith('.jpg')) {
+            setCurrentImgSrc(currentImgSrc.replace('.jpg', '.JPG'));
+        } else {
+            setImgError(true);
+        }
+    };
+
+    if (!imageUrl || imgError || !currentImgSrc) return null;
+
+    return (
+        <div className="mb-6 bg-gray-50 rounded-xl p-4 border border-gray-100 flex items-center justify-center overflow-hidden">
+            <img 
+                src={currentImgSrc} 
+                alt="Obrázek k otázce" 
+                className="max-h-64 object-contain" 
+                onError={handleImageError}
+            />
+        </div>
+    );
+};
+
 const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<AppUser | null>(null);
   const [loadingUser, setLoadingUser] = useState(true);
@@ -361,11 +397,14 @@ const App: React.FC = () => {
               <button onClick={handleLogout} className="text-sm text-red-500 hover:text-red-700 font-semibold border border-red-200 px-4 py-2 rounded-full hover:bg-red-50 transition-colors">Odhlásit</button>
           </div>
           <div className="text-center mb-12"><h1 className="text-5xl font-bold text-gray-900 mb-4 tracking-tight">Maturitní testy</h1></div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl mx-auto mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl mx-auto mb-12">
               <button onClick={handleSPSSelection} className="group relative overflow-hidden bg-white p-8 rounded-2xl shadow-lg border border-gray-100 hover:shadow-2xl hover:border-blue-300 transition-all duration-300 transform hover:-translate-y-1 text-center">
                   <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
-                  <div className="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300"><svg className="w-12 h-12 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg></div>
-                  <h2 className="text-3xl font-bold text-gray-800 mb-2">SPS</h2><p className="text-gray-500">Stavba a provoz strojů</p>
+                  <div className="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                      <svg className="w-12 h-12 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                  </div>
+                  <h2 className="text-3xl font-bold text-gray-800 mb-2">SPS</h2>
+                  <p className="text-gray-500">Stavba a provoz strojů</p>
                   {statsSPS && statsSPS.testsTaken ? (
                       <div className="flex justify-center gap-2 mt-4 text-sm font-medium">
                           <div className="bg-blue-50 text-blue-700 px-3 py-1 rounded-md border border-blue-100">Testů: <b>{statsSPS.testsTaken}</b></div>
@@ -375,8 +414,11 @@ const App: React.FC = () => {
               </button>
               <button onClick={handleSTTSelection} className="group relative overflow-hidden bg-white p-8 rounded-2xl shadow-lg border border-gray-100 hover:shadow-2xl hover:border-orange-300 transition-all duration-300 transform hover:-translate-y-1 text-center">
                   <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-orange-500 to-red-600"></div>
-                  <div className="w-24 h-24 bg-orange-50 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300"><svg className="w-12 h-12 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg></div>
-                  <h2 className="text-3xl font-bold text-gray-800 mb-2">STT</h2><p className="text-gray-500">Strojírenská technologie</p>
+                  <div className="w-24 h-24 bg-orange-50 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                      <svg className="w-12 h-12 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
+                  </div>
+                  <h2 className="text-3xl font-bold text-gray-800 mb-2">STT</h2>
+                  <p className="text-gray-500">Strojírenská technologie</p>
                   {statsSTT && statsSTT.testsTaken ? (
                       <div className="flex justify-center gap-2 mt-4 text-sm font-medium">
                           <div className="bg-orange-50 text-orange-700 px-3 py-1 rounded-md border border-orange-100">Testů: <b>{statsSTT.testsTaken}</b></div>
@@ -385,6 +427,30 @@ const App: React.FC = () => {
                   ) : null}
               </button>
           </div>
+
+          <div className="w-full max-w-4xl mx-auto mb-16">
+            <button 
+              onClick={() => { setSubject('STT'); setMode(AppMode.MATURITA_STT_2026); }} 
+              className="w-full group relative overflow-hidden bg-gradient-to-br from-green-600 to-emerald-700 p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-between gap-6"
+            >
+              <div className="flex items-center gap-6">
+                <div className="bg-white/20 p-4 rounded-xl border border-white/30 backdrop-blur-sm group-hover:scale-110 transition-transform duration-300">
+                  <span className="text-4xl">🎓</span>
+                </div>
+                <div className="text-left">
+                  <h2 className="text-2xl font-black text-white uppercase tracking-tight">Správné odpovědi z testu</h2>
+                  <p className="text-green-100 font-medium opacity-90">Dnešní maturitní test STT (40 otázek)</p>
+                </div>
+              </div>
+              <div className="hidden sm:block">
+                <svg className="w-8 h-8 text-white/50 group-hover:text-white transition-colors group-hover:translate-x-1 duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </div>
+            </button>
+          </div>
+
+
           <div className="w-full max-w-5xl mx-auto mb-10"><h2 className="text-center text-2xl font-bold text-slate-400 uppercase tracking-widest mb-10">Statistiky</h2><div className="grid grid-cols-1 md:grid-cols-2 gap-12"><div><Leaderboard subject="SPS" variant="compact" currentUserId={currentUser.uid} /></div><div><Leaderboard subject="STT" variant="compact" currentUserId={currentUser.uid} /></div></div></div>
           <footer className="mt-auto py-12 text-center text-[#94a3b8] text-base font-normal select-none">© 2026 Matyáš Korec | Verze 2.5.0</footer>
       </div>
@@ -475,6 +541,51 @@ const App: React.FC = () => {
                 {filteredBrowserQuestions.map(q => (
                     <BrowserQuestionItem key={q.id} question={q} isExpanded={expandedIds.has(q.id)} onToggle={() => setExpandedIds(prev => { const next = new Set(prev); if (next.has(q.id)) next.delete(q.id); else next.add(q.id); return next; })} onReportRequest={(id) => setReportingQuestionId(id)} subject={subject} />
                 ))}
+            </div>
+        </div>
+      )}
+
+      {subject === 'STT' && mode === AppMode.MATURITA_STT_2026 && (
+        <div className="max-w-4xl mx-auto p-4 md:p-8">
+            <div className="flex items-center gap-4 mb-8 sticky top-0 bg-slate-50 py-4 z-20">
+                <button onClick={() => setMode(AppMode.MENU)} className="p-2 text-gray-500 hover:text-blue-600 hover:bg-white rounded-full transition-all shadow-none hover:shadow-sm" title="Zpět do menu"><svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg></button>
+                <h1 className="text-2xl font-bold">Dnešní maturitní test (STT)</h1>
+            </div>
+            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-8 text-blue-800 text-sm">
+                Zde jsou správné odpovědi k 40 otázkám z dnešního maturitního testu podle databáze STT.
+            </div>
+            <div className="space-y-6">
+                {[102, 112, 416, 12, 289, 223, 46, 575, 378, 608, 159, 2, 544, 183, 298, 123, 260, 598, 131, 4, 269, 161, 319, 682, 288, 323, 70, 156, 578, 103, 609, 310, 287, 188, 35, 588, 97, 548, 29, 169].map((id, index) => {
+                    const q = QUESTIONS_STT.find(q => q.id === id);
+                    if (!q) return <div key={id} className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-600">Otázka #{id} nebyla nalezena v databázi!</div>;
+                    return (
+                        <div key={id} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 relative overflow-hidden group">
+                           <div className="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
+                           <div className="flex justify-between items-start mb-4">
+                              <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Otázka {index + 1} / 40 (ID {id})</span>
+                           </div>
+                           <h3 className="text-lg font-bold text-gray-900 mb-6 leading-snug">{q.text}</h3>
+                           
+                           <MaturitaQuestionImage imageUrl={q.imageUrl} />
+
+                           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                              {q.options.map((option, optIdx) => {
+                                 const isCorrect = optIdx === q.correctAnswerIndex;
+                                 return (
+                                    <div key={optIdx} className={`p-4 rounded-xl border-2 transition-all ${isCorrect ? 'bg-green-50 border-green-500 ring-4 ring-green-500/10' : 'bg-gray-50 border-transparent opacity-60'}`}>
+                                       <div className="flex items-center gap-3">
+                                          <div className={`w-8 h-8 flex items-center justify-center rounded-full font-bold text-sm ${isCorrect ? 'bg-green-500 text-white shadow-lg shadow-green-200' : 'bg-gray-200 text-gray-400'}`}>
+                                             {String.fromCharCode(65 + optIdx)}
+                                          </div>
+                                          <span className={`font-medium ${isCorrect ? 'text-green-900' : 'text-gray-500'}`}>{option}</span>
+                                       </div>
+                                    </div>
+                                 );
+                              })}
+                           </div>
+                        </div>
+                    );
+                })}
             </div>
         </div>
       )}

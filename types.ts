@@ -23,6 +23,7 @@ export enum AppMode {
   SUDDEN_DEATH = 'SUDDEN_DEATH',
   CATEGORY_SELECT = 'CATEGORY_SELECT', // Nový mód pro výběr kategorie
   CALCULATIONS = 'CALCULATIONS',
+  MATURITA_STT_2026 = 'MATURITA_STT_2026',
 }
 
 export interface Category {

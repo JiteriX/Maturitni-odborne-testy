@@ -1,5 +1,4 @@
-
-import { Question, Category } from './types';
+import { Question, Category, Subject } from './types';
 import { RAW_SPS } from './questionsSPS';
 import { RAW_STT } from './questionsSTT';
 
@@ -64,7 +63,7 @@ export const CATEGORIES_STT: Category[] = [
   { id: 'stt_7', name: 'Ostatní (Plasty, Koroze, NDT)', subject: 'STT', questionRanges: [[275, 276], [280, 281], [304, 308], [372, 393], [394, 433], [689, 693]] },
 ];
 
-export const getCategoryForQuestion = (qId: number, subject: 'SPS' | 'STT'): Category | undefined => {
+export const getCategoryForQuestion = (qId: number, subject: Subject): Category | undefined => {
   const cats = subject === 'SPS' ? CATEGORIES_SPS : CATEGORIES_STT;
   return cats.find(cat => cat.questionRanges.some(range => qId >= range[0] && qId <= range[1]));
 };
