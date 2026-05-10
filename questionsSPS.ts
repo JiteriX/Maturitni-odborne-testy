@@ -469,7 +469,7 @@ export const RAW_SPS: any[] = [
   [467, "Jakou jednotku má veličina 'tepelný tok'?", ["Watt", "Joule", "Kelvin", "Newton"], 0],
   [468, "Co je to 'konvektor'?", ["Otopné tĕleso", "Expanzní nádoba", "Teplovodní kotel", "Rozvodné potrubí"], 0],
   [469, "Teplovodní otopná soustava je vybavena otevřenou expanzní nádobou. Kde se tato otevřená expanzní nádoba nachází?", ["U teplovodního kotle", "V nejvyšší místĕ soustavy", "U každého otopného tĕlesa", "Nezáleží na její poloze"], 1],
-  [470, "Pokud v místnosti otevřete okno, pak se jedná o vĕtrání ...", ["přirozené.", "samočinné.", "nucené.", "lokální."], 0],
+  [470, "Pokud v místnosti otevřete okno, pak se jedná o vĕtrání ...", ["přirozené.", "samočinné.", "nucené.", "lokální."], 1],
   [471, "Co nepatří mezi výhody vysokotlaké klimatizace?", ["Menší rozmĕry rozvodného potrubí", "Snazší (i dodatečná) instalace zařízení do objektu", "Nastavení odlišné teploty for každou místnost", "Velmi nízká cena celého zařízení"], 3],
   [472, "Co je to tzv. výparné teplo?", ["Teplo, které látka potřebuje ke zmĕnĕ svého skupenství", "Teplo, které látka vydá do okolí při vypařování", "Teplo, které se z látky samovolnĕ uvolňuje a lze využít k vytápĕní", "Teplo, které se přemĕní v mechanickou energii kompresoru"], 0],
   [473, "Co must splňovat chladící kapalina, aby byla vhodná pro použití do chladícího okruhu?", ["Musí mít vysokou teplotu varu", "Musí mít vysokou hodnotu výparného tepla", "Musí mít vysokou hustotu v kapalné formĕ", "Musí mít vysokou cenu"], 1],
