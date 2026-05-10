@@ -439,7 +439,7 @@ const App: React.FC = () => {
                 </div>
                 <div className="text-left">
                   <h2 className="text-2xl font-black text-white uppercase tracking-tight">Správné odpovědi z testu</h2>
-                  <p className="text-green-100 font-medium opacity-90">Dnešní maturitní test STT (40 otázek)</p>
+                  <p className="text-green-100 font-medium opacity-90">Školní test STT (40 otázek)</p>
                 </div>
               </div>
               <div className="hidden sm:block">
@@ -549,10 +549,10 @@ const App: React.FC = () => {
         <div className="max-w-4xl mx-auto p-4 md:p-8">
             <div className="flex items-center gap-4 mb-8 sticky top-0 bg-slate-50 py-4 z-20">
                 <button onClick={() => setMode(AppMode.MENU)} className="p-2 text-gray-500 hover:text-blue-600 hover:bg-white rounded-full transition-all shadow-none hover:shadow-sm" title="Zpět do menu"><svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg></button>
-                <h1 className="text-2xl font-bold">Dnešní maturitní test (STT)</h1>
+                <h1 className="text-2xl font-bold">Školní test (STT)</h1>
             </div>
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-8 text-blue-800 text-sm">
-                Zde jsou správné odpovědi k 40 otázkám z dnešního maturitního testu podle databáze STT.
+                Zde jsou správné odpovědi k 40 otázkám ze školního testu podle databáze STT.
             </div>
             <div className="space-y-6">
                 {[102, 112, 416, 12, 289, 223, 46, 575, 378, 608, 159, 2, 544, 183, 298, 123, 260, 598, 131, 4, 269, 161, 319, 682, 288, 323, 70, 156, 578, 103, 609, 310, 287, 188, 35, 588, 97, 548, 29, 169].map((id, index) => {

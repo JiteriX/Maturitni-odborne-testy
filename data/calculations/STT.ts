@@ -16,7 +16,7 @@ export const STT_CALCULATIONS: CalculationData[] = [
 
 - Strana čtverce (a): 40 mm
 - Průměr otvoru (d): 20 mm
-- Tloušťka materiálu (s): 4 mm
+- Tloušťka materiálu (t): 4 mm
 - Materiál: 11 373 (konstrukční ocel)
 
 ### 2. Materiálové charakteristiky

@@ -165,7 +165,7 @@ export const RAW_SPS: any[] = [
   [163, "Kterou z možností NELZE zajistit snížení prokluzu u třecích převodů?", ["Zvýšení přítlačné síly mezi obĕma třecími koly", "Zmĕnou materiálů třecích kol", "Zvýšením otáček třecích kol", "Připevněním obložení ke třecím kolům"], 2],
   [164, "Přes jaké plochy se přenáší síly mezi řemenicemi a úzkým klínovým řemenem? Přenáší se přes ...", ["boky řemene.", "nárazník řemene.", "zuby řemene.", "výztužná vlákna řemene."], 0],
   [165, "Co je výhodou třecích převodů?", ["Malé namáhání ložisek", "Přenos velkých výkonů", "Stálý převodový poměr", "Tlumí rázy"], 3],
-  [166, "Řetĕzové převody jsou převody....", ["nepřímé se silovým stykem.", "nepřímé s tvarovým stykem.", "přímé se silovým stykem.", "přímé s tvarovým stykem."], 3],
+  [166, "Řetĕzové převody jsou převody....", ["nepřímé se silovým stykem.", "nepřímé s tvarovým stykem.", "přímé se silovým stykem.", "přímé s tvarovým stykem."], 1],
   [167, "Jaký je pomĕr obvodových rychlostí obou řemenic v řemenovém převodu při zanedbání prokluzu?", ["Hnací řemenice má vĕtší obvodovou rychlost než hnaná.", "Hnací řemenice má menší obvodovou rychlost než hnaná.", "Hnací řemenice má stejnou obvodovou rychlost jako hnaná.", "Závislost nelze jednoznačnĕ rozhodnout."], 2],
   [168, "Kam se umísťuje napínací kladka v řemenovém převodu?", ["Do ochablé části pásu a co nejblíže malé řemenice", "Do ochablé části pásu a co nejblíže velké řemenice", "Do napnuté části pásu a co nejblíže malé řemenice", "Do napnuté části pásu a co nejblíže malé řemenice"], 0],
   [169, "Co NEPATŘÍ mezi výhody řemenových převodů s ozubenými řemeny?", ["Pracují bez skluzu", "Namáhají ménĕ ložiska", "Mají tichý a klidný chod", "Dobře snáší vysoké teploty"], 3],
