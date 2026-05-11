@@ -430,26 +430,6 @@ const App: React.FC = () => {
 
           <div className="w-full max-w-4xl mx-auto mb-16 grid grid-cols-1 md:grid-cols-2 gap-4">
             <button 
-              onClick={() => { setSubject('STT'); setMode(AppMode.MATURITA_STT_2026); }} 
-              className="w-full group relative overflow-hidden bg-gradient-to-br from-green-600 to-emerald-700 p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-between gap-4"
-            >
-              <div className="flex items-center gap-4">
-                <div className="bg-white/20 p-3 rounded-xl border border-white/30 backdrop-blur-sm group-hover:scale-110 transition-transform duration-300">
-                  <span className="text-2xl">🎓</span>
-                </div>
-                <div className="text-left">
-                  <h2 className="text-lg font-black text-white uppercase tracking-tight">Odpovědi STT</h2>
-                  <p className="text-green-100 text-xs font-medium opacity-90">Školní test STT (40 otázek)</p>
-                </div>
-              </div>
-              <div className="hidden sm:block">
-                <svg className="w-6 h-6 text-white/50 group-hover:text-white transition-colors group-hover:translate-x-1 duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </div>
-            </button>
-
-            <button 
               onClick={() => { setSubject('SPS'); setMode(AppMode.MATURITA_SPS_2026); }} 
               className="w-full group relative overflow-hidden bg-gradient-to-br from-blue-600 to-indigo-700 p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-between gap-4"
             >
@@ -460,6 +440,26 @@ const App: React.FC = () => {
                 <div className="text-left">
                   <h2 className="text-lg font-black text-white uppercase tracking-tight">Odpovědi SPS</h2>
                   <p className="text-blue-100 text-xs font-medium opacity-90">Školní test SPS (40 otázek)</p>
+                </div>
+              </div>
+              <div className="hidden sm:block">
+                <svg className="w-6 h-6 text-white/50 group-hover:text-white transition-colors group-hover:translate-x-1 duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </div>
+            </button>
+
+            <button 
+              onClick={() => { setSubject('STT'); setMode(AppMode.MATURITA_STT_2026); }} 
+              className="w-full group relative overflow-hidden bg-gradient-to-br from-green-600 to-emerald-700 p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-between gap-4"
+            >
+              <div className="flex items-center gap-4">
+                <div className="bg-white/20 p-3 rounded-xl border border-white/30 backdrop-blur-sm group-hover:scale-110 transition-transform duration-300">
+                  <span className="text-2xl">🎓</span>
+                </div>
+                <div className="text-left">
+                  <h2 className="text-lg font-black text-white uppercase tracking-tight">Odpovědi STT</h2>
+                  <p className="text-green-100 text-xs font-medium opacity-90">Školní test STT (40 otázek)</p>
                 </div>
               </div>
               <div className="hidden sm:block">
